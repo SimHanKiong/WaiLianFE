@@ -27,6 +27,7 @@ export default function TextInputCell<TData extends DataWithId>({
 
   return (
     <Input
+      className="focus-visible:ring-0 border-0 shadow-none"
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={() =>

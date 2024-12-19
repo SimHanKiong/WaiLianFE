@@ -11,21 +11,26 @@ export const schoolTableColumns = [
   columnHelper.accessor('name', {
     header: 'School Name',
     cell: (info) => <TextInputCell {...info} updateCellAction={updateSchool} />,
+    size: 500,
   }),
   columnHelper.accessor('initial', {
     header: 'School Initials',
     cell: (info) => <TextInputCell {...info} updateCellAction={updateSchool} />,
+    size: 200,
   }),
   columnHelper.accessor('arrivalTime', {
     header: 'Arrival Time',
     cell: (info) => <TextInputCell {...info} updateCellAction={updateSchool} />,
+    size: 200,
   }),
   columnHelper.accessor('departureTime', {
     header: 'Departure Time',
     cell: (info) => <TextInputCell {...info} updateCellAction={updateSchool} />,
+    size: 200,
   }),
   columnHelper.display({
     id: 'select',
     cell: SelectCell,
+    size: 50,
   }),
 ];

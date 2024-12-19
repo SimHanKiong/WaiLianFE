@@ -51,15 +51,16 @@ export function EditableTable<TData extends DataWithId, TValue>({
   const selectedRows = table.getSelectedRowModel().rows;
 
   return (
-    <div className="rounded-md border">
-      <Table className="w-full border border-gray-200 rounded-lg shadow-sm">
+    <div className="rounded-lg border overflow-x-auto overflow-y-hidden">
+      <Table className="w-full border border-gray-200 rounded-lg shadow-sm table-fixed">
         <TableHeader className="bg-gray-100">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="px-4 py-2 text-left text-sm font-semibold text-gray-600"
+                  className="px-4 py-2 text-left text-sm font-semibold text-gray-600 border"
+                  style={{ width: `${header.getSize()}px` }}
                 >
                   {header.isPlaceholder
                     ? null
@@ -85,7 +86,8 @@ export function EditableTable<TData extends DataWithId, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className="px-4 py-2 text-sm text-gray-700 border-t border-gray-200"
+                    className="px-4 py-2 text-sm text-gray-700 border"
+                    style={{ width: `${cell.column.getSize()}px` }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
