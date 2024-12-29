@@ -52,7 +52,6 @@ export const updateSchool = async (
   id: string,
   schoolUpdate: Partial<School>
 ): Promise<void> => {
-  console.log(schoolUpdate);
   const response = await fetch(`${process.env.API_URL}/school/${id}`, {
     method: 'PATCH',
     headers: {

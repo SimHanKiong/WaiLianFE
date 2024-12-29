@@ -4,6 +4,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import {
@@ -15,8 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 interface DataWithId {
   id: string;
@@ -27,6 +29,8 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   data: TData[];
   addRowAction: () => Promise<void>;
   deleteRowsAction: (ids: string[]) => Promise<void>;
+  getRowColour?: (row: TData) => string;
+  enableSearching: boolean;
 }
 
 export function EditableTable<TData extends DataWithId, TValue>({
@@ -34,24 +38,38 @@ export function EditableTable<TData extends DataWithId, TValue>({
   data,
   addRowAction,
   deleteRowsAction,
+  getRowColour,
+  enableSearching,
 }: EditableTableProps<TData, TValue>) {
-  const [tableData, setTableData] = useState(data);
-
-  useEffect(() => {
-    setTableData(data);
-  }, [data]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
-    data: tableData,
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   const selectedRows = table.getSelectedRowModel().rows;
 
   return (
     <div className="rounded-lg border overflow-x-auto overflow-y-hidden">
+      {enableSearching && (
+        <div className="p-4">
+          <Input
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            placeholder="Search..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
+          />
+        </div>
+      )}
+
       <Table className="w-full border border-gray-200 rounded-lg shadow-sm table-fixed">
         <TableHeader className="bg-gray-100">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -79,7 +97,8 @@ export function EditableTable<TData extends DataWithId, TValue>({
               <TableRow
                 key={row.id}
                 className={`${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                  getRowColour?.(row.original) ||
+                  (index % 2 === 0 ? '' : 'bg-gray-50')
                 } hover:bg-gray-100`}
                 data-state={row.getIsSelected() && 'selected'}
               >
