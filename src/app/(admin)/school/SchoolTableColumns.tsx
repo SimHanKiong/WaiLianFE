@@ -1,7 +1,7 @@
 'use client';
 
-import SelectCell from '@/components/SelectCell';
-import TextInputCell from '@/components/TextInputCell';
+import SelectCell from '@/components/table/SelectCell';
+import TextInputCell from '@/components/table/TextInputCell';
 import { School, updateSchool } from '@/lib/services/school';
 import { createColumnHelper } from '@tanstack/react-table';
 

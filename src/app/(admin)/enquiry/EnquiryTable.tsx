@@ -1,17 +1,17 @@
 'use client';
-import { EditableTable } from '@/components/EditableTable';
+import { EditableTable } from '@/components/table/EditableTable';
 import { createColumnHelper } from '@tanstack/react-table';
-import DropdownCell from '@/components/DropdownCell';
-import NumberInputCell from '@/components/NumberInputCell';
-import SelectCell from '@/components/SelectCell';
-import TextInputCell from '@/components/TextInputCell';
+import DropdownCell from '@/components/table/DropdownCell';
+import NumberInputCell from '@/components/table/NumberInputCell';
+import SelectCell from '@/components/table/SelectCell';
+import TextInputCell from '@/components/table/TextInputCell';
 import {
   Enquiry,
   updateEnquiry,
   createEnquiry,
   deleteEnquiries,
 } from '@/lib/services/enquiry';
-import DisplayCell from '@/components/DisplayCell';
+import DisplayCell from '@/components/table/DisplayCell';
 import { CopyIcon } from 'lucide-react';
 import DialogWrapper from '@/components/DialogWrapper';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { CellContext } from '@tanstack/react-table';
-import { Checkbox } from './ui/checkbox';
+import { Checkbox } from '../ui/checkbox';
 
 interface DataWithId {
   id: string;

@@ -1,4 +1,4 @@
-import { EditableTable } from '@/components/EditableTable';
+import { EditableTable } from '@/components/table/EditableTable';
 import { schoolTableColumns } from './SchoolTableColumns';
 import {
   createSchool,
