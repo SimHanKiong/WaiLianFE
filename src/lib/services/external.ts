@@ -1,7 +1,5 @@
 'use server';
 
-import { date } from 'zod';
-
 export const getAddress = async (postalCode: string): Promise<string> => {
   const response = await fetch(
     `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${postalCode}&returnGeom=N&getAddrDetails=Y`,

@@ -14,6 +14,7 @@ interface TextInputFormProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   placeholder: string;
   maxLength?: number;
+  type?: string;
 }
 
 export default function TextInputForm<TFieldValues extends FieldValues>({
@@ -22,6 +23,7 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
   control,
   placeholder,
   maxLength,
+  type = 'text',
 }: TextInputFormProps<TFieldValues>) {
   return (
     <FormField
@@ -32,7 +34,7 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
           <FormLabel className="text-gray-700 font-semibold">{label}</FormLabel>
           <FormControl>
             <Input
-              type="text"
+              type={type}
               {...field}
               className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm"
               placeholder={placeholder}

@@ -1,27 +1,51 @@
-import { Label } from '@radix-ui/react-label';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from "@radix-ui/react-label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Control, FieldValues, Path } from 'react-hook-form';
+} from "../ui/form";
+import { Control, FieldValues, Path } from "react-hook-form";
 
-interface RadioInputFormProps<TFieldValues extends FieldValues> {
+type RadioOption<T> = {
+  value: T;
+  label: string;
+};
+
+interface RadioInputFormProps<
+  TFieldValues extends FieldValues,
+  TValue extends string | number | boolean,
+> {
   name: Path<TFieldValues>;
   label: string;
   control: Control<TFieldValues>;
-  options: { value: boolean | string; label: string }[];
+  options: RadioOption<TValue>[];
 }
 
-export default function RadioInputForm<TFieldValues extends FieldValues>({
+export default function RadioInputForm<
+  TFieldValues extends FieldValues,
+  TValue extends string | number | boolean,
+>({
   name,
   label,
   control,
   options,
-}: RadioInputFormProps<TFieldValues>) {
+}: RadioInputFormProps<TFieldValues, TValue>) {
+  const parseValue = (value: string): TValue => {
+    const firstOption = options[0];
+
+    switch (typeof firstOption.value) {
+      case "number":
+        return Number(value) as TValue;
+      case "boolean":
+        return (value === "true") as TValue;
+      default:
+        return value as TValue;
+    }
+  };
+
   return (
     <FormField
       control={control}
@@ -32,14 +56,9 @@ export default function RadioInputForm<TFieldValues extends FieldValues>({
           <FormControl>
             <RadioGroup
               onValueChange={(value) => {
-                const parsedValue = options.some(
-                  (opt) => typeof opt.value === 'boolean'
-                )
-                  ? value === 'true'
-                  : value;
-                field.onChange(parsedValue);
+                field.onChange(parseValue(value));
               }}
-              value={field.value?.toString() || ''}
+              value={field.value?.toString() || ""}
               className="space-y-2"
             >
               {options.map((option) => (

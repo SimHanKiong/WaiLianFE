@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormField,
@@ -13,14 +13,14 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { createLocation } from '@/lib/services/location';
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { createLocation } from "@/lib/services/location";
 
 const locationSchema = z.object({
-  address: z.string().trim().min(1, 'Address is required'),
-  time: z.string().trim().min(1, 'Time is required'),
-  type: z.enum(['AM', 'PM'], { required_error: 'Type is required' }),
+  address: z.string().trim().min(1, "Address is required"),
+  time: z.string().trim().min(1, "Time is required"),
+  type: z.enum(["AM", "PM"], { required_error: "Type is required" }),
 });
 
 type LocationFormData = z.infer<typeof locationSchema>;
@@ -29,8 +29,8 @@ export default function LocationForm() {
   const form = useForm<LocationFormData>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
-      address: '',
-      time: '',
+      address: "",
+      time: "",
       type: undefined,
     },
   });
@@ -96,7 +96,7 @@ export default function LocationForm() {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  value={field.value || ''}
+                  value={field.value || ""}
                   className="space-y-2"
                 >
                   <div className="flex items-center space-x-3">

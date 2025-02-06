@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Input } from '../ui/input';
-import { CellContext } from '@tanstack/react-table';
+import { useEffect, useState } from "react";
+import { Input } from "../ui/input";
+import { CellContext } from "@tanstack/react-table";
 
 interface DataWithId {
   id: string;
@@ -16,6 +16,7 @@ export default function TextInputCell<TData extends DataWithId>({
   getValue,
   row,
   column,
+  // table,
   updateCellAction,
 }: TextInputCellProps<TData>) {
   const initialValue = getValue();
@@ -29,12 +30,15 @@ export default function TextInputCell<TData extends DataWithId>({
     <Input
       className="focus-visible:ring-0 border-0 shadow-none"
       value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={() =>
+      onChange={(e) => {
+        setValue(e.target.value);
+      }}
+      onBlur={() => {
+        // table.options.meta?.updateData(row.index, column.id, value);
         updateCellAction(row.original.id, {
           [column.id]: value,
-        } as Partial<TData>)
-      }
+        } as Partial<TData>);
+      }}
       type="text"
     />
   );

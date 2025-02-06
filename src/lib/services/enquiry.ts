@@ -1,99 +1,117 @@
-'use server';
+"use server";
 
-import { revalidateTag } from 'next/cache';
-import { Location } from './location';
-import { School } from './school';
+import { revalidateTag } from "next/cache";
+import { Location } from "./location";
+import { School } from "./school";
+import { EnquiryFormData } from "@/app/enquiry/[id]/EnquiryForm";
+import { EnquiryStatusType } from "../constants";
 
 export type Enquiry = {
   id: string;
-  date: string;
-  phoneNo: string;
+  email: string;
   block: string;
   remark: string;
   fare: number;
+  homePostalCode: string;
+  homeUnitNo: string;
+  amPostalCode: string;
+  pmPostalCode: string;
   schoolId: string | null;
   school: School | null;
   amLocationId: string | null;
   amLocation: Location | null;
   pmLocationId: string | null;
   pmLocation: Location | null;
-  status: 'To Be Confirmed' | 'Enquiry Sent' | 'Registration Received' | null;
+  year: number;
+  status: EnquiryStatusType | null;
+  homeAddress: string;
+  amAddress: string;
+  pmAddress: string;
+  created_at: Date;
 };
 
 export const readEnquiries = async (): Promise<Enquiry[]> => {
   const response = await fetch(`${process.env.API_URL}/enquiry`, {
-    method: 'GET',
+    method: "GET",
     next: {
-      tags: ['enquiry'],
+      tags: ["enquiry"],
     },
   });
 
   if (!response.ok) {
-    throw new Error('Unable to get Enquiries');
+    throw new Error("Unable to get Enquiries");
   }
 
   const data = await response.json();
   return data;
 };
 
-export const createEnquiry = async (): Promise<void> => {
+export const createEnquiry = async (
+  schoolId: string,
+  formData: EnquiryFormData
+): Promise<void> => {
   const enquiryCreate: Partial<Enquiry> = {
-    date: '',
-    phoneNo: '',
-    block: '',
-    remark: '',
+    email: formData.email,
+    block: "",
+    remark: "",
     fare: 0,
-    status: null,
-    schoolId: null,
+    homePostalCode: formData.homePostalCode,
+    homeUnitNo: formData.homeUnitNo,
+    amPostalCode: formData.amPostalCode,
+    pmPostalCode: formData.pmPostalCode,
+    schoolId: schoolId,
     amLocationId: null,
     pmLocationId: null,
+    status: null,
+    year: formData.year,
   };
+
   const response = await fetch(`${process.env.API_URL}/enquiry`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(enquiryCreate),
   });
 
   if (!response.ok) {
-    throw new Error('Unable to create Enquiry');
+    const text = await response.text();
+    throw new Error(text);
   }
 
-  revalidateTag('enquiry');
+  revalidateTag("enquiry");
 };
 
 export const updateEnquiry = async (
   id: string,
   enquiryUpdate: Partial<Enquiry>
 ): Promise<void> => {
-  console.log(id);
-  console.log(enquiryUpdate);
   const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(enquiryUpdate),
   });
 
   if (!response.ok) {
-    throw new Error('Unable to update Enquiry');
+    const text = await response.text();
+    throw new Error(text);
   }
 
-  revalidateTag('enquiry');
+  revalidateTag("enquiry");
 };
 
 export const deleteEnquiries = async (ids: string[]): Promise<void> => {
   for (const id of ids) {
     const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
 
     if (!response.ok) {
-      throw new Error('Unable to delete Enquiry');
+      throw new Error("Unable to delete Enquiry");
     }
   }
 
-  revalidateTag('enquiry');
+  revalidateTag("enquiry");
 };

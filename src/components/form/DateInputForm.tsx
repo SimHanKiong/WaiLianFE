@@ -28,7 +28,7 @@ interface DateInputFormProps<TFieldValues extends FieldValues> {
   maxDate?: Date;
 }
 
-export function DateInputForm<TFieldValues extends FieldValues>({
+export default function DateInputForm<TFieldValues extends FieldValues>({
   name,
   label,
   control,
@@ -67,7 +67,7 @@ export function DateInputForm<TFieldValues extends FieldValues>({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2"
+                  className="absolute right-2 rounded-full"
                   type="button"
                 >
                   <CalendarIcon className="w-5 h-5 text-gray-500" />

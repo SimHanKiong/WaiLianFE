@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { CellContext } from '@tanstack/react-table';
+import { useEffect, useState } from "react";
+import { CellContext } from "@tanstack/react-table";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -14,18 +14,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
-import { Button } from '@/components/ui/button';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DataWithId {
   id: string;
 }
 
 interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
-  width: number;
   options: { value: string; label: string }[];
+  // options: { value: string; label: string; object?: unknown }[];
+  // objectColumnId?: string;
   updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
 }
 
@@ -35,7 +36,6 @@ export default function DropdownCell<TData extends DataWithId>({
   column,
   options,
   updateCellAction,
-  width,
 }: DropdownCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -48,6 +48,21 @@ export default function DropdownCell<TData extends DataWithId>({
   const handleSelect = (currentValue: string) => {
     setValue(currentValue);
     setOpen(false);
+
+    // table.options.meta?.updateData(row.index, column.id, currentValue);
+
+    // if (objectColumnId) {
+    //   for (const option of options) {
+    //     if (option.value === currentValue) {
+    //       table.options.meta?.updateData(
+    //         row.index,
+    //         objectColumnId,
+    //         option.object
+    //       );
+    //     }
+    //   }
+    // }
+
     updateCellAction(row.original.id, {
       [column.id]: currentValue,
     } as Partial<TData>);
@@ -61,16 +76,15 @@ export default function DropdownCell<TData extends DataWithId>({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            style={{ width: `${width}px` }}
-            className="justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent"
+            className="w-full px-3 justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent"
           >
             {value
               ? options.find((option) => option.value === value)?.label
-              : 'Select...'}
+              : "Select..."}
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent style={{ width: `${width}px` }} className="p-0">
+        <PopoverContent className="p-0 w-[--radix-popover-trigger-width] max-h-[--radix-popover-content-available-height]">
           <Command>
             <CommandInput placeholder="Search..." />
             <CommandList>
@@ -85,8 +99,8 @@ export default function DropdownCell<TData extends DataWithId>({
                     {option.label}
                     <Check
                       className={cn(
-                        'ml-auto',
-                        value === option.value ? 'opacity-100' : 'opacity-0'
+                        "ml-auto",
+                        value === option.value ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

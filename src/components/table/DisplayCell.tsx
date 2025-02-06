@@ -1,9 +1,12 @@
-import { CellContext } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+"use client";
+
+import { CellContext } from "@tanstack/react-table";
+import { useEffect, useState } from "react";
+import validator from "validator";
 
 export default function DisplayCell<TData>({
   getValue,
-}: CellContext<TData, string>) {
+}: CellContext<TData, string | number>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -12,6 +15,14 @@ export default function DisplayCell<TData>({
   }, [initialValue]);
 
   return (
-    <div className="flex w-full px-3 py-1 text-base md:text-sm">{value}</div>
+    <div className="flex w-full px-3 py-1 text-base md:text-sm">
+      {value && typeof value === "string" && validator.isEmail(value) ? (
+        <a href={`mailto:${value}`} className="text-blue-500 hover:underline">
+          {value}
+        </a>
+      ) : (
+        value
+      )}
+    </div>
   );
 }
