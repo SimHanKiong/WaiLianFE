@@ -2,7 +2,7 @@
 
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { date, z } from "zod";
+import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import TextInputForm from "@/components/form/TextInputForm";
@@ -164,6 +164,7 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
         description: "Please check your email for more details.",
       });
     } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Submission Failed",

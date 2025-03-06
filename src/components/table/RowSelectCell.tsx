@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { CellContext } from '@tanstack/react-table';
-import { Checkbox } from '../ui/checkbox';
+import { CellContext } from "@tanstack/react-table";
+import { Checkbox } from "../ui/checkbox";
 
 interface DataWithId {
   id: string;
@@ -9,7 +9,7 @@ interface DataWithId {
 
 export default function RowSelectCell<TData extends DataWithId>({
   row,
-}: CellContext<TData, any>) {
+}: CellContext<TData, unknown>) {
   return (
     <div className="flex justify-center">
       <Checkbox
