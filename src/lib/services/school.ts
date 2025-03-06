@@ -13,7 +13,7 @@ export type School = {
 };
 
 export const readSchools = async (): Promise<School[]> => {
-  const response = await fetch(`${process.env.API_URL}/school`, {
+  const response = await fetch(`${process.env.API_URL}/school/`, {
     method: "GET",
     next: {
       tags: ["school"],
@@ -54,7 +54,9 @@ export const createSchool = async (): Promise<void> => {
     isFinalYear: false,
   };
 
-  const response = await fetch(`${process.env.API_URL}/school`, {
+  console.log(schoolCreate);
+
+  const response = await fetch(`${process.env.API_URL}/school/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -65,6 +67,9 @@ export const createSchool = async (): Promise<void> => {
   if (!response.ok) {
     throw new Error("Unable to create School");
   }
+
+  const data = await response.json();
+  console.log(data);
 
   revalidateTag("school");
 };

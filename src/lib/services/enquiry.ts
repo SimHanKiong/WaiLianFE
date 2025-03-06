@@ -31,7 +31,7 @@ export type Enquiry = {
 };
 
 export const readEnquiries = async (): Promise<Enquiry[]> => {
-  const response = await fetch(`${process.env.API_URL}/enquiry`, {
+  const response = await fetch(`${process.env.API_URL}/enquiry/`, {
     method: "GET",
     next: {
       tags: ["enquiry"],
@@ -66,7 +66,7 @@ export const createEnquiry = async (
     year: formData.year,
   };
 
-  const response = await fetch(`${process.env.API_URL}/enquiry`, {
+  const response = await fetch(`${process.env.API_URL}/enquiry/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

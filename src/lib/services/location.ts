@@ -23,7 +23,7 @@ export const readLocations = async (
       },
     });
   } else {
-    response = await fetch(`${process.env.API_URL}/location`, {
+    response = await fetch(`${process.env.API_URL}/location/`, {
       method: "GET",
       next: {
         tags: ["location"],
@@ -39,7 +39,7 @@ export const readLocations = async (
 };
 
 export const createLocation = async (locationCreate: Partial<Location>) => {
-  const response = await fetch(`${process.env.API_URL}/location`, {
+  const response = await fetch(`${process.env.API_URL}/location/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
