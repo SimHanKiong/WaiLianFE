@@ -8,17 +8,12 @@ interface DataWithId {
   id: string;
 }
 
-interface NumberInputCellProps<TData> extends CellContext<TData, number> {
-  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
-}
-
 export default function NumberInputCell<TData extends DataWithId>({
   getValue,
   row,
   column,
-  // table,
-  updateCellAction,
-}: NumberInputCellProps<TData>) {
+  table,
+}: CellContext<TData, number>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -32,10 +27,7 @@ export default function NumberInputCell<TData extends DataWithId>({
       value={value}
       onChange={(e) => setValue(Number(e.target.value))}
       onBlur={() => {
-        // table.options.meta?.updateData(row.index, column.id, value);
-        updateCellAction(row.original.id, {
-          [column.id]: value,
-        } as Partial<TData>);
+        table.options.meta?.updateData(row.original.id, column.id, value);
       }}
       type="number"
     />

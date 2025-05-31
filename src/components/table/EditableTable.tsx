@@ -35,7 +35,7 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   addRowAction?: (dataCreate: TData) => Promise<void>;
-  addRowData?: TData;
+  getNewRowData?: () => TData;
   updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
   deleteRowsAction: (ids: string[]) => Promise<void>;
   getRowColour?: (row: TData) => string;
@@ -46,7 +46,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
   columns,
   data,
   addRowAction,
-  addRowData,
+  getNewRowData,
   updateCellAction,
   deleteRowsAction,
   getRowColour,
@@ -70,13 +70,20 @@ export function EditableTable<TData extends DataWithId, TValue>({
     },
     onGlobalFilterChange: setGlobalFilter,
     meta: {
-      updateData: (rowId: string, columnId: string, value: unknown) => {
+      updateData: (
+        rowId: string,
+        columnId: string,
+        value: unknown,
+        updateServer: boolean = true
+      ) => {
         setTableData((prev) =>
           prev.map((row) =>
             row.id === rowId ? { ...row, [columnId]: value } : row
           )
         );
-        updateCellAction(rowId, { [columnId]: value } as Partial<TData>);
+        if (updateServer) {
+          updateCellAction(rowId, { [columnId]: value } as Partial<TData>);
+        }
       },
     },
   });
@@ -161,22 +168,21 @@ export function EditableTable<TData extends DataWithId, TValue>({
           variant="default"
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-2"
           onClick={() => {
+            const idsToDelete = selectedRows.map((row) => row.original.id);
             setTableData((prev) =>
-              prev.filter(
-                (row) =>
-                  !selectedRows.some((selected) => selected.id === row.id)
-              )
+              prev.filter((row) => !idsToDelete.includes(row.id))
             );
-            deleteRowsAction(selectedRows.map((row) => row.original.id));
+            deleteRowsAction(idsToDelete);
             table.resetRowSelection();
           }}
         >
           Delete Rows
         </Button>
-        {addRowAction && addRowData ? (
+        {addRowAction && getNewRowData ? (
           <Button
             variant="default"
             onClick={() => {
+              const addRowData = getNewRowData();
               setTableData((prev) => [...prev, addRowData]);
               addRowAction(addRowData);
             }}

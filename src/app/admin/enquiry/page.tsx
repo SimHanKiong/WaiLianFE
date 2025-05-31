@@ -7,44 +7,32 @@ import { readLocations } from "@/lib/services/location";
 import { EnquiryStatus } from "@/lib/constants";
 
 export default async function Page() {
-  console.time("Data Fetching Time"); // Start measuring overall fetching time
+  const [enquiries, schools, amLocations, pmLocations] = await Promise.all([
+    readEnquiries(),
+    readSchools(),
+    readLocations("AM"),
+    readLocations("PM"),
+  ]);
 
-  console.time("Enquiries Fetch Time");
-  const enquiries = await readEnquiries();
-  console.timeEnd("Enquiries Fetch Time");
-
-  console.time("Schools Fetch Time");
-  const schools = await readSchools();
   const schoolOptions = schools.map((school) => ({
     value: school.id,
     label: school.initial,
+    object: school,
   }));
-  console.timeEnd("Schools Fetch Time");
-
-  console.time("AM Locations Fetch Time");
-  const amLocations = await readLocations("AM");
   const amLocationOptions = amLocations.map((amLocation) => ({
     value: amLocation.id,
     label: amLocation.address,
-    // object: amLocation,
+    object: amLocation,
   }));
-  console.timeEnd("AM Locations Fetch Time");
-
-  console.time("PM Locations Fetch Time");
-  const pmLocations = await readLocations("PM");
   const pmLocationOptions = pmLocations.map((pmLocation) => ({
     value: pmLocation.id,
     label: pmLocation.address,
-    // object: pmLocation,
+    object: pmLocation,
   }));
-  console.timeEnd("PM Locations Fetch Time");
-
   const enquiryStatus = EnquiryStatus.map((enquiry) => ({
     value: enquiry,
     label: enquiry,
   }));
-
-  console.timeEnd("Data Fetching Time"); // End overall fetching time
 
   return (
     <div className="container mx-auto py-10 px-10 max-w-full">

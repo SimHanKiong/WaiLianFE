@@ -13,8 +13,8 @@ import {
   updateSchool,
 } from "@/lib/services/school";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useMemo } from "react";
 
 interface SchoolTableProps {
   data: School[];
@@ -73,14 +73,16 @@ export default function SchoolTable({ data }: SchoolTableProps) {
     [columnHelper]
   );
 
-  const schoolCreate: School = {
-    id: uuidv4(),
-    name: "",
-    initial: "",
-    arrivalTime: "",
-    departureTime: "",
-    email: null,
-    isFinalYear: false,
+  const getNewSchool = (): School => {
+    return {
+      id: uuidv4(),
+      name: "",
+      initial: "",
+      arrivalTime: "",
+      departureTime: "",
+      email: null,
+      isFinalYear: false,
+    };
   };
 
   return (
@@ -88,7 +90,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       columns={columns}
       data={data}
       addRowAction={createSchool}
-      addRowData={schoolCreate}
+      getNewRowData={getNewSchool}
       updateCellAction={updateSchool}
       deleteRowsAction={deleteSchools}
       enableSearching={false}

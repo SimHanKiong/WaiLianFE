@@ -17,12 +17,10 @@ import { useMemo } from "react";
 
 interface EnquiryTableProps {
   data: Enquiry[];
-  schools: { value: string; label: string }[];
+  schools: { value: string; label: string; object: unknown }[];
   enquiryStatus: { value: string; label: string }[];
-  // amLocations: { value: string; label: string; object: unknown }[];
-  // pmLocations: { value: string; label: string; object: unknown }[];
-  amLocations: { value: string; label: string }[];
-  pmLocations: { value: string; label: string }[];
+  amLocations: { value: string; label: string; object: unknown }[];
+  pmLocations: { value: string; label: string; object: unknown }[];
 }
 
 export default function EnquiryTable({
@@ -56,11 +54,7 @@ export default function EnquiryTable({
       columnHelper.accessor("school.id", {
         header: "School",
         cell: (info) => (
-          <DropdownCell
-            {...info}
-            updateCellAction={updateEnquiry}
-            options={schools}
-          />
+          <DropdownCell {...info} options={schools} objectColumnId="school" />
         ),
         size: 150,
       }),
@@ -90,9 +84,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("fare", {
         header: "Bus Fare",
-        cell: (info) => (
-          <NumberInputCell {...info} updateCellAction={updateEnquiry} />
-        ),
+        cell: (info) => <NumberInputCell {...info} />,
         size: 100,
       }),
       columnHelper.accessor("amLocation.id", {
@@ -101,9 +93,8 @@ export default function EnquiryTable({
         cell: (info) => (
           <DropdownCell
             {...info}
-            updateCellAction={updateEnquiry}
             options={amLocations}
-            // objectColumnId="amLocation"
+            objectColumnId="amLocation"
           />
         ),
         size: 400,
@@ -119,9 +110,8 @@ export default function EnquiryTable({
         cell: (info) => (
           <DropdownCell
             {...info}
-            updateCellAction={updateEnquiry}
             options={pmLocations}
-            // objectColumnId="pmLocation"
+            objectColumnId="pmLocation"
           />
         ),
         size: 400,
@@ -133,13 +123,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("status", {
         header: "Status",
-        cell: (info) => (
-          <DropdownCell
-            {...info}
-            updateCellAction={updateEnquiry}
-            options={enquiryStatus}
-          />
-        ),
+        cell: (info) => <DropdownCell {...info} options={enquiryStatus} />,
         size: 250,
       }),
       columnHelper.display({
@@ -175,7 +159,7 @@ export default function EnquiryTable({
         size: 50,
       }),
     ],
-    [columnHelper]
+    [columnHelper, schools, enquiryStatus, amLocations, pmLocations]
   );
   return (
     <EditableTable<Enquiry, any>

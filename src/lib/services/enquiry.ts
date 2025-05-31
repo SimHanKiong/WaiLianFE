@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { Location } from "./location";
 import { School } from "./school";
 import { EnquiryFormData } from "@/app/enquiry/[id]/EnquiryForm";
@@ -33,9 +32,7 @@ export type Enquiry = {
 export const readEnquiries = async (): Promise<Enquiry[]> => {
   const response = await fetch(`${process.env.API_URL}/enquiry/`, {
     method: "GET",
-    next: {
-      tags: ["enquiry"],
-    },
+    cache: "no-store",
   });
 
   if (!response.ok) {
@@ -78,8 +75,6 @@ export const createEnquiry = async (
     const text = await response.text();
     throw new Error(text);
   }
-
-  revalidateTag("enquiry");
 };
 
 export const updateEnquiry = async (
@@ -98,8 +93,6 @@ export const updateEnquiry = async (
     const text = await response.text();
     throw new Error(text);
   }
-
-  revalidateTag("enquiry");
 };
 
 export const deleteEnquiries = async (ids: string[]): Promise<void> => {
@@ -112,6 +105,4 @@ export const deleteEnquiries = async (ids: string[]): Promise<void> => {
       throw new Error("Unable to delete Enquiry");
     }
   }
-
-  revalidateTag("enquiry");
 };

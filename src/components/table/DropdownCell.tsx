@@ -24,10 +24,8 @@ interface DataWithId {
 }
 
 interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
-  options: { value: string; label: string }[];
-  // options: { value: string; label: string; object?: unknown }[];
-  // objectColumnId?: string;
-  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
+  options: { value: string; label: string; object?: unknown }[];
+  objectColumnId?: string;
 }
 
 export default function DropdownCell<TData extends DataWithId>({
@@ -35,7 +33,8 @@ export default function DropdownCell<TData extends DataWithId>({
   row,
   column,
   options,
-  updateCellAction,
+  objectColumnId,
+  table,
 }: DropdownCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -49,23 +48,23 @@ export default function DropdownCell<TData extends DataWithId>({
     setValue(currentValue);
     setOpen(false);
 
-    // table.options.meta?.updateData(row.index, column.id, currentValue);
+    table.options.meta?.updateData(row.original.id, column.id, currentValue);
 
-    // if (objectColumnId) {
-    //   for (const option of options) {
-    //     if (option.value === currentValue) {
-    //       table.options.meta?.updateData(
-    //         row.index,
-    //         objectColumnId,
-    //         option.object
-    //       );
-    //     }
-    //   }
-    // }
+    if (!objectColumnId) {
+      return;
+    }
+    for (const option of options) {
+      if (option.value !== currentValue) {
+        continue;
+      }
 
-    updateCellAction(row.original.id, {
-      [column.id]: currentValue,
-    } as Partial<TData>);
+      table.options.meta?.updateData(
+        row.original.id,
+        objectColumnId,
+        option.object
+      );
+      return;
+    }
   };
 
   return (
