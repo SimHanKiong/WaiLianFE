@@ -57,7 +57,7 @@ export const createSchool = async (schoolCreate: School): Promise<void> => {
     throw new Error("Unable to create School");
   }
 
-  const data = await response.json();
+  await response.json();
   revalidateTag("school");
 };
 

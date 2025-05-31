@@ -79,17 +79,13 @@ export default function EnquiryTable({
       // }),
       columnHelper.accessor("block", {
         header: "Block",
-        cell: (info) => (
-          <TextInputCell {...info} updateCellAction={updateEnquiry} />
-        ),
+        cell: (info) => <TextInputCell {...info} />,
         size: 100,
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("remark", {
         header: "Remark",
-        cell: (info) => (
-          <TextInputCell {...info} updateCellAction={updateEnquiry} />
-        ),
+        cell: (info) => <TextInputCell {...info} />,
         size: 250,
       }),
       columnHelper.accessor("fare", {
@@ -179,7 +175,7 @@ export default function EnquiryTable({
         size: 50,
       }),
     ],
-    []
+    [columnHelper]
   );
   return (
     <EditableTable<Enquiry, any>

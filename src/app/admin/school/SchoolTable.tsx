@@ -70,7 +70,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         size: 80,
       }),
     ],
-    []
+    [columnHelper]
   );
 
   const schoolCreate: School = {

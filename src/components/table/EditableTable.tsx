@@ -5,6 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  RowData,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -19,10 +20,8 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-import type { RowData } from "@tanstack/react-table";
-import { add, set } from "date-fns";
-
 declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData = RowData> {
     updateData: (rowId: string, columnId: string, value: unknown) => void;
   }
