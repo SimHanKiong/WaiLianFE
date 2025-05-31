@@ -8,17 +8,12 @@ interface DataWithId {
   id: string;
 }
 
-interface CheckboxCellProps<TData> extends CellContext<TData, boolean> {
-  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
-}
-
 export default function CheckboxCell<TData extends DataWithId>({
   getValue,
   row,
   column,
-  // table,
-  updateCellAction,
-}: CheckboxCellProps<TData>) {
+  table,
+}: CellContext<TData, boolean>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -29,10 +24,7 @@ export default function CheckboxCell<TData extends DataWithId>({
   const handleCheckedChange = () => {
     const newValue = !value;
     setValue(newValue);
-    // table.options.meta?.updateData(row.index, column.id, newValue);
-    updateCellAction(row.original.id, {
-      [column.id]: newValue,
-    } as Partial<TData>);
+    table.options.meta?.updateData(row.original.id, column.id, newValue);
   };
 
   return (

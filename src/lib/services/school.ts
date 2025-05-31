@@ -44,18 +44,7 @@ export const readSchool = async (id: string): Promise<School> => {
   return data;
 };
 
-export const createSchool = async (): Promise<void> => {
-  const schoolCreate: Partial<School> = {
-    name: "",
-    initial: "",
-    arrivalTime: "",
-    departureTime: "",
-    email: null,
-    isFinalYear: false,
-  };
-
-  console.log(schoolCreate);
-
+export const createSchool = async (schoolCreate: School): Promise<void> => {
   const response = await fetch(`${process.env.API_URL}/school/`, {
     method: "POST",
     headers: {
@@ -69,8 +58,6 @@ export const createSchool = async (): Promise<void> => {
   }
 
   const data = await response.json();
-  console.log(data);
-
   revalidateTag("school");
 };
 

@@ -8,17 +8,12 @@ interface DataWithId {
   id: string;
 }
 
-interface TextInputCellProps<TData> extends CellContext<TData, string> {
-  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
-}
-
 export default function TextInputCell<TData extends DataWithId>({
   getValue,
   row,
   column,
-  // table,
-  updateCellAction,
-}: TextInputCellProps<TData>) {
+  table,
+}: CellContext<TData, string>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -34,10 +29,7 @@ export default function TextInputCell<TData extends DataWithId>({
         setValue(e.target.value);
       }}
       onBlur={() => {
-        // table.options.meta?.updateData(row.index, column.id, value);
-        updateCellAction(row.original.id, {
-          [column.id]: value,
-        } as Partial<TData>);
+        table.options.meta?.updateData(row.original.id, column.id, value);
       }}
       type="text"
     />

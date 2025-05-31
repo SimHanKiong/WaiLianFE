@@ -15,15 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-// declare module "@tanstack/react-table" {
-//   interface TableMeta<TData extends RowData> {
-//     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-//   }
-// }
+import type { RowData } from "@tanstack/react-table";
+import { add, set } from "date-fns";
+
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData extends RowData = RowData> {
+    updateData: (rowId: string, columnId: string, value: unknown) => void;
+  }
+}
 
 interface DataWithId {
   id: string;
@@ -32,7 +35,9 @@ interface DataWithId {
 interface EditableTableProps<TData extends DataWithId, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  addRowAction?: () => Promise<void>;
+  addRowAction?: (dataCreate: TData) => Promise<void>;
+  addRowData?: TData;
+  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
   deleteRowsAction: (ids: string[]) => Promise<void>;
   getRowColour?: (row: TData) => string;
   enableSearching: boolean;
@@ -42,19 +47,21 @@ export function EditableTable<TData extends DataWithId, TValue>({
   columns,
   data,
   addRowAction,
+  addRowData,
+  updateCellAction,
   deleteRowsAction,
   getRowColour,
   enableSearching,
 }: EditableTableProps<TData, TValue>) {
-  // const [tableData, setTableData] = useState(data);
+  const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  // useEffect(() => {
-  //   setTableData(data);
-  // }, [data]);
+  useEffect(() => {
+    setTableData(data);
+  }, [data]);
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
@@ -63,15 +70,16 @@ export function EditableTable<TData extends DataWithId, TValue>({
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
-    // meta: {
-    //   updateData: (rowIndex: number, columnId: string, value: unknown) => {
-    //     setTableData((prev) =>
-    //       prev.map((row, index) =>
-    //         index === rowIndex ? { ...row, [columnId]: value } : row
-    //       )
-    //     );
-    //   },
-    // },
+    meta: {
+      updateData: (rowId: string, columnId: string, value: unknown) => {
+        setTableData((prev) =>
+          prev.map((row) =>
+            row.id === rowId ? { ...row, [columnId]: value } : row
+          )
+        );
+        updateCellAction(rowId, { [columnId]: value } as Partial<TData>);
+      },
+    },
   });
 
   const selectedRows = table.getSelectedRowModel().rows;
@@ -154,16 +162,25 @@ export function EditableTable<TData extends DataWithId, TValue>({
           variant="default"
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-2"
           onClick={() => {
+            setTableData((prev) =>
+              prev.filter(
+                (row) =>
+                  !selectedRows.some((selected) => selected.id === row.id)
+              )
+            );
             deleteRowsAction(selectedRows.map((row) => row.original.id));
             table.resetRowSelection();
           }}
         >
           Delete Rows
         </Button>
-        {addRowAction ? (
+        {addRowAction && addRowData ? (
           <Button
             variant="default"
-            onClick={() => addRowAction()}
+            onClick={() => {
+              setTableData((prev) => [...prev, addRowData]);
+              addRowAction(addRowData);
+            }}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
           >
             Add Row
@@ -171,7 +188,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
         ) : null}
       </div>
 
-      {/* <pre>{JSON.stringify(tableData, null, 2)}</pre> */}
+      <pre>{JSON.stringify(tableData, null, 2)}</pre>
     </div>
   );
 }

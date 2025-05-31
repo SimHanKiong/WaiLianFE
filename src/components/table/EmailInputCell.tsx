@@ -10,17 +10,12 @@ interface DataWithId {
   id: string;
 }
 
-interface EmailInputCellProps<TData> extends CellContext<TData, string | null> {
-  updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
-}
-
 export default function EmailInputCell<TData extends DataWithId>({
   getValue,
   row,
   column,
-  // table,
-  updateCellAction,
-}: EmailInputCellProps<TData>) {
+  table,
+}: CellContext<TData, string | null>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
   const { toast } = useToast();
@@ -40,11 +35,7 @@ export default function EmailInputCell<TData extends DataWithId>({
       return;
     }
 
-    // table.options.meta?.updateData(row.index, column.id, value);
-
-    updateCellAction(row.original.id, {
-      [column.id]: value === "" ? null : value,
-    } as Partial<TData>);
+    table.options.meta?.updateData(row.original.id, column.id, value);
   };
 
   return (

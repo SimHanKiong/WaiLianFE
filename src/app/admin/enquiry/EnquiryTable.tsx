@@ -185,6 +185,7 @@ export default function EnquiryTable({
     <EditableTable<Enquiry, any>
       columns={columns}
       data={data}
+      updateCellAction={updateEnquiry}
       deleteRowsAction={deleteEnquiries}
       getRowColour={(row) => getStatusRowColour(row.status)}
       enableSearching={true}
