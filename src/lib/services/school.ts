@@ -9,6 +9,7 @@ export type School = {
   arrivalTime: string;
   departureTime: string;
   email: string | null;
+  password: string;
   isFinalYear: boolean;
 };
 

@@ -36,22 +36,27 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       columnHelper.accessor("initial", {
         header: "School Initials",
         cell: (info) => <TextInputCell {...info} />,
-        size: 200,
+        size: 100,
       }),
       columnHelper.accessor("arrivalTime", {
         header: "Arrival Time",
         cell: (info) => <TextInputCell {...info} />,
-        size: 200,
+        size: 100,
       }),
       columnHelper.accessor("departureTime", {
         header: "Departure Time",
         cell: (info) => <TextInputCell {...info} />,
-        size: 200,
+        size: 100,
       }),
       columnHelper.accessor("email", {
         header: "Email",
         cell: (info) => <EmailInputCell {...info} />,
         size: 300,
+      }),
+      columnHelper.accessor("password", {
+        header: "Password",
+        cell: (info) => <TextInputCell {...info} />,
+        size: 200,
       }),
       columnHelper.accessor("isFinalYear", {
         header: "Final Year",
@@ -81,6 +86,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       arrivalTime: "",
       departureTime: "",
       email: null,
+      password: "",
       isFinalYear: false,
     };
   };

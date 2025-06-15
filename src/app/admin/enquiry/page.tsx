@@ -32,6 +32,7 @@ export default async function Page() {
   const enquiryStatus = EnquiryStatus.map((enquiry) => ({
     value: enquiry,
     label: enquiry,
+    object: false,
   }));
 
   return (

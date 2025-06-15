@@ -14,11 +14,12 @@ import {
 import DisplayCell from "@/components/table/DisplayCell";
 import { EnquiryStatusType } from "@/lib/constants";
 import { useMemo } from "react";
+import CheckboxCell from "@/components/table/CheckboxCell";
 
 interface EnquiryTableProps {
   data: Enquiry[];
   schools: { value: string; label: string; object: unknown }[];
-  enquiryStatus: { value: string; label: string }[];
+  enquiryStatus: { value: string; label: string; object: unknown }[];
   amLocations: { value: string; label: string; object: unknown }[];
   pmLocations: { value: string; label: string; object: unknown }[];
 }
@@ -123,13 +124,18 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("status", {
         header: "Status",
-        cell: (info) => <DropdownCell {...info} options={enquiryStatus} />,
+        cell: (info) => (
+          <DropdownCell
+            {...info}
+            options={enquiryStatus}
+            objectColumnId="emailSent"
+          />
+        ),
         size: 250,
       }),
-      columnHelper.display({
-        id: "action",
+      columnHelper.accessor("emailSent", {
         header: "Send Email",
-        cell: RowSelectCell,
+        cell: (info) => <CheckboxCell {...info} />,
         size: 75,
       }),
       columnHelper.accessor("homeAddress", {

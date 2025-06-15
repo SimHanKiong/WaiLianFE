@@ -23,6 +23,7 @@ export type Enquiry = {
   pmLocation: Location | null;
   year: number;
   status: EnquiryStatusType | null;
+  emailSent: boolean;
   homeAddress: string;
   amAddress: string;
   pmAddress: string;
@@ -60,6 +61,7 @@ export const createEnquiry = async (
     amLocationId: null,
     pmLocationId: null,
     status: null,
+    emailSent: false,
     year: formData.year,
   };
 
