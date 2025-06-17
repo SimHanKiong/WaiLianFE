@@ -53,3 +53,15 @@ export const createLocation = async (locationCreate: Partial<Location>) => {
 
   revalidateTag("location");
 };
+
+export const deleteLocation = async (id: string): Promise<void> => {
+  const response = await fetch(`${process.env.API_URL}/location/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to delete Location");
+  }
+
+  revalidateTag("location");
+};

@@ -15,6 +15,7 @@ import DisplayCell from "@/components/table/DisplayCell";
 import { EnquiryStatusType } from "@/lib/constants";
 import { useMemo } from "react";
 import CheckboxCell from "@/components/table/CheckboxCell";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
 interface EnquiryTableProps {
   data: Enquiry[];
@@ -57,7 +58,7 @@ export default function EnquiryTable({
         cell: (info) => (
           <DropdownCell {...info} options={schools} objectColumnId="school" />
         ),
-        size: 150,
+        size: 100,
       }),
       columnHelper.accessor("year", {
         header: "Year",
@@ -72,6 +73,17 @@ export default function EnquiryTable({
       //   size: 150,
       //   enableGlobalFilter: false,
       // }),
+      columnHelper.accessor("email", {
+        header: "Email",
+        cell: (info) => <DisplayCell {...info} />,
+        size: 200,
+        enableGlobalFilter: true,
+      }),
+      columnHelper.accessor("homeAddress", {
+        header: "Home Address",
+        cell: (info) => <DisplayCell {...info} />,
+        size: 300,
+      }),
       columnHelper.accessor("block", {
         header: "Block",
         cell: (info) => <TextInputCell {...info} />,
@@ -84,13 +96,18 @@ export default function EnquiryTable({
         size: 250,
       }),
       columnHelper.accessor("fare", {
-        header: "Bus Fare",
+        header: "Bus Fare ($)",
         cell: (info) => <NumberInputCell {...info} />,
         size: 100,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
-        header: "Pick Up Point",
+        header: () => (
+          <span className="flex items-center gap-1">
+            <ArrowBigUp className="w-10 h-10 text-orange-400 fill-orange-400" />
+            Pick Up Point
+          </span>
+        ),
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -107,7 +124,12 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
-        header: "Drop Off Point",
+        header: () => (
+          <span className="flex items-center gap-1">
+            <ArrowBigDown className="w-10 h-10 text-blue-400 fill-blue-400" />
+            Drop Off Point
+          </span>
+        ),
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -138,27 +160,28 @@ export default function EnquiryTable({
         cell: (info) => <CheckboxCell {...info} />,
         size: 75,
       }),
-      columnHelper.accessor("homeAddress", {
-        header: "Home Address",
-        cell: (info) => <DisplayCell {...info} />,
-        size: 300,
-      }),
+
       columnHelper.accessor("amAddress", {
-        header: "Pick Up Address",
+        header: () => (
+          <span className="flex items-center gap-1">
+            <ArrowBigUp className="w-10 h-10 text-orange-400 fill-orange-400" />
+            Pick Up Address
+          </span>
+        ),
         cell: (info) => <DisplayCell {...info} />,
         size: 300,
       }),
       columnHelper.accessor("pmAddress", {
-        header: "Drop Off Address",
+        header: () => (
+          <span className="flex items-center gap-1">
+            <ArrowBigDown className="w-10 h-10 text-blue-400 fill-blue-400" />
+            Drop Off Address
+          </span>
+        ),
         cell: (info) => <DisplayCell {...info} />,
         size: 300,
       }),
-      columnHelper.accessor("email", {
-        header: "Email",
-        cell: (info) => <DisplayCell {...info} />,
-        size: 200,
-        enableGlobalFilter: true,
-      }),
+
       columnHelper.display({
         id: "select",
         cell: RowSelectCell,
