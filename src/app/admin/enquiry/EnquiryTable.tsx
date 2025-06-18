@@ -12,7 +12,6 @@ import {
   deleteEnquiries,
 } from "@/lib/services/enquiry";
 import DisplayCell from "@/components/table/DisplayCell";
-import { EnquiryStatusType } from "@/lib/constants";
 import { useMemo } from "react";
 import CheckboxCell from "@/components/table/CheckboxCell";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
@@ -32,12 +31,12 @@ export default function EnquiryTable({
   amLocations,
   pmLocations,
 }: EnquiryTableProps) {
-  const getStatusRowColour = (status?: EnquiryStatusType | null): string => {
-    if (!status) {
-      return "";
+  const getStatusRowColour = (row: Enquiry): string => {
+    if (row.isFavourite) {
+      return "bg-yellow-100";
     }
 
-    switch (status) {
+    switch (row.status) {
       case "Registration":
         return "bg-green-100";
       case "To Be Confirmed":
@@ -53,6 +52,16 @@ export default function EnquiryTable({
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor("createdOn", {
+        header: "Date",
+        cell: (info) => <DisplayCell {...info} />,
+        size: 100,
+      }),
+      columnHelper.accessor("isFavourite", {
+        header: "",
+        cell: (info) => <CheckboxCell {...info} />,
+        size: 75,
+      }),
       columnHelper.accessor("school.id", {
         header: "School",
         cell: (info) => (
@@ -63,16 +72,8 @@ export default function EnquiryTable({
       columnHelper.accessor("year", {
         header: "Year",
         cell: (info) => <DisplayCell {...info} />,
-        size: 100,
+        size: 75,
       }),
-      // columnHelper.accessor("date", {
-      //   header: "Date",
-      //   cell: (info) => (
-      //     <TextInputCell {...info} updateCellAction={updateEnquiry} />
-      //   ),
-      //   size: 150,
-      //   enableGlobalFilter: false,
-      // }),
       columnHelper.accessor("email", {
         header: "Email",
         cell: (info) => <DisplayCell {...info} />,
@@ -94,11 +95,12 @@ export default function EnquiryTable({
         header: "Remark",
         cell: (info) => <TextInputCell {...info} />,
         size: 250,
+        enableGlobalFilter: true,
       }),
       columnHelper.accessor("fare", {
         header: "Bus Fare ($)",
         cell: (info) => <NumberInputCell {...info} />,
-        size: 100,
+        size: 50,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
@@ -153,14 +155,13 @@ export default function EnquiryTable({
             objectColumnId="emailSent"
           />
         ),
-        size: 250,
+        size: 170,
       }),
-      columnHelper.accessor("emailSent", {
+      columnHelper.accessor("isEmailSent", {
         header: "Send Email",
         cell: (info) => <CheckboxCell {...info} />,
         size: 75,
       }),
-
       columnHelper.accessor("amAddress", {
         header: () => (
           <span className="flex items-center gap-1">
@@ -181,11 +182,10 @@ export default function EnquiryTable({
         cell: (info) => <DisplayCell {...info} />,
         size: 300,
       }),
-
       columnHelper.display({
         id: "select",
         cell: RowSelectCell,
-        size: 50,
+        size: 75,
       }),
     ],
     [columnHelper, schools, enquiryStatus, amLocations, pmLocations]
@@ -196,7 +196,7 @@ export default function EnquiryTable({
       data={data}
       updateCellAction={updateEnquiry}
       deleteRowsAction={deleteEnquiries}
-      getRowColour={(row) => getStatusRowColour(row.status)}
+      getRowColour={(row) => getStatusRowColour(row)}
       enableSearching={true}
     />
   );

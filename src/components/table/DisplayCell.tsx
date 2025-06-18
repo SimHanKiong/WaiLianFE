@@ -20,6 +20,8 @@ export default function DisplayCell<TData>({
         <a href={`mailto:${value}`} className="text-blue-500 hover:underline">
           {value}
         </a>
+      ) : value && typeof value === "string" && validator.isISO8601(value) ? (
+        new Date(value).toLocaleDateString("en-SG")
       ) : (
         value
       )}

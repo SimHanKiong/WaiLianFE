@@ -111,7 +111,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
                   <TableHead
                     key={header.id}
                     className="px-3 py-2
-                   text-left text-sm font-semibold text-gray-600 border sticky top-0 z-10 bg-gray-100"
+                   text-left text-sm font-semibold text-gray-600 border sticky top-0 z-10 bg-gray-200"
                     style={{ width: `${header.getSize()}px` }}
                   >
                     {header.isPlaceholder
@@ -132,8 +132,8 @@ export function EditableTable<TData extends DataWithId, TValue>({
                   key={row.id}
                   className={`${
                     getRowColour?.(row.original) ||
-                    (index % 2 === 0 ? "" : "bg-gray-50")
-                  } hover:bg-gray-100`}
+                    (index % 2 === 0 ? "" : "bg-gray-100")
+                  } `}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -164,9 +164,22 @@ export function EditableTable<TData extends DataWithId, TValue>({
         </Table>
       </div>
       <div className="w-full p-4 border border-gray-100 rounded-md shadow-sm text-right">
+        {addRowAction && getNewRowData ? (
+          <Button
+            variant="default"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+            onClick={() => {
+              const addRowData = getNewRowData();
+              setTableData((prev) => [...prev, addRowData]);
+              addRowAction(addRowData);
+            }}
+          >
+            Add Row
+          </Button>
+        ) : null}
         <Button
           variant="default"
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-2"
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
           onClick={() => {
             const idsToDelete = selectedRows.map((row) => row.original.id);
             setTableData((prev) =>
@@ -178,19 +191,6 @@ export function EditableTable<TData extends DataWithId, TValue>({
         >
           Delete Rows
         </Button>
-        {addRowAction && getNewRowData ? (
-          <Button
-            variant="default"
-            onClick={() => {
-              const addRowData = getNewRowData();
-              setTableData((prev) => [...prev, addRowData]);
-              addRowAction(addRowData);
-            }}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-          >
-            Add Row
-          </Button>
-        ) : null}
       </div>
 
       <pre>{JSON.stringify(tableData, null, 2)}</pre>

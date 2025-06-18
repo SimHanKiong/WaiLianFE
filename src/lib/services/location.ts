@@ -12,24 +12,27 @@ export type Location = {
 };
 
 export const readLocations = async (
-  type?: "AM" | "PM"
+  type?: "AM" | "PM",
+  sortBy?: string
 ): Promise<Location[]> => {
-  let response;
+  const params = new URLSearchParams();
   if (type) {
-    response = await fetch(`${process.env.API_URL}/location/?type=${type}`, {
-      method: "GET",
-      next: {
-        tags: ["location", type],
-      },
-    });
-  } else {
-    response = await fetch(`${process.env.API_URL}/location/`, {
-      method: "GET",
-      next: {
-        tags: ["location"],
-      },
-    });
+    params.append("type", type);
   }
+  if (sortBy) {
+    params.append("sort_by", sortBy);
+  }
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+
+  const response = await fetch(
+    `${process.env.API_URL}/location/${queryString}`,
+    {
+      method: "GET",
+      next: {
+        tags: ["location", type].filter(Boolean) as string[],
+      },
+    }
+  );
   if (!response.ok) {
     throw new Error("Unable to get Locations");
   }

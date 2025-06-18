@@ -11,8 +11,8 @@ export default async function Page() {
   const [enquiries, schools, amLocations, pmLocations] = await Promise.all([
     readEnquiries(),
     readSchools(),
-    readLocations("AM"),
-    readLocations("PM"),
+    readLocations("AM", "address"),
+    readLocations("PM", "address"),
   ]);
 
   const schoolOptions = schools.map((school) => ({

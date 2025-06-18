@@ -23,11 +23,12 @@ export type Enquiry = {
   pmLocation: Location | null;
   year: number;
   status: EnquiryStatusType | null;
-  emailSent: boolean;
+  isEmailSent: boolean;
+  isFavourite: boolean;
   homeAddress: string;
   amAddress: string;
   pmAddress: string;
-  created_at: Date;
+  createdOn: string;
 };
 
 export const readEnquiries = async (): Promise<Enquiry[]> => {
@@ -61,7 +62,8 @@ export const createEnquiry = async (
     amLocationId: null,
     pmLocationId: null,
     status: null,
-    emailSent: false,
+    isEmailSent: false,
+    isFavourite: false,
     year: formData.year,
   };
 
@@ -83,6 +85,7 @@ export const updateEnquiry = async (
   id: string,
   enquiryUpdate: Partial<Enquiry>
 ): Promise<void> => {
+  console.log(enquiryUpdate);
   const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
     method: "PATCH",
     headers: {

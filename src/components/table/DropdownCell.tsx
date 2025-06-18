@@ -77,9 +77,11 @@ export default function DropdownCell<TData extends DataWithId>({
             aria-expanded={open}
             className="w-full px-3 justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent"
           >
-            {value
-              ? options.find((option) => option.value === value)?.label
-              : "Select..."}
+            {value ? (
+              options.find((option) => option.value === value)?.label
+            ) : (
+              <span className="invisible"></span>
+            )}
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
