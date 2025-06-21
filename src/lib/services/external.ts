@@ -20,5 +20,7 @@ export const getAddress = async (postalCode: string): Promise<string> => {
     return "";
   }
 
-  return results[0]["ADDRESS"];
+  const block = results[0]["BLK_NO"];
+  const road = results[0]["ROAD_NAME"];
+  return block + " " + road;
 };

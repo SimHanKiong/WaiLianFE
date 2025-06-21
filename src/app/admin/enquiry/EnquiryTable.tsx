@@ -80,6 +80,11 @@ export default function EnquiryTable({
         size: 200,
         enableGlobalFilter: true,
       }),
+      columnHelper.accessor("homePostalCode", {
+        header: "Home Postal Code",
+        cell: (info) => <DisplayCell {...info} />,
+        size: 100,
+      }),
       columnHelper.accessor("homeAddress", {
         header: "Home Address",
         cell: (info) => <DisplayCell {...info} />,
@@ -88,7 +93,7 @@ export default function EnquiryTable({
       columnHelper.accessor("block", {
         header: "Block",
         cell: (info) => <TextInputCell {...info} />,
-        size: 100,
+        size: 120,
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("remark", {
@@ -100,13 +105,13 @@ export default function EnquiryTable({
       columnHelper.accessor("fare", {
         header: "Bus Fare ($)",
         cell: (info) => <NumberInputCell {...info} />,
-        size: 50,
+        size: 80,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigUp className="w-10 h-10 text-orange-400 fill-orange-400" />
+            <ArrowBigUp className="w-10 h-10 text-orange-500 fill-orange-500" />
             Pick Up Point
           </span>
         ),
@@ -128,7 +133,7 @@ export default function EnquiryTable({
         id: "pmLocationId",
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigDown className="w-10 h-10 text-blue-400 fill-blue-400" />
+            <ArrowBigDown className="w-10 h-10 text-blue-500 fill-blue-500" />
             Drop Off Point
           </span>
         ),
@@ -165,7 +170,7 @@ export default function EnquiryTable({
       columnHelper.accessor("amAddress", {
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigUp className="w-10 h-10 text-orange-400 fill-orange-400" />
+            <ArrowBigUp className="w-10 h-10 text-orange-500 fill-orange-500" />
             Pick Up Address
           </span>
         ),
@@ -175,7 +180,7 @@ export default function EnquiryTable({
       columnHelper.accessor("pmAddress", {
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigDown className="w-10 h-10 text-blue-400 fill-blue-400" />
+            <ArrowBigDown className="w-10 h-10 text-blue-500 fill-blue-500" />
             Drop Off Address
           </span>
         ),

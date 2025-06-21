@@ -164,7 +164,6 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
         description: "Please check your email for more details.",
       });
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
         title: "Submission Failed",

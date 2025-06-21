@@ -46,7 +46,6 @@ export const readSchool = async (id: string): Promise<School> => {
 };
 
 export const createSchool = async (schoolCreate: School): Promise<void> => {
-  console.log(schoolCreate);
   const response = await fetch(`${process.env.API_URL}/school/`, {
     method: "POST",
     headers: {

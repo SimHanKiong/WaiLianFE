@@ -111,7 +111,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
                   <TableHead
                     key={header.id}
                     className="px-3 py-2
-                   text-left text-sm font-semibold text-gray-600 border sticky top-0 z-10 bg-gray-200"
+                   text-left text-sm font-semibold text-gray-900 border sticky top-0 z-10 bg-gray-200 border-gray-400"
                     style={{ width: `${header.getSize()}px` }}
                   >
                     {header.isPlaceholder
@@ -139,7 +139,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="px-0 py-2 text-sm text-gray-700 border"
+                      className="px-0 py-2 text-sm text-gray-900 border border-gray-400"
                       style={{ width: `${cell.column.getSize()}px` }}
                     >
                       {flexRender(
@@ -154,7 +154,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="px-4 py-2 text-center text-gray-500"
+                  className="px-4 py-2 text-center text-gray-900"
                 >
                   No results.
                 </TableCell>

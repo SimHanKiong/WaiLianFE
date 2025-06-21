@@ -85,7 +85,6 @@ export const updateEnquiry = async (
   id: string,
   enquiryUpdate: Partial<Enquiry>
 ): Promise<void> => {
-  console.log(enquiryUpdate);
   const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
     method: "PATCH",
     headers: {

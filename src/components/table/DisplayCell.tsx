@@ -21,7 +21,11 @@ export default function DisplayCell<TData>({
           {value}
         </a>
       ) : value && typeof value === "string" && validator.isISO8601(value) ? (
-        new Date(value).toLocaleDateString("en-SG")
+        new Date(value).toLocaleDateString("en-SG", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+        })
       ) : (
         value
       )}
