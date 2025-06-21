@@ -75,7 +75,7 @@ export default function DropdownCell<TData extends DataWithId>({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full px-3 justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent"
+            className="w-full px-3 justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent hover:bg-transparent"
           >
             {value ? (
               options.find((option) => option.value === value)?.label
