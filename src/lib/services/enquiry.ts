@@ -31,20 +31,11 @@ export type Enquiry = {
   createdOn: string;
 };
 
-export const readEnquiries = async (sortBy?: string[]): Promise<Enquiry[]> => {
-  const params = new URLSearchParams();
-  if (sortBy) {
-    sortBy.forEach((sort) => params.append("sort_by", sort));
-  }
-  const queryString = params.toString() ? `?${params.toString()}` : "";
-
-  const response = await fetch(
-    `${process.env.API_URL}/enquiry/${queryString}`,
-    {
-      method: "GET",
-      cache: "no-store",
-    }
-  );
+export const readEnquiries = async (): Promise<Enquiry[]> => {
+  const response = await fetch(`${process.env.API_URL}/enquiry/`, {
+    method: "GET",
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     throw new Error("Unable to get Enquiries");
