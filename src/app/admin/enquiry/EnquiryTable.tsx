@@ -1,7 +1,7 @@
 "use client";
 
 import { EditableTable } from "@/components/table/EditableTable";
-import { createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
 import DropdownCell from "@/components/table/DropdownCell";
 import NumberInputCell from "@/components/table/NumberInputCell";
 import RowSelectCell from "@/components/table/RowSelectCell";
@@ -45,6 +45,24 @@ export default function EnquiryTable({
         return "bg-blue-100";
       default:
         return "";
+    }
+  };
+
+  const sortByColumns: SortingState = [
+    { id: "status", desc: true },
+    { id: "createdOn", desc: false },
+  ];
+
+  const statusSortFn = (rowA: Row<Enquiry>, rowB: Row<Enquiry>) => {
+    const statusA = rowA.getValue("status");
+    const statusB = rowB.getValue("status");
+
+    if (statusA && !statusB) {
+      return -1;
+    } else if (!statusA && statusB) {
+      return 1;
+    } else {
+      return 0;
     }
   };
 
@@ -160,6 +178,7 @@ export default function EnquiryTable({
             objectColumnId="emailSent"
           />
         ),
+        sortingFn: statusSortFn,
         size: 170,
       }),
       columnHelper.accessor("isEmailSent", {
@@ -203,6 +222,7 @@ export default function EnquiryTable({
       deleteRowsAction={deleteEnquiries}
       getRowColour={(row) => getStatusRowColour(row)}
       enableSearching={true}
+      sortByColumns={sortByColumns}
     />
   );
 }

@@ -5,7 +5,9 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   RowData,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -40,6 +42,7 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   deleteRowsAction: (ids: string[]) => Promise<void>;
   getRowColour?: (row: TData) => string;
   enableSearching: boolean;
+  sortByColumns?: SortingState;
 }
 
 export function EditableTable<TData extends DataWithId, TValue>({
@@ -51,9 +54,11 @@ export function EditableTable<TData extends DataWithId, TValue>({
   deleteRowsAction,
   getRowColour,
   enableSearching,
+  sortByColumns,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState<SortingState>(sortByColumns ?? []);
 
   useEffect(() => {
     setTableData(data);
@@ -65,10 +70,13 @@ export function EditableTable<TData extends DataWithId, TValue>({
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     state: {
       globalFilter,
+      sorting,
     },
     onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
     meta: {
       updateData: (
         rowId: string,

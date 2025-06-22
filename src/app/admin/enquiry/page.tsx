@@ -9,7 +9,7 @@ import DeleteLocationForm from "./DeleteLocationForm";
 
 export default async function Page() {
   const [enquiries, schools, amLocations, pmLocations] = await Promise.all([
-    readEnquiries(),
+    readEnquiries(["-status", "created_on"]),
     readSchools(),
     readLocations("AM", "address"),
     readLocations("PM", "address"),
