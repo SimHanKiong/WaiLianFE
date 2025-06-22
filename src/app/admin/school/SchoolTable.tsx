@@ -15,6 +15,7 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import { v4 as uuidv4 } from "uuid";
 import { useMemo } from "react";
+import ImageInputCell from "@/components/table/ImageInputCell";
 
 interface SchoolTableProps {
   data: School[];
@@ -28,6 +29,11 @@ export default function SchoolTable({ data }: SchoolTableProps) {
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor("emailAttachmentKey", {
+        header: "Email Attachment",
+        cell: (info) => <ImageInputCell {...info} />,
+        size: 400,
+      }),
       columnHelper.accessor("name", {
         header: "School Name",
         cell: (info) => <TextInputCell {...info} />,
@@ -88,6 +94,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       email: null,
       password: "",
       isFinalYear: false,
+      emailAttachmentKey: null,
     };
   };
 

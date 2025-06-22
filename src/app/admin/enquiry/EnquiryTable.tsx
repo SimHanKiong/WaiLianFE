@@ -93,7 +93,7 @@ export default function EnquiryTable({
       columnHelper.accessor("block", {
         header: "Block",
         cell: (info) => <TextInputCell {...info} />,
-        size: 120,
+        size: 170,
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("remark", {

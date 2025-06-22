@@ -11,6 +11,8 @@ export type School = {
   email: string | null;
   password: string;
   isFinalYear: boolean;
+  emailAttachmentKey: string | null;
+  emailAttachmentSignedUrl?: string | null;
 };
 
 export const readSchools = async (): Promise<School[]> => {

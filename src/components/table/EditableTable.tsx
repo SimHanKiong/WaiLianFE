@@ -103,7 +103,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
         </div>
       )}
       <div className="overflow-auto relative max-h-[70vh]">
-        <Table className="w-full border border-gray-200 rounded-lg shadow-sm table-fixed">
+        <Table className="w-full border border-gray-400 rounded-lg shadow-sm table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
