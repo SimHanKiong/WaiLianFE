@@ -16,6 +16,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { v4 as uuidv4 } from "uuid";
 import { useMemo } from "react";
 import ImageInputCell from "@/components/table/ImageInputCell";
+import ImageDisplayCell from "@/components/table/ImageDisplayCell";
 
 interface SchoolTableProps {
   data: School[];
@@ -29,11 +30,6 @@ export default function SchoolTable({ data }: SchoolTableProps) {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("emailAttachmentKey", {
-        header: "Email Attachment",
-        cell: (info) => <ImageInputCell {...info} />,
-        size: 400,
-      }),
       columnHelper.accessor("name", {
         header: "School Name",
         cell: (info) => <TextInputCell {...info} />,
@@ -64,16 +60,26 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         cell: (info) => <TextInputCell {...info} />,
         size: 200,
       }),
-      columnHelper.accessor("isFinalYear", {
-        header: "Final Year",
-        cell: (info) => <CheckboxCell {...info} />,
-        size: 100,
+      columnHelper.accessor("emailAttachmentKey", {
+        header: "Email Upload",
+        cell: (info) => <ImageInputCell {...info} />,
+        size: 400,
+      }),
+      columnHelper.accessor("emailAttachmentSignedUrl", {
+        header: "Email Attachment",
+        cell: (info) => <ImageDisplayCell {...info} />,
+        size: 200,
       }),
       columnHelper.display({
         id: "link",
         header: "Link",
         cell: ({ row }) => <ClipboardCell content={getLink(row.original)} />,
         size: 80,
+      }),
+      columnHelper.accessor("isFinalYear", {
+        header: "Final Year",
+        cell: (info) => <CheckboxCell {...info} />,
+        size: 100,
       }),
       columnHelper.display({
         id: "select",
