@@ -129,7 +129,7 @@ export default function EnquiryTable({
         id: "amLocationId",
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigUp className="w-10 h-10 text-orange-500 fill-orange-500" />
+            <ArrowBigUp className="h-10 w-10 fill-orange-500 text-orange-500" />
             Pick Up Point
           </span>
         ),
@@ -151,7 +151,7 @@ export default function EnquiryTable({
         id: "pmLocationId",
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigDown className="w-10 h-10 text-blue-500 fill-blue-500" />
+            <ArrowBigDown className="h-10 w-10 fill-blue-500 text-blue-500" />
             Drop Off Point
           </span>
         ),
@@ -189,7 +189,7 @@ export default function EnquiryTable({
       columnHelper.accessor("amAddress", {
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigUp className="w-10 h-10 text-orange-500 fill-orange-500" />
+            <ArrowBigUp className="h-10 w-10 fill-orange-500 text-orange-500" />
             Pick Up Address
           </span>
         ),
@@ -199,18 +199,14 @@ export default function EnquiryTable({
       columnHelper.accessor("pmAddress", {
         header: () => (
           <span className="flex items-center gap-1">
-            <ArrowBigDown className="w-10 h-10 text-blue-500 fill-blue-500" />
+            <ArrowBigDown className="h-10 w-10 fill-blue-500 text-blue-500" />
             Drop Off Address
           </span>
         ),
         cell: (info) => <DisplayCell {...info} />,
         size: 300,
       }),
-      columnHelper.display({
-        id: "select",
-        cell: RowSelectCell,
-        size: 75,
-      }),
+      columnHelper.display({ id: "select", cell: RowSelectCell, size: 75 }),
     ],
     [columnHelper, schools, enquiryStatus, amLocations, pmLocations]
   );

@@ -1,12 +1,12 @@
-import { Control, FieldValues, Path } from 'react-hook-form';
+import { Control, FieldValues, Path } from "react-hook-form";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
+} from "../ui/form";
+import { Input } from "../ui/input";
 
 interface TextInputFormProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>;
@@ -23,7 +23,7 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
   control,
   placeholder,
   maxLength,
-  type = 'text',
+  type = "text",
 }: TextInputFormProps<TFieldValues>) {
   return (
     <FormField
@@ -31,12 +31,12 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gray-700 font-semibold">{label}</FormLabel>
+          <FormLabel className="font-semibold text-gray-700">{label}</FormLabel>
           <FormControl>
             <Input
               type={type}
               {...field}
-              className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm"
+              className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm"
               placeholder={placeholder}
               maxLength={maxLength}
             />

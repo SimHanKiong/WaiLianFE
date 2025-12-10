@@ -3,6 +3,7 @@ import { readEnquiries } from "@/lib/services/enquiry";
 import EnquiryTable from "./EnquiryTable";
 import { readSchools } from "@/lib/services/school";
 import { readLocations } from "@/lib/services/location";
+import Header from "@/components/Header";
 import { EnquiryStatus } from "@/lib/constants";
 import AddLocationForm from "./AddLocationForm";
 import DeleteLocationForm from "./DeleteLocationForm";
@@ -41,11 +42,9 @@ export default async function Page() {
   }));
 
   return (
-    <div className="container mx-auto py-10 px-10 max-w-full">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">
-        Enquiries
-      </h1>
-      <div className="flex flex-row gap-4 pb-2 mb-4 justify-end">
+    <div className="container mx-auto max-w-full px-10 py-10">
+      <Header title="Enquiries" />
+      <div className="mb-4 flex flex-row justify-end gap-4 pb-2">
         <DialogWrapper
           openText="Add Location"
           title="Add a Location"

@@ -23,9 +23,7 @@ export default function DeleteLocationForm({
 }: DeleteLocationFormProps) {
   const form = useForm<DeleteLocationFormData>({
     resolver: zodResolver(deleteLocationSchema),
-    defaultValues: {
-      locationId: undefined,
-    },
+    defaultValues: { locationId: undefined },
   });
 
   const onSubmit = async (data: DeleteLocationFormData) => {
@@ -37,7 +35,7 @@ export default function DeleteLocationForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full"
+        className="w-full space-y-6 rounded-lg bg-white p-6 shadow-lg"
       >
         <DropdownForm
           name="locationId"
@@ -49,7 +47,7 @@ export default function DeleteLocationForm({
         <div className="text-right">
           <Button
             type="submit"
-            className="bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md shadow-md"
+            className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md hover:bg-red-700"
           >
             Delete
           </Button>

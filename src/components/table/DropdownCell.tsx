@@ -68,14 +68,14 @@ export default function DropdownCell<TData extends DataWithId>({
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex items-center justify-center">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full px-3 justify-between focus-visible:ring-0 border-0 shadow-none bg-transparent hover:bg-transparent"
+            className="w-full justify-between border-0 bg-transparent px-3 shadow-none hover:bg-transparent focus-visible:ring-0"
           >
             {value ? (
               options.find((option) => option.value === value)?.label
@@ -85,7 +85,7 @@ export default function DropdownCell<TData extends DataWithId>({
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-[--radix-popover-trigger-width] max-h-[--radix-popover-content-available-height]">
+        <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
           <Command>
             <CommandInput placeholder="Search..." />
             <CommandList>

@@ -9,19 +9,19 @@ export default function ImageDisplayCell<TData>({
 
   if (!url) {
     return (
-      <div className="flex items-center justify-center w-full text-m text-gray-400">
+      <div className="text-m flex w-full items-center justify-center text-gray-400">
         No Image
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-16">
+    <div className="flex h-16 w-full items-center justify-center">
       <a href={url}>
         <img
           src={url}
           alt="Preview"
-          className="max-h-16 max-w-[200px] object-contain rounded border"
+          className="max-h-16 max-w-[200px] rounded border object-contain"
         />
       </a>
     </div>

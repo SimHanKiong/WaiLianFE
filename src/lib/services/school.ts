@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-
 export type School = {
   id: string;
   name: string;
@@ -18,9 +16,7 @@ export type School = {
 export const readSchools = async (): Promise<School[]> => {
   const response = await fetch(`${process.env.API_URL}/school/`, {
     method: "GET",
-    next: {
-      tags: ["school"],
-    },
+    cache: "no-store",
   });
 
   if (!response.ok) {
@@ -34,9 +30,7 @@ export const readSchools = async (): Promise<School[]> => {
 export const readSchool = async (id: string): Promise<School> => {
   const response = await fetch(`${process.env.API_URL}/school/${id}`, {
     method: "GET",
-    next: {
-      tags: ["school", id],
-    },
+    cache: "no-store",
   });
 
   if (!response.ok) {
@@ -59,9 +53,7 @@ export const createSchool = async (schoolCreate: School): Promise<void> => {
   if (!response.ok) {
     throw new Error("Unable to create School");
   }
-
   await response.json();
-  revalidateTag("school");
 };
 
 export const updateSchool = async (
@@ -79,8 +71,6 @@ export const updateSchool = async (
   if (!response.ok) {
     throw new Error("Unable to update School");
   }
-
-  revalidateTag("school");
 };
 
 export const deleteSchools = async (ids: string[]): Promise<void> => {
@@ -93,6 +83,4 @@ export const deleteSchools = async (ids: string[]): Promise<void> => {
       throw new Error("Unable to delete School");
     }
   }
-
-  revalidateTag("school");
 };

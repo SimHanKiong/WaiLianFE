@@ -178,7 +178,7 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full"
+        className="w-full space-y-6 rounded-lg bg-white p-6 shadow-lg"
       >
         <TextInputForm
           name="email"
@@ -208,8 +208,8 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
           maxLength={6}
         />
         <div className="space-y-2">
-          <Label className="text-gray-700 font-semibold">Home Address</Label>
-          <p className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm md:text-sm">
+          <Label className="font-semibold text-gray-700">Home Address</Label>
+          <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
             {homeAddress || "No Home Address Found"}
           </p>
         </div>
@@ -240,10 +240,10 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
               maxLength={6}
             />
             <div className="space-y-2">
-              <Label className="text-gray-700 font-semibold">
+              <Label className="font-semibold text-gray-700">
                 Pick Up Address
               </Label>
-              <p className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm md:text-sm">
+              <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
                 {amAddress || "No Pick Up Address Found"}
               </p>
             </div>
@@ -259,10 +259,10 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
               maxLength={6}
             />
             <div className="space-y-2">
-              <Label className="text-gray-700 font-semibold">
+              <Label className="font-semibold text-gray-700">
                 Drop Off Address
               </Label>
-              <p className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm md:text-sm">
+              <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
                 {pmAddress || "No Drop Off Address Found"}
               </p>
             </div>
@@ -271,7 +271,7 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
         <div className="text-right">
           <Button
             type="submit"
-            className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md shadow-md"
+            className="rounded-md bg-blue-600 px-4 py-2 text-white shadow-md hover:bg-blue-700"
           >
             Submit
           </Button>

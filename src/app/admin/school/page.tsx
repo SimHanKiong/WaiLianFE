@@ -1,14 +1,13 @@
-import { readSchools } from '@/lib/services/school';
-import SchoolTable from './SchoolTable';
+import { readSchools } from "@/lib/services/school";
+import SchoolTable from "./SchoolTable";
+import Header from "@/components/Header";
 
 export default async function Page() {
   const schools = await readSchools();
 
   return (
-    <div className="container mx-auto py-10 px-10 max-w-full">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">
-        Schools
-      </h1>
+    <div className="container mx-auto max-w-full px-10 py-10">
+      <Header title="Schools" />
       <SchoolTable data={schools} />
     </div>
   );

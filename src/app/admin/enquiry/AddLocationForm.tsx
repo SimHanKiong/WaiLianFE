@@ -20,11 +20,7 @@ type AddLocationFormData = z.infer<typeof addLocationSchema>;
 export default function AddLocationForm() {
   const form = useForm<AddLocationFormData>({
     resolver: zodResolver(addLocationSchema),
-    defaultValues: {
-      address: "",
-      time: "",
-      type: undefined,
-    },
+    defaultValues: { address: "", time: "", type: undefined },
   });
 
   const onSubmit = async (data: AddLocationFormData) => {
@@ -36,7 +32,7 @@ export default function AddLocationForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full"
+        className="w-full space-y-6 rounded-lg bg-white p-6 shadow-lg"
       >
         <TextInputForm
           control={form.control}
@@ -63,7 +59,7 @@ export default function AddLocationForm() {
         <div className="text-right">
           <Button
             type="submit"
-            className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md shadow-md"
+            className="rounded-md bg-blue-600 px-4 py-2 text-white shadow-md hover:bg-blue-700"
           >
             Submit
           </Button>

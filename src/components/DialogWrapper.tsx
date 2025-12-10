@@ -30,7 +30,7 @@ export default function DialogWrapper({
           {openText}
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full rounded-lg p-6 shadow-lg border">
+      <DialogContent className="w-full rounded-lg border p-6 shadow-lg">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>

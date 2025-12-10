@@ -9,10 +9,7 @@ import {
 } from "../ui/form";
 import { Control, FieldValues, Path } from "react-hook-form";
 
-type RadioOption<T> = {
-  value: T;
-  label: string;
-};
+type RadioOption<T> = { value: T; label: string };
 
 interface RadioInputFormProps<
   TFieldValues extends FieldValues,
@@ -52,7 +49,7 @@ export default function RadioInputForm<
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gray-700 font-semibold">{label}</FormLabel>
+          <FormLabel className="font-semibold text-gray-700">{label}</FormLabel>
           <FormControl>
             <RadioGroup
               onValueChange={(value) => {
@@ -69,11 +66,11 @@ export default function RadioInputForm<
                   <RadioGroupItem
                     value={String(option.value)}
                     id={`${name}-${String(option.value)}`}
-                    className="w-5 h-5 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="h-5 w-5 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <Label
                     htmlFor={`${name}-${String(option.value)}`}
-                    className="text-gray-700 font-medium"
+                    className="font-medium text-gray-700"
                   >
                     {option.label}
                   </Label>

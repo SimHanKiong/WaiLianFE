@@ -81,11 +81,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         cell: (info) => <CheckboxCell {...info} />,
         size: 100,
       }),
-      columnHelper.display({
-        id: "select",
-        cell: RowSelectCell,
-        size: 80,
-      }),
+      columnHelper.display({ id: "select", cell: RowSelectCell, size: 80 }),
     ],
     [columnHelper]
   );

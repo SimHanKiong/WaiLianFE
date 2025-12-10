@@ -43,7 +43,7 @@ export default function DropdownForm<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gray-700 font-semibold">{label}</FormLabel>
+          <FormLabel className="font-semibold text-gray-700">{label}</FormLabel>
           <FormControl>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
@@ -52,7 +52,7 @@ export default function DropdownForm<TFieldValues extends FieldValues>({
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm w-full flex justify-between"
+                  className="flex w-full justify-between rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm"
                 >
                   {field.value
                     ? options.find((option) => option.value === field.value)
@@ -61,7 +61,7 @@ export default function DropdownForm<TFieldValues extends FieldValues>({
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="p-0 w-[--radix-popover-trigger-width] max-h-[--radix-popover-content-available-height]">
+              <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                 <Command>
                   <CommandInput placeholder="Search..." />
                   <CommandList>

@@ -51,7 +51,7 @@ export default function FileInputCell<TData extends DataWithId>({
   };
 
   return (
-    <div className="flex items-center gap-3 ml-2">
+    <div className="ml-2 flex items-center gap-3">
       <Button
         type="button"
         variant={value ? "secondary" : "outline"}
@@ -61,7 +61,7 @@ export default function FileInputCell<TData extends DataWithId>({
       >
         {value ? "Replace File" : "Upload File"}
       </Button>
-      <span className={value ? "text-green-600 text-m" : "text-red-600 text-m"}>
+      <span className={value ? "text-m text-green-600" : "text-m text-red-600"}>
         {value ? "File Uploaded" : "No File"}
       </span>
       <Input

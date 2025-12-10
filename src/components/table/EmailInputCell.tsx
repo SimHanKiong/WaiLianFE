@@ -40,7 +40,7 @@ export default function EmailInputCell<TData extends DataWithId>({
 
   return (
     <Input
-      className="focus-visible:ring-0 border-0 shadow-none"
+      className="border-0 shadow-none focus-visible:ring-0"
       value={value ?? ""}
       onChange={(e) => setValue(e.target.value)}
       onBlur={handleBlur}
