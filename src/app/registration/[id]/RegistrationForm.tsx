@@ -122,9 +122,9 @@ interface RegistrationFormProps {
 
 export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
   const enquiryTransportRequirement =
-    enquiry.amLocationId && enquiry.pmLocationId
+    enquiry.amPostalCode && enquiry.pmPostalCode
       ? "Both"
-      : enquiry.amLocationId
+      : enquiry.amPostalCode
         ? "AM"
         : "PM";
 
@@ -141,7 +141,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
       siblings: [
         {
           fullName: "",
-          givenName: "",  
+          givenName: "",
           gender: undefined,
           level: 0,
           class: "",
