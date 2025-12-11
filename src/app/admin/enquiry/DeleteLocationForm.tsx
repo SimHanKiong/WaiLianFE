@@ -45,10 +45,7 @@ export default function DeleteLocationForm({
           placeholder="Select a location to delete"
         />
         <div className="text-right">
-          <Button
-            type="submit"
-            className="rounded-md bg-red-600 px-4 py-2 text-white shadow-md hover:bg-red-700"
-          >
+          <Button type="submit" variant="delete">
             Delete
           </Button>
         </div>

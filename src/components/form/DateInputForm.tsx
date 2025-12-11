@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { format, parseISO } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { format, parseISO } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Calendar } from '@/components/ui/calendar';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/form";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Control, FieldValues, Path } from 'react-hook-form';
-import { useState } from 'react';
-import { Input } from '../ui/input';
+} from "@/components/ui/popover";
+import { Control, FieldValues, Path } from "react-hook-form";
+import { useState } from "react";
+import { Input } from "../ui/input";
 
 interface DateInputFormProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>;
@@ -43,25 +43,24 @@ export default function DateInputForm<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-gray-700 font-semibold">{label}</FormLabel>
+          <FormLabel className="font-semibold text-gray-700">{label}</FormLabel>
           <div className="relative flex items-center">
-            {/* Native Date Input */}
             <FormControl>
               <Input
                 type="date"
                 {...field}
-                className="border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow-sm"
-                value={format(field.value, 'yyyy-MM-dd')}
+                className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm"
+                value={format(field.value, "yyyy-MM-dd")}
                 onChange={(e) => {
-                  const value = e.target.value;
-                  const parsedDate = parseISO(value);
-                  field.onChange(parsedDate);
+                  const parsedDate = parseISO(e.target.value);
+                  if (Number.isFinite(parsedDate.getTime())) {
+                    field.onChange(parsedDate);
+                  }
                 }}
                 onClick={(e) => e.preventDefault()}
               />
             </FormControl>
 
-            {/* Calendar Popover */}
             <Popover open={isOpen} onOpenChange={setIsOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -70,7 +69,7 @@ export default function DateInputForm<TFieldValues extends FieldValues>({
                   className="absolute right-2 rounded-full"
                   type="button"
                 >
-                  <CalendarIcon className="w-5 h-5 text-gray-500" />
+                  <CalendarIcon className="h-5 w-5 text-gray-500" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">

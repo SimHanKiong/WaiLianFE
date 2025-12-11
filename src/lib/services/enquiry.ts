@@ -15,8 +15,8 @@ export type Enquiry = {
   homeUnitNo: string;
   amPostalCode: string;
   pmPostalCode: string;
-  schoolId: string | null;
-  school: School | null;
+  schoolId: string;
+  school: School;
   amLocationId: string | null;
   amLocation: Location | null;
   pmLocationId: string | null;
@@ -39,6 +39,20 @@ export const readEnquiries = async (): Promise<Enquiry[]> => {
 
   if (!response.ok) {
     throw new Error("Unable to get Enquiries");
+  }
+
+  const data = await response.json();
+  return data;
+};
+
+export const readEnquiry = async (id: string): Promise<Enquiry> => {
+  const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
+    method: "GET",
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to get Enquiry");
   }
 
   const data = await response.json();
@@ -69,9 +83,7 @@ export const createEnquiry = async (
 
   const response = await fetch(`${process.env.API_URL}/enquiry/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(enquiryCreate),
   });
 
@@ -87,9 +99,7 @@ export const updateEnquiry = async (
 ): Promise<void> => {
   const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(enquiryUpdate),
   });
 

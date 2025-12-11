@@ -9,10 +9,10 @@ import TextInputForm from "@/components/form/TextInputForm";
 import RadioInputForm from "@/components/form/RadioInputForm";
 import { useEffect, useState } from "react";
 import { getAddress } from "@/lib/services/external";
-import { Label } from "@/components/ui/label";
 import { createEnquiry } from "@/lib/services/enquiry";
 import { School } from "@/lib/services/school";
 import { useToast } from "@/hooks/use-toast";
+import DisplayFieldForm from "@/components/form/DisplayFieldForm";
 
 const year = new Date().getFullYear();
 
@@ -207,19 +207,17 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
           placeholder="Enter home postal code"
           maxLength={6}
         />
-        <div className="space-y-2">
-          <Label className="font-semibold text-gray-700">Home Address</Label>
-          <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
-            {homeAddress || "No Home Address Found"}
-          </p>
-        </div>
+        <DisplayFieldForm
+          label="Home Address"
+          value={homeAddress}
+          fallback="No Home Address Found"
+        />
         <TextInputForm
           name="homeUnitNo"
           label="Home Unit Number (Without #)"
           control={form.control}
           placeholder="Enter home unit number"
         />
-
         <RadioInputForm
           name="transportRequirement"
           label="Transport Requirement"
@@ -239,14 +237,11 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
               placeholder="Enter pick up postal code"
               maxLength={6}
             />
-            <div className="space-y-2">
-              <Label className="font-semibold text-gray-700">
-                Pick Up Address
-              </Label>
-              <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
-                {amAddress || "No Pick Up Address Found"}
-              </p>
-            </div>
+            <DisplayFieldForm
+              label="Pick Up Address"
+              value={amAddress}
+              fallback="No Pick Up Address Found"
+            />
           </>
         )}
         {(transportRequirement === "Both" || transportRequirement == "PM") && (
@@ -258,21 +253,15 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
               placeholder="Enter drop off postal code"
               maxLength={6}
             />
-            <div className="space-y-2">
-              <Label className="font-semibold text-gray-700">
-                Drop Off Address
-              </Label>
-              <p className="rounded-md border border-gray-300 px-3 py-2 text-gray-700 shadow-sm md:text-sm">
-                {pmAddress || "No Drop Off Address Found"}
-              </p>
-            </div>
+            <DisplayFieldForm
+              label="Drop Off Address"
+              value={pmAddress}
+              fallback="No Drop Off Address Found"
+            />
           </>
         )}
         <div className="text-right">
-          <Button
-            type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-white shadow-md hover:bg-blue-700"
-          >
+          <Button type="submit" variant="submit">
             Submit
           </Button>
         </div>

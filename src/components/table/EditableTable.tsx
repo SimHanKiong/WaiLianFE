@@ -71,10 +71,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
     enableRowSelection: true,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    state: {
-      globalFilter,
-      sorting,
-    },
+    state: { globalFilter, sorting },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     meta: {
@@ -106,20 +103,19 @@ export function EditableTable<TData extends DataWithId, TValue>({
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             placeholder="Search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
+            className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm"
           />
         </div>
       )}
-      <div className="overflow-auto relative max-h-[70vh]">
-        <Table className="w-full border border-gray-400 rounded-lg shadow-sm table-fixed">
+      <div className="relative max-h-[70vh] overflow-auto">
+        <Table className="w-full table-fixed rounded-lg border border-gray-400 shadow-sm">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="px-3 py-2
-                   text-left text-sm font-semibold text-gray-900 border sticky top-0 z-10 bg-gray-200 border-gray-400"
+                    className="sticky top-0 z-10 border border-gray-400 bg-gray-200 px-3 py-2 text-left text-sm font-semibold text-gray-900"
                     style={{ width: `${header.getSize()}px` }}
                   >
                     {header.isPlaceholder
@@ -147,7 +143,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="px-0 py-2 text-sm text-gray-900 border border-gray-400"
+                      className="border border-gray-400 px-0 py-2 text-sm text-gray-900"
                       style={{ width: `${cell.column.getSize()}px` }}
                     >
                       {flexRender(
@@ -171,11 +167,11 @@ export function EditableTable<TData extends DataWithId, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="w-full p-4 border border-gray-100 rounded-md shadow-sm text-right">
+      <div className="w-full rounded-md border border-gray-100 p-4 text-right shadow-sm">
         {addRowAction && getNewRowData ? (
           <Button
-            variant="default"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+            variant="add"
+            className="mr-2"
             onClick={() => {
               const addRowData = getNewRowData();
               setTableData((prev) => [...prev, addRowData]);
@@ -186,8 +182,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
           </Button>
         ) : null}
         <Button
-          variant="default"
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+          variant="delete"
           onClick={() => {
             const idsToDelete = selectedRows.map((row) => row.original.id);
             setTableData((prev) =>

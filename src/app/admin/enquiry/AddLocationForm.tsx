@@ -57,10 +57,7 @@ export default function AddLocationForm() {
           ]}
         />
         <div className="text-right">
-          <Button
-            type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-white shadow-md hover:bg-blue-700"
-          >
+          <Button type="submit" variant="submit">
             Submit
           </Button>
         </div>
