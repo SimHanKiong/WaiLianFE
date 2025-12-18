@@ -4,7 +4,7 @@ import EnquiryTable from "./EnquiryTable";
 import { readSchools } from "@/lib/services/school";
 import { readLocations } from "@/lib/services/location";
 import Header from "@/components/Header";
-import { EnquiryStatus } from "@/lib/constants";
+import { EnquiryStatusOptions } from "@/lib/constants";
 import AddLocationForm from "./AddLocationForm";
 import DeleteLocationForm from "./DeleteLocationForm";
 
@@ -31,10 +31,9 @@ export default async function Page() {
     label: pmLocation.address,
     object: pmLocation,
   }));
-  const enquiryStatus = EnquiryStatus.map((enquiry) => ({
-    value: enquiry,
-    label: enquiry,
-    object: false,
+  const enquiryStatus = EnquiryStatusOptions.map((status) => ({
+    value: status,
+    label: status,
   }));
   const locations = [...amLocations, ...pmLocations].map((location) => ({
     value: location.id,

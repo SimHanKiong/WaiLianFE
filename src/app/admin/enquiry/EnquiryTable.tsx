@@ -1,6 +1,6 @@
 "use client";
 
-import { EditableTable } from "@/components/table/EditableTable";
+import EditableTable from "@/components/table/EditableTable";
 import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
 import DropdownCell from "@/components/table/DropdownCell";
 import NumberInputCell from "@/components/table/NumberInputCell";
@@ -15,13 +15,15 @@ import DisplayCell from "@/components/table/DisplayCell";
 import { useMemo } from "react";
 import CheckboxCell from "@/components/table/CheckboxCell";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { School } from "@/lib/services/school";
+import { Location } from "@/lib/services/location";
 
 interface EnquiryTableProps {
   data: Enquiry[];
-  schools: { value: string; label: string; object: unknown }[];
-  enquiryStatus: { value: string; label: string; object: unknown }[];
-  amLocations: { value: string; label: string; object: unknown }[];
-  pmLocations: { value: string; label: string; object: unknown }[];
+  schools: { value: string; label: string; object: School }[];
+  enquiryStatus: { value: string; label: string }[];
+  amLocations: { value: string; label: string; object: Location }[];
+  pmLocations: { value: string; label: string; object: Location }[];
 }
 
 export default function EnquiryTable({
@@ -54,8 +56,8 @@ export default function EnquiryTable({
   ];
 
   const statusSortFn = (rowA: Row<Enquiry>, rowB: Row<Enquiry>) => {
-    const statusA = rowA.getValue("status");
-    const statusB = rowB.getValue("status");
+    const statusA = rowA.original.status;
+    const statusB = rowB.original.status;
 
     if (statusA && !statusB) {
       return -1;
@@ -72,7 +74,7 @@ export default function EnquiryTable({
     () => [
       columnHelper.accessor("createdOn", {
         header: "Date",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.accessor("isFavourite", {
@@ -89,23 +91,23 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("year", {
         header: "Year",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 75,
       }),
       columnHelper.accessor("email", {
         header: "Email",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 200,
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("homePostalCode", {
         header: "Home Postal Code",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.accessor("homeAddress", {
         header: "Home Address",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,
       }),
       columnHelper.accessor("block", {
@@ -144,7 +146,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("amLocation.time", {
         header: "Pick Up Time",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.accessor("pmLocation.id", {
@@ -166,7 +168,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("pmLocation.time", {
         header: "Drop Off Time",
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.accessor("status", {
@@ -193,7 +195,7 @@ export default function EnquiryTable({
             Pick Up Address
           </span>
         ),
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,
       }),
       columnHelper.accessor("pmAddress", {
@@ -203,10 +205,15 @@ export default function EnquiryTable({
             Drop Off Address
           </span>
         ),
-        cell: (info) => <DisplayCell {...info} />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,
       }),
-      columnHelper.display({ id: "select", cell: RowSelectCell, size: 75 }),
+      columnHelper.display({
+        id: "select",
+        header: "Delete",
+        cell: RowSelectCell,
+        size: 75,
+      }),
     ],
     [columnHelper, schools, enquiryStatus, amLocations, pmLocations]
   );

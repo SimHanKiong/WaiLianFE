@@ -41,11 +41,11 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   updateCellAction: (id: string, dataUpdate: Partial<TData>) => Promise<void>;
   deleteRowsAction: (ids: string[]) => Promise<void>;
   getRowColour?: (row: TData) => string;
-  enableSearching: boolean;
+  enableSearching?: boolean;
   sortByColumns?: SortingState;
 }
 
-export function EditableTable<TData extends DataWithId, TValue>({
+export default function EditableTable<TData extends DataWithId, TValue>({
   columns,
   data,
   addRowAction,
@@ -53,7 +53,7 @@ export function EditableTable<TData extends DataWithId, TValue>({
   updateCellAction,
   deleteRowsAction,
   getRowColour,
-  enableSearching,
+  enableSearching = false,
   sortByColumns,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);

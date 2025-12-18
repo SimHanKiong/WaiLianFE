@@ -1,19 +1,12 @@
 "use client";
 
-import { CellContext } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
 import validator from "validator";
 
-export default function DisplayCell<TData>({
-  getValue,
-}: CellContext<TData, string | number>) {
-  const initialValue = getValue();
-  const [value, setValue] = useState(initialValue);
+interface DisplayCellProps {
+  value: string | number | null | undefined;
+}
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
+export default function DisplayCell({ value }: DisplayCellProps) {
   return (
     <div className="flex w-full px-3 py-1 text-base md:text-sm">
       {value && typeof value === "string" && validator.isEmail(value) ? (

@@ -74,13 +74,15 @@ export const updateSchool = async (
 };
 
 export const deleteSchools = async (ids: string[]): Promise<void> => {
-  for (const id of ids) {
-    const response = await fetch(`${process.env.API_URL}/school/${id}`, {
-      method: "DELETE",
-    });
+  const response = await fetch(`${process.env.API_URL}/school/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids),
+  });
 
-    if (!response.ok) {
-      throw new Error("Unable to delete School");
-    }
+  if (!response.ok) {
+    throw new Error("Unable to delete Schools");
   }
 };

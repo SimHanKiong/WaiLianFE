@@ -63,33 +63,22 @@ export const createEnquiry = async (
   schoolId: string,
   formData: EnquiryFormData
 ): Promise<void> => {
-  const enquiryCreate: Partial<Enquiry> = {
-    email: formData.email,
-    block: "",
-    remark: "",
-    fare: 0,
-    homePostalCode: formData.homePostalCode,
-    homeUnitNo: formData.homeUnitNo,
-    amPostalCode: formData.amPostalCode,
-    pmPostalCode: formData.pmPostalCode,
-    schoolId: schoolId,
-    amLocationId: null,
-    pmLocationId: null,
-    status: null,
-    isEmailSent: false,
-    isFavourite: false,
-    year: formData.year,
-  };
-
   const response = await fetch(`${process.env.API_URL}/enquiry/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(enquiryCreate),
+    body: JSON.stringify({
+      email: formData.email,
+      homePostalCode: formData.homePostalCode,
+      homeUnitNo: formData.homeUnitNo,
+      amPostalCode: formData.amPostalCode,
+      pmPostalCode: formData.pmPostalCode,
+      schoolId: schoolId,
+      year: formData.year,
+    }),
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text);
+    throw new Error("Unable to create Enquiry");
   }
 };
 
@@ -104,19 +93,20 @@ export const updateEnquiry = async (
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text);
+    throw new Error("Unable to update Enquiry");
   }
 };
 
 export const deleteEnquiries = async (ids: string[]): Promise<void> => {
-  for (const id of ids) {
-    const response = await fetch(`${process.env.API_URL}/enquiry/${id}`, {
-      method: "DELETE",
-    });
+  const response = await fetch(`${process.env.API_URL}/enquiry/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids),
+  });
 
-    if (!response.ok) {
-      throw new Error("Unable to delete Enquiry");
-    }
+  if (!response.ok) {
+    throw new Error("Unable to delete Enquiries");
   }
 };

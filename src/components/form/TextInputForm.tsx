@@ -1,6 +1,7 @@
 import { Control, FieldValues, Path } from "react-hook-form";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,6 +16,7 @@ interface TextInputFormProps<TFieldValues extends FieldValues> {
   placeholder: string;
   maxLength?: number;
   type?: string;
+  description?: string;
 }
 
 export default function TextInputForm<TFieldValues extends FieldValues>({
@@ -24,6 +26,7 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
   placeholder,
   maxLength,
   type = "text",
+  description,
 }: TextInputFormProps<TFieldValues>) {
   return (
     <FormField
@@ -41,6 +44,11 @@ export default function TextInputForm<TFieldValues extends FieldValues>({
               maxLength={maxLength}
             />
           </FormControl>
+          {description && (
+            <FormDescription className="text-sm text-gray-500">
+              {description}
+            </FormDescription>
+          )}
           <FormMessage />
         </FormItem>
       )}

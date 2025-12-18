@@ -2,7 +2,7 @@
 
 import CheckboxCell from "@/components/table/CheckboxCell";
 import ClipboardCell from "@/components/table/CopyCell";
-import { EditableTable } from "@/components/table/EditableTable";
+import EditableTable from "@/components/table/EditableTable";
 import EmailInputCell from "@/components/table/EmailInputCell";
 import RowSelectCell from "@/components/table/RowSelectCell";
 import TextInputCell from "@/components/table/TextInputCell";
@@ -81,7 +81,12 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         cell: (info) => <CheckboxCell {...info} />,
         size: 100,
       }),
-      columnHelper.display({ id: "select", cell: RowSelectCell, size: 80 }),
+      columnHelper.display({
+        id: "select",
+        header: "Delete",
+        cell: RowSelectCell,
+        size: 80,
+      }),
     ],
     [columnHelper]
   );

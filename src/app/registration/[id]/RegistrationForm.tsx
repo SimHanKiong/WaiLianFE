@@ -11,6 +11,8 @@ import RadioInputForm from "@/components/form/RadioInputForm";
 import NumberInputForm from "@/components/form/NumberInputForm";
 import DateInputForm from "@/components/form/DateInputForm";
 import DisplayFieldForm from "@/components/form/DisplayFieldForm";
+import { createParent } from "@/lib/services/parent";
+import { useToast } from "@/hooks/use-toast";
 
 const capitalise = (word: string) => {
   return word.charAt(0).toLocaleUpperCase() + word.slice(1).toLowerCase();
@@ -47,7 +49,7 @@ const studentSchema = z
       .int()
       .min(1, "Level should be between 1 and 6")
       .max(6, "Level should be between 1 and 6"),
-    class: z
+    className: z
       .string()
       .trim()
       .transform((str) => capitalise(str)),
@@ -84,34 +86,34 @@ const registrationSchema = z.object({
   contact1Name: z
     .string()
     .trim()
-    .min(1, "Contact 1 Name is required")
+    .min(1, "Full Name of Contact 1 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
   contact1No: z
     .string()
-    .regex(/^\d{8}$/, "Contact 1 Phone Number must be exactly 8 digits"),
+    .regex(/^\d{8}$/, "Contact Number 1 must be exactly 8 digits"),
   contact1Relationship: z
     .string()
     .trim()
-    .min(1, "Contact 1 Relationship is required")
+    .min(1, "Relationship of Contact 1 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
   contact2Name: z
     .string()
     .trim()
-    .min(1, "Contact 2 Name is required")
+    .min(1, "Full Name of Contact 2 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
   contact2No: z
     .string()
-    .regex(/^\d{8}$/, "Contact 2 Phone Number must be exactly 8 digits"),
+    .regex(/^\d{8}$/, "Contact Number 2 must be exactly 8 digits"),
   contact2Relationship: z
     .string()
     .trim()
-    .min(1, "Contact 2 Relationship is required")
+    .min(1, "Relationship of Contact 2 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
-  underFAS: z.preprocess(
+  underFas: z.preprocess(
     (val) => (val === undefined ? undefined : val === "true"),
     z.boolean({ required_error: "FAS status is required" })
   ),
-  siblings: z.array(studentSchema).min(1),
+  children: z.array(studentSchema).min(1),
 });
 
 export type RegistrationFormData = z.infer<typeof registrationSchema>;
@@ -121,6 +123,8 @@ interface RegistrationFormProps {
 }
 
 export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
+  const { toast } = useToast();
+
   const enquiryTransportRequirement =
     enquiry.amPostalCode && enquiry.pmPostalCode
       ? "Both"
@@ -137,14 +141,14 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
       contact2Name: "",
       contact2No: "",
       contact2Relationship: "",
-      underFAS: undefined,
-      siblings: [
+      underFas: undefined,
+      children: [
         {
           fullName: "",
           givenName: "",
           gender: undefined,
           level: 0,
-          class: "",
+          className: "",
           dateOfBirth: startOfTomorrow,
           nric: "",
           transportRequirement: enquiryTransportRequirement,
@@ -156,11 +160,26 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "siblings",
+    name: "children",
   });
 
   const onSubmit = async (data: RegistrationFormData) => {
-    console.log(data);
+    try {
+      await createParent(enquiry.id, data);
+      toast({
+        variant: "success",
+        title: "Submission Successful",
+        description: "Please check your email for more details.",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description:
+          "Form could not be submitted. Please contact us via email.",
+      });
+    }
   };
 
   return (
@@ -169,19 +188,21 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-full space-y-6 rounded-lg bg-white p-6 shadow-lg"
       >
-        <DisplayFieldForm label="School" value={enquiry.school.name} />
-        <TextInputForm
-          name="contact1Name"
-          label="Name of Contact 1"
-          control={form.control}
-          placeholder="Enter name of contact 1"
-        />
+        <DisplayFieldForm label="School Name" value={enquiry.school.name} />
+        <DisplayFieldForm label="Email" value={enquiry.email} />
         <TextInputForm
           name="contact1No"
-          label="Contact Number of Contact 1"
+          label="Contact Number 1"
           control={form.control}
-          placeholder="Enter contact number of contact 1"
+          placeholder="XXXXXXXX"
           maxLength={8}
+          description="All notifications will be sent to this number."
+        />
+        <TextInputForm
+          name="contact1Name"
+          label="Full Name of Contact 1"
+          control={form.control}
+          placeholder="Enter name of contact 1"
         />
         <TextInputForm
           name="contact1Relationship"
@@ -190,17 +211,17 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
           placeholder="Enter relationship of contact 1"
         />
         <TextInputForm
-          name="contact2Name"
-          label="Name of Contact 2"
+          name="contact2No"
+          label="Contact Number 2"
           control={form.control}
-          placeholder="Enter name of contact 2"
+          placeholder="XXXXXXXX"
+          maxLength={8}
         />
         <TextInputForm
-          name="contact2No"
-          label="Contact Number of Contact 2"
+          name="contact2Name"
+          label="Full Name of Contact 2"
           control={form.control}
-          placeholder="Enter contact number of contact 2"
-          maxLength={8}
+          placeholder="Enter name of contact 2"
         />
         <TextInputForm
           name="contact2Relationship"
@@ -215,7 +236,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
         <DisplayFieldForm label="Home Address" value={enquiry.homeAddress} />
         <DisplayFieldForm label="Home Unit Number" value={enquiry.homeUnitNo} />
         <RadioInputForm
-          name="underFAS"
+          name="underFas"
           label="Under Financial Assistance Scheme?"
           control={form.control}
           options={[
@@ -223,8 +244,12 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
             { value: false, label: "No" },
           ]}
         />
+
         {fields.map((field, index) => (
-          <div key={field.id} className="space-y-4 rounded-lg border p-4">
+          <div
+            key={field.id}
+            className="space-y-4 rounded-lg border border-gray-400 p-4"
+          >
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-gray-700">Child {index + 1}</h3>
               {fields.length > 1 && (
@@ -238,19 +263,19 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               )}
             </div>
             <TextInputForm
-              name={`siblings.${index}.fullName`}
+              name={`children.${index}.fullName`}
               label="Full Name"
               control={form.control}
               placeholder="Enter full name"
             />
             <TextInputForm
-              name={`siblings.${index}.givenName`}
+              name={`children.${index}.givenName`}
               label="Given Name"
               control={form.control}
               placeholder="Enter given name"
             />
             <RadioInputForm
-              name={`siblings.${index}.gender`}
+              name={`children.${index}.gender`}
               label="Gender"
               control={form.control}
               options={[
@@ -259,30 +284,30 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               ]}
             />
             <NumberInputForm
-              name={`siblings.${index}.level`}
+              name={`children.${index}.level`}
               label={`Level (For ${getYear()})`}
               control={form.control}
             />
             <TextInputForm
-              name={`siblings.${index}.class`}
+              name={`children.${index}.className`}
               label={`Class (For ${getYear()})`}
               control={form.control}
               placeholder="Enter class"
             />
             <DateInputForm
-              name={`siblings.${index}.dateOfBirth`}
+              name={`children.${index}.dateOfBirth`}
               label="Date of Birth"
               control={form.control}
               maxDate={startOfToday}
             />
             <TextInputForm
-              name={`siblings.${index}.nric`}
+              name={`children.${index}.nric`}
               label="Birth Certificate or FIN Number"
               control={form.control}
               placeholder="Enter birth certificate or FIN number"
             />
             <RadioInputForm
-              name={`siblings.${index}.transportRequirement`}
+              name={`children.${index}.transportRequirement`}
               label="Transport Requirement"
               control={form.control}
               options={[
@@ -292,7 +317,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               ]}
             />
             <DateInputForm
-              name={`siblings.${index}.transportStartDate`}
+              name={`children.${index}.transportStartDate`}
               label="Transport Start Date"
               control={form.control}
               minDate={startOfTomorrow}
@@ -307,9 +332,9 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
             append({
               fullName: "",
               givenName: "",
-              gender: "" as "M" | "F",
+              gender: undefined as unknown as "M" | "F",
               level: 0,
-              class: "",
+              className: "",
               dateOfBirth: startOfTomorrow,
               nric: "",
               transportRequirement: enquiryTransportRequirement,
@@ -319,6 +344,24 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
         >
           Add Another Child
         </Button>
+
+        <div className="rounded-lg border border-gray-400 bg-gray-50 p-4 text-sm text-gray-600">
+          <p className="font-medium text-gray-700">
+            By submitting this form, I acknowledge that:
+          </p>
+          <ul className="ml-4 mt-2 list-disc space-y-1">
+            <li>
+              I have read and understood the School Bus Regulations sent via
+              WhatsApp.
+            </li>
+            <li>
+              The bus company will not disclose information to unregistered
+              contact numbers.
+            </li>
+            <li>All information given is true and accurate.</li>
+          </ul>
+        </div>
+
         <div className="text-right">
           <Button type="submit" variant="submit">
             Submit
