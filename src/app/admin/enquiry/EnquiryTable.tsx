@@ -17,11 +17,12 @@ import CheckboxCell from "@/components/table/CheckboxCell";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { School } from "@/lib/services/school";
 import { Location } from "@/lib/services/location";
+import IconHeader from "@/components/table/IconHeader";
 
 interface EnquiryTableProps {
   data: Enquiry[];
   schools: { value: string; label: string; object: School }[];
-  enquiryStatus: { value: string; label: string }[];
+  enquiryStatus: { value: string; label: string; object: boolean }[];
   amLocations: { value: string; label: string; object: Location }[];
   pmLocations: { value: string; label: string; object: Location }[];
 }
@@ -123,17 +124,14 @@ export default function EnquiryTable({
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("fare", {
-        header: "Bus Fare ($)",
+        header: "Bus Fare $",
         cell: (info) => <NumberInputCell {...info} />,
         size: 80,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
         header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigUp className="h-10 w-10 fill-orange-500 text-orange-500" />
-            Pick Up Point
-          </span>
+          <IconHeader icon={ArrowBigUp} label="Pick Up Point" color="orange" />
         ),
         cell: (info) => (
           <DropdownCell
@@ -152,10 +150,7 @@ export default function EnquiryTable({
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
         header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigDown className="h-10 w-10 fill-blue-500 text-blue-500" />
-            Drop Off Point
-          </span>
+          <IconHeader icon={ArrowBigDown} label="Drop Off Point" color="blue" />
         ),
         cell: (info) => (
           <DropdownCell
@@ -177,7 +172,7 @@ export default function EnquiryTable({
           <DropdownCell
             {...info}
             options={enquiryStatus}
-            objectColumnId="emailSent"
+            objectColumnId="isEmailSent"
           />
         ),
         sortingFn: statusSortFn,
@@ -190,20 +185,22 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("amAddress", {
         header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigUp className="h-10 w-10 fill-orange-500 text-orange-500" />
-            Pick Up Address
-          </span>
+          <IconHeader
+            icon={ArrowBigUp}
+            label="Pick Up Address"
+            color="orange"
+          />
         ),
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,
       }),
       columnHelper.accessor("pmAddress", {
         header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigDown className="h-10 w-10 fill-blue-500 text-blue-500" />
-            Drop Off Address
-          </span>
+          <IconHeader
+            icon={ArrowBigDown}
+            label="Drop Off Address"
+            color="blue"
+          />
         ),
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,

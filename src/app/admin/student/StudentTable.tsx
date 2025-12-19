@@ -4,13 +4,23 @@ import DisplayCell from "@/components/table/DisplayCell";
 import DropdownCell from "@/components/table/DropdownCell";
 import EditableTable from "@/components/table/EditableTable";
 import RowSelectCell from "@/components/table/RowSelectCell";
-import TextInputCell from "@/components/table/TextInputCell";
 import { Gender } from "@/lib/constants";
 import { deleteStudents, Student, updateStudent } from "@/lib/services/student";
 import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import {
+  ArrowBigDown,
+  ArrowBigUp,
+  School,
+  HousePlus,
+  FileUser,
+  CircleDollarSign,
+  CirclePercent,
+  ClockArrowUp,
+  ClockArrowDown,
+} from "lucide-react";
 import { useMemo } from "react";
 import { Location } from "@/lib/services/location";
+import IconHeader from "@/components/table/IconHeader";
 
 interface StudentTableProps {
   data: Student[];
@@ -51,14 +61,19 @@ export default function StudentTable({
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor("school.initial", {
+        header: () => <IconHeader icon={School} label="School" />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
+        size: 200,
+      }),
       columnHelper.accessor("block", {
-        header: "Block",
-        cell: (info) => <TextInputCell {...info} />,
+        header: () => <IconHeader icon={HousePlus} label="Block" />,
+        cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 200,
         sortingFn: blockSortFn,
       }),
       columnHelper.accessor("fullName", {
-        header: "Name",
+        header: () => <IconHeader icon={FileUser} label="Student Name" />,
         cell: ({ row }) => (
           <DisplayCell
             value={`${row.original.gender == Gender.MALE ? "🚹" : "🚺"} ${row.original.fullName}`}
@@ -76,13 +91,13 @@ export default function StudentTable({
         ),
         size: 200,
       }),
-      columnHelper.accessor("transportStartDate", {
-        header: "Transport Start Date",
+      columnHelper.accessor("parent.fare", {
+        header: () => <IconHeader icon={CircleDollarSign} label="Bus Fare $" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 100,
+        size: 120,
       }),
       columnHelper.accessor("parent.underFas", {
-        header: "Under FAS",
+        header: () => <IconHeader icon={CirclePercent} label="FAS" />,
         cell: ({ row }) => (
           <DisplayCell value={row.original.parent.underFas ? "Yes" : "No"} />
         ),
@@ -90,12 +105,7 @@ export default function StudentTable({
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
-        header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigUp className="h-10 w-10 fill-orange-500 text-orange-500" />
-            Pick Up Point
-          </span>
-        ),
+        header: () => <IconHeader icon={ArrowBigUp} label="Pick Up Point" />,
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -106,18 +116,13 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: "Pick Up Time",
+        header: () => <IconHeader icon={ClockArrowUp} label="Pick Up Time" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
-        header: () => (
-          <span className="flex items-center gap-1">
-            <ArrowBigDown className="h-10 w-10 fill-blue-500 text-blue-500" />
-            Drop Off Point
-          </span>
-        ),
+        header: () => <IconHeader icon={ArrowBigDown} label="Drop Off Point" />,
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -128,7 +133,7 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: "Drop Off Time",
+        header: () => <IconHeader icon={ClockArrowDown} label="Drop Off Time" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),

@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { CellContext } from "@tanstack/react-table";
-
-interface DataWithId {
-  id: string;
-}
+import { DataWithId } from "./EditableTable";
 
 export default function NumberInputCell<TData extends DataWithId>({
   getValue,

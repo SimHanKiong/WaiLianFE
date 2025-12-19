@@ -18,10 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface DataWithId {
-  id: string;
-}
+import { DataWithId } from "./EditableTable";
 
 interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
   options: { value: string; label: string; object?: unknown }[];

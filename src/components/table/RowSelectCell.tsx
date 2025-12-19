@@ -2,10 +2,7 @@
 
 import { CellContext } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
-
-interface DataWithId {
-  id: string;
-}
+import { DataWithId } from "./EditableTable";
 
 export default function RowSelectCell<TData extends DataWithId>({
   row,

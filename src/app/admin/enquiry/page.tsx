@@ -34,6 +34,7 @@ export default async function Page() {
   const enquiryStatus = EnquiryStatusOptions.map((status) => ({
     value: status,
     label: status,
+    object: false,
   }));
   const locations = [...amLocations, ...pmLocations].map((location) => ({
     value: location.id,
@@ -47,14 +48,14 @@ export default async function Page() {
         <DialogWrapper
           openText="Add Location"
           title="Add a Location"
-          buttonStyle="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md shadow-md"
+          buttonVariant="add"
         >
           <AddLocationForm />
         </DialogWrapper>
         <DialogWrapper
           openText="Delete Location"
           title="Delete a Location"
-          buttonVariant="secondary"
+          buttonVariant="delete"
         >
           <DeleteLocationForm locations={locations} />
         </DialogWrapper>

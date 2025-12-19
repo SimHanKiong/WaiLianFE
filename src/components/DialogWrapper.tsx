@@ -6,27 +6,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
+import { Button, ButtonProps } from "./ui/button";
 
 type DialogWrapperProps = {
   openText: ReactNode;
   title: string;
   children: ReactNode;
-  buttonStyle?: string;
-  buttonVariant?: "default" | "secondary" | "outline" | "ghost" | "link";
+  buttonClassName?: ButtonProps["className"];
+  buttonVariant?: ButtonProps["variant"];
 };
 
 export default function DialogWrapper({
   openText,
   title,
   children,
-  buttonStyle,
+  buttonClassName,
   buttonVariant = "secondary",
 }: DialogWrapperProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={buttonVariant} className={buttonStyle}>
+        <Button variant={buttonVariant} className={buttonClassName}>
           {openText}
         </Button>
       </DialogTrigger>

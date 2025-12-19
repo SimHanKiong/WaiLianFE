@@ -6,10 +6,7 @@ import { CellContext } from "@tanstack/react-table";
 import { uploadFile } from "@/lib/services/file";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
-
-interface DataWithId {
-  id: string;
-}
+import { DataWithId } from "./EditableTable";
 
 export default function FileInputCell<TData extends DataWithId>({
   getValue,

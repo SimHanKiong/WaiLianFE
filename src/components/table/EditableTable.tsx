@@ -29,7 +29,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-interface DataWithId {
+export interface DataWithId {
   id: string;
 }
 

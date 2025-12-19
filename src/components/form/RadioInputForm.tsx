@@ -1,4 +1,3 @@
-import { Label } from "@radix-ui/react-label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
   FormControl,
@@ -8,6 +7,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Control, FieldValues, Path } from "react-hook-form";
+import { Label } from "../ui/label";
 
 type RadioOption<T> = { value: T; label: string };
 

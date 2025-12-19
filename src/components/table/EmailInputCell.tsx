@@ -5,10 +5,7 @@ import { Input } from "../ui/input";
 import { CellContext } from "@tanstack/react-table";
 import validator from "validator";
 import { useToast } from "@/hooks/use-toast";
-
-interface DataWithId {
-  id: string;
-}
+import { DataWithId } from "./EditableTable";
 
 export default function EmailInputCell<TData extends DataWithId>({
   getValue,
