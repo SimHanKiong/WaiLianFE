@@ -8,8 +8,8 @@ import { Gender } from "@/lib/constants";
 import { deleteStudents, Student, updateStudent } from "@/lib/services/student";
 import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
 import {
-  ArrowBigDown,
-  ArrowBigUp,
+  ArrowDown,
+  ArrowUp,
   School,
   HousePlus,
   FileUser,
@@ -105,7 +105,7 @@ export default function StudentTable({
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
-        header: () => <IconHeader icon={ArrowBigUp} label="Pick Up Point" />,
+        header: () => <IconHeader icon={ArrowUp} label="Pick Up Point" />,
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -122,7 +122,7 @@ export default function StudentTable({
       }),
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
-        header: () => <IconHeader icon={ArrowBigDown} label="Drop Off Point" />,
+        header: () => <IconHeader icon={ArrowDown} label="Drop Off Point" />,
         cell: (info) => (
           <DropdownCell
             {...info}
