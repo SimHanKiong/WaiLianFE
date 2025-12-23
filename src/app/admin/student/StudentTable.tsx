@@ -8,18 +8,24 @@ import { Gender } from "@/lib/constants";
 import { deleteStudents, Student, updateStudent } from "@/lib/services/student";
 import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
 import {
-  ArrowDown,
-  ArrowUp,
   School,
-  HousePlus,
-  FileUser,
   CircleDollarSign,
-  CirclePercent,
   ClockArrowUp,
   ClockArrowDown,
+  Mail,
+  MessageSquareShare,
+  MessageCircleMore,
+  ArrowBigUp,
+  ArrowBigDown,
+  SquarePen,
+  MoveHorizontal,
+  Trash2,
 } from "lucide-react";
 import { useMemo } from "react";
 import { Location } from "@/lib/services/location";
+import Link from "next/link";
+import CheckboxCell from "@/components/table/CheckboxCell";
+import TextInputCell from "@/components/table/TextInputCell";
 import IconHeader from "@/components/table/IconHeader";
 
 interface StudentTableProps {
@@ -33,6 +39,23 @@ export default function StudentTable({
   amLocations,
   pmLocations,
 }: StudentTableProps) {
+  const getRowColour = (row: Student): string => {
+    return row.isFavourite ? "bg-yellow-100" : "";
+  };
+
+  const getWhatsappLink = (phoneNumber: string) => {
+    return `https://wa.me/65${phoneNumber}`;
+  };
+  const getStudentName = (student: Student) => {
+    return `${student.gender == Gender.MALE ? "🚹" : "🚺"} ${student.fullName} (${student.givenName})`;
+  };
+  const getClass = (student: Student) => {
+    return `${student.level} ${student.className}`;
+  };
+  const getContactUse = (student: Student) => {
+    return `${student.block} ${student.gender == Gender.MALE ? "🚹" : "🚺"} ${student.givenName}`;
+  };
+
   const sortByColumns: SortingState = [{ id: "block", desc: false }];
 
   const blockSortFn = (rowA: Row<Student>, rowB: Row<Student>) => {
@@ -62,50 +85,104 @@ export default function StudentTable({
   const columns = useMemo(
     () => [
       columnHelper.accessor("school.initial", {
-        header: () => <IconHeader icon={School} label="School" />,
+        header: () => <School className="size-8 text-amber-800" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 200,
+        size: 80,
+      }),
+      columnHelper.accessor("parent.email", {
+        header: "Mail",
+        cell: (info) => (
+          <div className="flex justify-center">
+            <a href={`mailto:${info.getValue()}`}>
+              <Mail className="size-8" />
+            </a>
+          </div>
+        ),
+        size: 60,
+      }),
+      columnHelper.accessor("parent.contact1No", {
+        header: () => <MessageSquareShare className="size-8 text-green-500" />,
+        cell: (info) => (
+          <div className="flex justify-center">
+            <a
+              href={getWhatsappLink(info.getValue())}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircleMore className="size-8 text-green-500" />
+            </a>
+          </div>
+        ),
+        size: 60,
+      }),
+      columnHelper.accessor("id", {
+        header: "Edit",
+        cell: (info) => (
+          <div className="flex justify-center">
+            <Link
+              href={`/admin/student/edit/${info.getValue()}`}
+              target="_self"
+            >
+              <SquarePen className="size-8 text-rose-600" />
+            </Link>
+          </div>
+        ),
+        size: 60,
+      }),
+      columnHelper.accessor("isFavourite", {
+        header: () => <MoveHorizontal className="size-8 text-yellow-500" />,
+        cell: (info) => <CheckboxCell {...info} />,
+        size: 60,
+      }),
+      columnHelper.display({
+        id: "#",
+        header: "S/No.",
+        cell: ({ row }) => <DisplayCell value={row.index + 1} />,
+        size: 60,
       }),
       columnHelper.accessor("block", {
-        header: () => <IconHeader icon={HousePlus} label="Block" />,
+        header: "Block",
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 200,
         sortingFn: blockSortFn,
       }),
       columnHelper.accessor("fullName", {
-        header: () => <IconHeader icon={FileUser} label="Student Name" />,
-        cell: ({ row }) => (
-          <DisplayCell
-            value={`${row.original.gender == Gender.MALE ? "🚹" : "🚺"} ${row.original.fullName}`}
-          />
-        ),
+        header: "Student Name",
+        cell: ({ row }) => <DisplayCell value={getStudentName(row.original)} />,
         size: 400,
       }),
       columnHelper.display({
         id: "levelClass",
         header: "Class",
-        cell: ({ row }) => (
-          <DisplayCell
-            value={`${row.original.level} ${row.original.className}`}
-          />
-        ),
+        cell: ({ row }) => <DisplayCell value={getClass(row.original)} />,
         size: 200,
       }),
       columnHelper.accessor("parent.fare", {
-        header: () => <IconHeader icon={CircleDollarSign} label="Bus Fare $" />,
+        header: () => <CircleDollarSign className="size-8 text-amber-500" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 120,
       }),
       columnHelper.accessor("parent.underFas", {
-        header: () => <IconHeader icon={CirclePercent} label="FAS" />,
+        header: "FAS",
         cell: ({ row }) => (
           <DisplayCell value={row.original.parent.underFas ? "Yes" : "No"} />
         ),
         size: 100,
       }),
+
+      columnHelper.accessor("amIcon", {
+        header: "",
+        cell: (info) => <TextInputCell {...info} textColour="text-blue-700" />,
+        size: 40,
+      }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
-        header: () => <IconHeader icon={ArrowUp} label="Pick Up Point" />,
+        header: () => (
+          <IconHeader
+            icon={<ArrowBigUp className="size-8 fill-blue-700 text-blue-700" />}
+            label="Pick Up Point"
+          />
+        ),
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -116,13 +193,27 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: () => <IconHeader icon={ClockArrowUp} label="Pick Up Time" />,
+        header: () => <ClockArrowUp className="size-8 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
+      columnHelper.accessor("pmIcon", {
+        header: "",
+        cell: (info) => (
+          <TextInputCell {...info} textColour="text-orange-600" />
+        ),
+        size: 40,
+      }),
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
-        header: () => <IconHeader icon={ArrowDown} label="Drop Off Point" />,
+        header: () => (
+          <IconHeader
+            icon={
+              <ArrowBigDown className="size-8 fill-orange-600 text-orange-600" />
+            }
+            label="Drop Off Point"
+          />
+        ),
         cell: (info) => (
           <DropdownCell
             {...info}
@@ -133,15 +224,26 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: () => <IconHeader icon={ClockArrowDown} label="Drop Off Time" />,
+        header: () => <ClockArrowDown className="size-8 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
       columnHelper.display({
         id: "select",
-        header: "Delete",
+        header: () => <Trash2 className="size-8" />,
         cell: RowSelectCell,
-        size: 75,
+        size: 60,
+      }),
+      columnHelper.display({
+        id: "Contact Use",
+        header: "Contact Use",
+        cell: ({ row }) => <DisplayCell value={getContactUse(row.original)} />,
+        size: 200,
+      }),
+      columnHelper.accessor("remark", {
+        header: "Remark",
+        cell: (info) => <TextInputCell {...info} textColour="text-red-600" />,
+        size: 250,
       }),
     ],
     [columnHelper, amLocations, pmLocations]
@@ -153,6 +255,7 @@ export default function StudentTable({
       updateCellAction={updateStudent}
       deleteRowsAction={deleteStudents}
       sortByColumns={sortByColumns}
+      getRowColour={getRowColour}
     />
   );
 }

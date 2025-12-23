@@ -14,7 +14,16 @@ import {
 import DisplayCell from "@/components/table/DisplayCell";
 import { useMemo } from "react";
 import CheckboxCell from "@/components/table/CheckboxCell";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import {
+  ArrowBigDown,
+  ArrowBigUp,
+  CircleDollarSign,
+  ClockArrowDown,
+  ClockArrowUp,
+  MoveHorizontal,
+  SchoolIcon,
+  Trash2,
+} from "lucide-react";
 import { School } from "@/lib/services/school";
 import { Location } from "@/lib/services/location";
 import IconHeader from "@/components/table/IconHeader";
@@ -78,60 +87,97 @@ export default function EnquiryTable({
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
-      columnHelper.accessor("isFavourite", {
-        header: "",
-        cell: (info) => <CheckboxCell {...info} />,
-        size: 75,
-      }),
       columnHelper.accessor("school.id", {
-        header: "School",
+        header: () => <SchoolIcon className="size-8 text-amber-800" />,
         cell: (info) => (
           <DropdownCell {...info} options={schools} objectColumnId="school" />
         ),
-        size: 100,
+        size: 80,
       }),
       columnHelper.accessor("year", {
         header: "Year",
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 75,
       }),
+      columnHelper.accessor("isFavourite", {
+        header: () => <MoveHorizontal className="size-8 text-yellow-500" />,
+        cell: (info) => <CheckboxCell {...info} />,
+        size: 60,
+      }),
       columnHelper.accessor("email", {
-        header: "Email",
+        header: "Email*",
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 200,
         enableGlobalFilter: true,
-      }),
-      columnHelper.accessor("homePostalCode", {
-        header: "Home Postal Code",
-        cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 100,
       }),
       columnHelper.accessor("homeAddress", {
         header: "Home Address",
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 300,
       }),
+      columnHelper.accessor("amAddress", {
+        header: () => (
+          <IconHeader
+            icon={<ArrowBigUp className="size-8 fill-blue-700 text-blue-700" />}
+            label="Pick Up Address"
+          />
+        ),
+        cell: (info) => (
+          <DisplayCell
+            value={info.getValue()}
+            icon={<ArrowBigUp className="size-8 fill-blue-700 text-blue-700" />}
+          />
+        ),
+        size: 300,
+      }),
+      columnHelper.accessor("pmAddress", {
+        header: () => (
+          <IconHeader
+            icon={
+              <ArrowBigDown className="size-8 fill-orange-600 text-orange-600" />
+            }
+            label="Drop Off Address"
+          />
+        ),
+        cell: (info) => (
+          <DisplayCell
+            value={info.getValue()}
+            icon={
+              <ArrowBigDown className="size-8 fill-orange-600 text-orange-600" />
+            }
+          />
+        ),
+        size: 300,
+      }),
+      columnHelper.accessor("remark", {
+        header: "Remark*",
+        cell: (info) => <TextInputCell {...info} textColour="text-red-600" />,
+        size: 250,
+        enableGlobalFilter: true,
+      }),
       columnHelper.accessor("block", {
-        header: "Block",
+        header: "Block*",
         cell: (info) => <TextInputCell {...info} />,
         size: 170,
         enableGlobalFilter: true,
       }),
-      columnHelper.accessor("remark", {
-        header: "Remark",
-        cell: (info) => <TextInputCell {...info} />,
-        size: 250,
-        enableGlobalFilter: true,
-      }),
       columnHelper.accessor("fare", {
-        header: "Bus Fare $",
+        header: () => <CircleDollarSign className="size-8 text-amber-500" />,
         cell: (info) => <NumberInputCell {...info} />,
         size: 80,
+      }),
+      columnHelper.accessor("amIcon", {
+        header: "",
+        cell: (info) => <TextInputCell {...info} textColour="text-blue-700" />,
+        size: 40,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
         header: () => (
-          <IconHeader icon={ArrowBigUp} label="Pick Up Point" color="orange" />
+          <IconHeader
+            icon={<ArrowBigUp className="size-8 fill-blue-700 text-blue-700" />}
+            label="Pick Up Point"
+          />
         ),
         cell: (info) => (
           <DropdownCell
@@ -143,14 +189,26 @@ export default function EnquiryTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: "Pick Up Time",
+        header: () => <ClockArrowUp className="size-8 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
+      }),
+      columnHelper.accessor("pmIcon", {
+        header: "",
+        cell: (info) => (
+          <TextInputCell {...info} textColour="text-orange-600" />
+        ),
+        size: 40,
       }),
       columnHelper.accessor("pmLocation.id", {
         id: "pmLocationId",
         header: () => (
-          <IconHeader icon={ArrowBigDown} label="Drop Off Point" color="blue" />
+          <IconHeader
+            icon={
+              <ArrowBigDown className="size-8 fill-orange-600 text-orange-600" />
+            }
+            label="Drop Off Point"
+          />
         ),
         cell: (info) => (
           <DropdownCell
@@ -162,7 +220,7 @@ export default function EnquiryTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: "Drop Off Time",
+        header: () => <ClockArrowDown className="size-8 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 100,
       }),
@@ -183,33 +241,12 @@ export default function EnquiryTable({
         cell: (info) => <CheckboxCell {...info} />,
         size: 75,
       }),
-      columnHelper.accessor("amAddress", {
-        header: () => (
-          <IconHeader
-            icon={ArrowBigUp}
-            label="Pick Up Address"
-            color="orange"
-          />
-        ),
-        cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 300,
-      }),
-      columnHelper.accessor("pmAddress", {
-        header: () => (
-          <IconHeader
-            icon={ArrowBigDown}
-            label="Drop Off Address"
-            color="blue"
-          />
-        ),
-        cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 300,
-      }),
+
       columnHelper.display({
         id: "select",
-        header: "Delete",
+        header: () => <Trash2 className="size-8" />,
         cell: RowSelectCell,
-        size: 75,
+        size: 60,
       }),
     ],
     [columnHelper, schools, enquiryStatus, amLocations, pmLocations]

@@ -17,6 +17,13 @@ import { v4 as uuidv4 } from "uuid";
 import { useMemo } from "react";
 import ImageInputCell from "@/components/table/ImageInputCell";
 import ImageDisplayCell from "@/components/table/ImageDisplayCell";
+import {
+  ClockArrowDown,
+  ClockArrowUp,
+  MoveHorizontal,
+  SchoolIcon,
+  Trash2,
+} from "lucide-react";
 
 interface SchoolTableProps {
   data: School[];
@@ -26,29 +33,58 @@ export default function SchoolTable({ data }: SchoolTableProps) {
   const getLink = (row: School) =>
     `${process.env.NEXT_PUBLIC_FE_URL}/enquiry/${row.id}`;
 
+  const getRowColour = (row: School): string => {
+    return row.isFavourite ? "bg-yellow-100" : "";
+  };
+
   const columnHelper = createColumnHelper<School>();
 
   const columns = useMemo(
     () => [
+      columnHelper.accessor("isFavourite", {
+        header: () => <MoveHorizontal className="size-8 text-yellow-500" />,
+        cell: (info) => <CheckboxCell {...info} />,
+        size: 60,
+      }),
       columnHelper.accessor("name", {
         header: "School Name",
         cell: (info) => <TextInputCell {...info} />,
         size: 400,
       }),
       columnHelper.accessor("initial", {
-        header: "School Initials",
+        header: () => <SchoolIcon className="size-8 text-amber-800" />,
         cell: (info) => <TextInputCell {...info} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.accessor("arrivalTime", {
-        header: "Arrival Time",
+        header: () => <ClockArrowUp className="size-8 text-blue-700" />,
         cell: (info) => <TextInputCell {...info} />,
         size: 100,
       }),
       columnHelper.accessor("departureTime", {
-        header: "Departure Time",
+        header: () => <ClockArrowDown className="size-8 text-orange-600" />,
         cell: (info) => <TextInputCell {...info} />,
         size: 100,
+      }),
+      columnHelper.accessor("priceListKey", {
+        header: "Price List Upload",
+        cell: (info) => <ImageInputCell {...info} />,
+        size: 300,
+      }),
+      columnHelper.accessor("priceListSignedUrl", {
+        header: "View Price List",
+        cell: (info) => <ImageDisplayCell {...info} />,
+        size: 200,
+      }),
+      columnHelper.accessor("rulesKey", {
+        header: "Rules and Regulations Upload",
+        cell: (info) => <ImageInputCell {...info} />,
+        size: 300,
+      }),
+      columnHelper.accessor("rulesSignedUrl", {
+        header: "View Rules and Regulations",
+        cell: (info) => <ImageDisplayCell {...info} />,
+        size: 200,
       }),
       columnHelper.accessor("email", {
         header: "Email",
@@ -60,32 +96,23 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         cell: (info) => <TextInputCell {...info} />,
         size: 200,
       }),
-      columnHelper.accessor("emailAttachmentKey", {
-        header: "Email Upload",
-        cell: (info) => <ImageInputCell {...info} />,
-        size: 400,
-      }),
-      columnHelper.accessor("emailAttachmentSignedUrl", {
-        header: "Email Attachment",
-        cell: (info) => <ImageDisplayCell {...info} />,
-        size: 200,
-      }),
+
       columnHelper.display({
         id: "link",
-        header: "Link",
+        header: "Copy Enquiries Link",
         cell: ({ row }) => <ClipboardCell content={getLink(row.original)} />,
-        size: 80,
+        size: 150,
       }),
       columnHelper.accessor("isFinalYear", {
         header: "Final Year",
         cell: (info) => <CheckboxCell {...info} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.display({
         id: "select",
-        header: "Delete",
+        header: () => <Trash2 className="size-8" />,
         cell: RowSelectCell,
-        size: 80,
+        size: 60,
       }),
     ],
     [columnHelper]
@@ -101,7 +128,11 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       email: null,
       password: "",
       isFinalYear: false,
-      emailAttachmentKey: null,
+      isFavourite: false,
+      priceListKey: null,
+      rulesKey: null,
+      priceListSignedUrl: null,
+      rulesSignedUrl: null,
     };
   };
 
@@ -114,6 +145,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       updateCellAction={updateSchool}
       deleteRowsAction={deleteSchools}
       enableSearching={false}
+      getRowColour={getRowColour}
     />
   );
 }

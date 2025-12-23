@@ -18,6 +18,10 @@ export type Student = {
   transportRequirement: TransportRequirementType;
   block: string;
   status: string;
+  amIcon: string;
+  pmIcon: string;
+  isFavourite: boolean;
+  remark: string;
   schoolId: string;
   school: School;
   amLocationId: string | null;

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { CheckIcon, CopyIcon } from "lucide-react";
 
 interface ClipboardCellProps {
@@ -19,13 +18,14 @@ export default function ClipboardCell({ content }: ClipboardCellProps) {
 
   return (
     <div className="flex justify-center">
-      <Button onClick={handleCopy} variant="secondary" className="items-center">
-        {copied ? (
-          <CheckIcon className="h-5 w-5 text-green-500" />
-        ) : (
-          <CopyIcon className="h-5 w-5 text-gray-700" />
-        )}
-      </Button>
+      {copied ? (
+        <CheckIcon className="size-8 text-green-500" />
+      ) : (
+        <CopyIcon
+          className="size-8 cursor-pointer text-emerald-600"
+          onClick={handleCopy}
+        />
+      )}
     </div>
   );
 }

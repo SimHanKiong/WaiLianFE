@@ -1,14 +1,17 @@
 "use client";
 
+import { ReactNode } from "react";
 import validator from "validator";
 
 interface DisplayCellProps {
   value: string | number | null | undefined;
+  icon?: ReactNode;
 }
 
-export default function DisplayCell({ value }: DisplayCellProps) {
+export default function DisplayCell({ value, icon }: DisplayCellProps) {
   return (
-    <div className="flex w-full px-3 py-1 text-base md:text-sm">
+    <div className="flex w-full items-center gap-2 px-3 py-1 text-base md:text-sm">
+      {value && icon}
       {value && typeof value === "string" && validator.isEmail(value) ? (
         <a href={`mailto:${value}`} className="text-blue-500 hover:underline">
           {value}

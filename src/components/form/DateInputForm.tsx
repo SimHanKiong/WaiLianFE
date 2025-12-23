@@ -86,7 +86,13 @@ export default function DateInputForm<TFieldValues extends FieldValues>({
                     false
                   }
                   defaultMonth={field.value || undefined}
-                  initialFocus={true}
+                  captionLayout="dropdown"
+                  startMonth={
+                    minDate ?? new Date(new Date().getFullYear() - 100, 0, 1)
+                  }
+                  endMonth={
+                    maxDate ?? new Date(new Date().getFullYear() + 10, 11, 31)
+                  }
                 />
               </PopoverContent>
             </Popover>

@@ -9,8 +9,11 @@ export type School = {
   email: string | null;
   password: string;
   isFinalYear: boolean;
-  emailAttachmentKey: string | null;
-  emailAttachmentSignedUrl?: string | null;
+  isFavourite: boolean;
+  priceListKey: string | null;
+  priceListSignedUrl: string | null;
+  rulesKey: string | null;
+  rulesSignedUrl: string | null;
 };
 
 export const readSchools = async (): Promise<School[]> => {

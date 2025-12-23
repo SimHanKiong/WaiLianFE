@@ -29,6 +29,8 @@ export type Enquiry = {
   amAddress: string;
   pmAddress: string;
   createdOn: string;
+  amIcon: string;
+  pmIcon: string;
 };
 
 export const readEnquiries = async (): Promise<Enquiry[]> => {

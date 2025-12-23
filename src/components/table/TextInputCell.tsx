@@ -4,13 +4,19 @@ import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { CellContext } from "@tanstack/react-table";
 import { DataWithId } from "./EditableTable";
+import { cn } from "@/lib/utils";
+
+interface TextInputCellProps<TData> extends CellContext<TData, string> {
+  textColour?: string;
+}
 
 export default function TextInputCell<TData extends DataWithId>({
   getValue,
   row,
   column,
   table,
-}: CellContext<TData, string>) {
+  textColour = "",
+}: TextInputCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -20,7 +26,7 @@ export default function TextInputCell<TData extends DataWithId>({
 
   return (
     <Input
-      className="border-0 shadow-none focus-visible:ring-0"
+      className={cn("border-0 shadow-none focus-visible:ring-0", textColour)}
       value={value}
       onChange={(e) => {
         setValue(e.target.value);

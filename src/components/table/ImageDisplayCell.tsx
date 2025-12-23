@@ -9,14 +9,14 @@ export default function ImageDisplayCell<TData>({
 
   if (!url) {
     return (
-      <div className="text-m flex w-full items-center justify-center text-gray-400">
+      <div className="text-m flex w-full items-center px-3 text-gray-400">
         No Image
       </div>
     );
   }
 
   return (
-    <div className="flex h-16 w-full items-center justify-center">
+    <div className="flex h-16 w-full items-center px-3">
       <a href={url}>
         <img
           src={url}

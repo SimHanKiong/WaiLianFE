@@ -21,6 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +75,9 @@ export default function EditableTable<TData extends DataWithId, TValue>({
     state: { globalFilter, sorting },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
+    defaultColumn: {
+      enableGlobalFilter: false,
+    },
     meta: {
       updateData: (
         rowId: string,
@@ -134,10 +138,10 @@ export default function EditableTable<TData extends DataWithId, TValue>({
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
-                  className={`${
+                  className={cn(
                     getRowColour?.(row.original) ||
-                    (index % 2 === 0 ? "" : "bg-gray-100")
-                  } `}
+                      (index % 2 === 0 ? "" : "bg-gray-100")
+                  )}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
