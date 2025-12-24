@@ -46,7 +46,7 @@ export default function BusTable({ data }: BusTableProps) {
       }),
       columnHelper.display({
         id: "select",
-        header: () => <Trash2 className="stroke-3 size-6" />,
+        header: () => <Trash2 className=" size-6" />,
         cell: RowSelectCell,
         size: 50,
       }),

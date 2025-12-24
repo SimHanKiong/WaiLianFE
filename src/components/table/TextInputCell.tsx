@@ -7,7 +7,7 @@ import { DataWithId } from "./EditableTable";
 import { cn } from "@/lib/utils";
 
 interface TextInputCellProps<TData> extends CellContext<TData, string> {
-  textColour?: string;
+  className?: string;
 }
 
 export default function TextInputCell<TData extends DataWithId>({
@@ -15,7 +15,7 @@ export default function TextInputCell<TData extends DataWithId>({
   row,
   column,
   table,
-  textColour = "",
+  className = "",
 }: TextInputCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -26,7 +26,7 @@ export default function TextInputCell<TData extends DataWithId>({
 
   return (
     <Input
-      className={cn("border-0 shadow-none focus-visible:ring-0", textColour)}
+      className={cn("border-0 shadow-none focus-visible:ring-0", className)}
       value={value}
       onChange={(e) => {
         setValue(e.target.value);

@@ -30,7 +30,7 @@ export default function CheckboxCell<TData extends DataWithId>({
   return (
     <div className="flex justify-center">
       <Checkbox
-        className="h-6 w-6 items-center data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
+        className="size-6 data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
         checked={value}
         onCheckedChange={handleCheckedChange}
       />

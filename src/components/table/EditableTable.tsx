@@ -21,7 +21,6 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -135,13 +134,10 @@ export default function EditableTable<TData extends DataWithId, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className={cn(
-                    getRowColour?.(row.original) ||
-                      (index % 2 === 0 ? "" : "bg-gray-100")
-                  )}
+                  className={getRowColour?.(row.original)}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (

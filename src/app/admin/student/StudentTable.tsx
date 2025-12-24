@@ -85,7 +85,7 @@ export default function StudentTable({
   const columns = useMemo(
     () => [
       columnHelper.accessor("school.initial", {
-        header: () => <School className="stroke-3 size-6 text-amber-800" />,
+        header: () => <School className="size-6 text-amber-800" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 70,
       }),
@@ -94,16 +94,14 @@ export default function StudentTable({
         cell: (info) => (
           <div className="flex justify-center">
             <a href={`mailto:${info.getValue()}`}>
-              <Mail className="stroke-3 size-6" />
+              <Mail className="size-6 stroke-1" />
             </a>
           </div>
         ),
         size: 60,
       }),
       columnHelper.accessor("parent.contact1No", {
-        header: () => (
-          <MessageSquareShare className="stroke-3 size-6 text-green-500" />
-        ),
+        header: () => <MessageSquareShare className="size-6 text-green-500" />,
         cell: (info) => (
           <div className="flex justify-center">
             <a
@@ -132,9 +130,7 @@ export default function StudentTable({
         size: 60,
       }),
       columnHelper.accessor("isFavourite", {
-        header: () => (
-          <MoveHorizontal className="stroke-3 size-6 text-yellow-500" />
-        ),
+        header: () => <MoveHorizontal className="size-6 text-yellow-500" />,
         cell: (info) => <CheckboxCell {...info} />,
         size: 50,
       }),
@@ -146,7 +142,7 @@ export default function StudentTable({
       }),
       columnHelper.accessor("block", {
         header: "Block",
-        cell: (info) => <TextInputCell {...info} />,
+        cell: (info) => <TextInputCell {...info} className="font-bold" />,
         size: 170,
         sortingFn: blockSortFn,
       }),
@@ -159,14 +155,12 @@ export default function StudentTable({
         id: "levelClass",
         header: "Class",
         cell: ({ row }) => <DisplayCell value={getClass(row.original)} />,
-        size: 200,
+        size: 120,
       }),
       columnHelper.accessor("parent.fare", {
-        header: () => (
-          <CircleDollarSign className="stroke-3 size-6 text-amber-500" />
-        ),
+        header: () => <CircleDollarSign className="size-6 text-amber-500" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 100,
+        size: 50,
       }),
       columnHelper.accessor("parent.underFas", {
         header: "FAS",
@@ -178,16 +172,14 @@ export default function StudentTable({
 
       columnHelper.accessor("amIcon", {
         header: "",
-        cell: (info) => <TextInputCell {...info} textColour="text-blue-700" />,
+        cell: (info) => <TextInputCell {...info} className="text-blue-700" />,
         size: 40,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
         header: () => (
           <IconHeader
-            icon={
-              <ArrowBigUp className="stroke-3 size-6 fill-blue-700 text-blue-700" />
-            }
+            icon={<ArrowBigUp className="size-6 fill-blue-700 text-blue-700" />}
             label="Pick Up Point"
           />
         ),
@@ -201,17 +193,13 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: () => (
-          <ClockArrowUp className="stroke-3 size-6 text-blue-700" />
-        ),
+        header: () => <ClockArrowUp className="size-6 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
       }),
       columnHelper.accessor("pmIcon", {
         header: "",
-        cell: (info) => (
-          <TextInputCell {...info} textColour="text-orange-600" />
-        ),
+        cell: (info) => <TextInputCell {...info} className="text-orange-600" />,
         size: 40,
       }),
       columnHelper.accessor("pmLocation.id", {
@@ -219,7 +207,7 @@ export default function StudentTable({
         header: () => (
           <IconHeader
             icon={
-              <ArrowBigDown className="stroke-3 size-6 fill-orange-600 text-orange-600" />
+              <ArrowBigDown className="size-6 fill-orange-600 text-orange-600" />
             }
             label="Drop Off Point"
           />
@@ -234,15 +222,13 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: () => (
-          <ClockArrowDown className="stroke-3 size-6 text-orange-600" />
-        ),
+        header: () => <ClockArrowDown className="size-6 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
       }),
       columnHelper.display({
         id: "select",
-        header: () => <Trash2 className="stroke-3 size-6" />,
+        header: () => <Trash2 className="size-6" />,
         cell: RowSelectCell,
         size: 50,
       }),
@@ -254,7 +240,7 @@ export default function StudentTable({
       }),
       columnHelper.accessor("remark", {
         header: "Remark",
-        cell: (info) => <TextInputCell {...info} textColour="text-red-600" />,
+        cell: (info) => <TextInputCell {...info} className="text-red-600" />,
         size: 250,
       }),
     ],

@@ -14,14 +14,17 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-screen">
-      <nav className="bg-slate-900 text-white">
-        <div className="flex items-center gap-8 px-6 py-6">
-          <div className="flex gap-8">
+      <nav className="border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="text-lg font-bold text-gray-900">
+            WAI LIAN TRADING AND TRANSPORTATION
+          </div>
+          <div className="flex items-center gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center gap-2 text-xl font-medium hover:text-gray-300"
+                className="text-md flex items-center gap-1 font-bold text-gray-700 hover:text-gray-900"
               >
                 {item.label}
               </Link>

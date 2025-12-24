@@ -88,7 +88,7 @@ export default function EnquiryTable({
         size: 100,
       }),
       columnHelper.accessor("school.id", {
-        header: () => <SchoolIcon className="stroke-3 size-6 text-amber-800" />,
+        header: () => <SchoolIcon className="size-6 text-amber-800" />,
         cell: (info) => (
           <DropdownCell {...info} options={schools} objectColumnId="school" />
         ),
@@ -100,9 +100,7 @@ export default function EnquiryTable({
         size: 75,
       }),
       columnHelper.accessor("isFavourite", {
-        header: () => (
-          <MoveHorizontal className="stroke-3 size-6 text-yellow-500" />
-        ),
+        header: () => <MoveHorizontal className="size-6 text-yellow-500" />,
         cell: (info) => <CheckboxCell {...info} />,
         size: 50,
       }),
@@ -120,9 +118,7 @@ export default function EnquiryTable({
       columnHelper.accessor("amAddress", {
         header: () => (
           <IconHeader
-            icon={
-              <ArrowBigUp className="stroke-3 size-6 fill-blue-700 text-blue-700" />
-            }
+            icon={<ArrowBigUp className="size-6 fill-blue-700 text-blue-700" />}
             label="Pick Up Address"
           />
         ),
@@ -140,7 +136,7 @@ export default function EnquiryTable({
         header: () => (
           <IconHeader
             icon={
-              <ArrowBigDown className="stroke-3 size-6 fill-orange-600 text-orange-600" />
+              <ArrowBigDown className="size-6 fill-orange-600 text-orange-600" />
             }
             label="Drop Off Address"
           />
@@ -157,7 +153,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("remark", {
         header: "Remark*",
-        cell: (info) => <TextInputCell {...info} textColour="text-red-600" />,
+        cell: (info) => <TextInputCell {...info} className="text-red-600" />,
         size: 250,
         enableGlobalFilter: true,
       }),
@@ -168,24 +164,20 @@ export default function EnquiryTable({
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("fare", {
-        header: () => (
-          <CircleDollarSign className="stroke-3 size-6 text-amber-500" />
-        ),
+        header: () => <CircleDollarSign className="size-6 text-amber-500" />,
         cell: (info) => <NumberInputCell {...info} />,
         size: 60,
       }),
       columnHelper.accessor("amIcon", {
         header: "",
-        cell: (info) => <TextInputCell {...info} textColour="text-blue-700" />,
+        cell: (info) => <TextInputCell {...info} className="text-blue-700" />,
         size: 40,
       }),
       columnHelper.accessor("amLocation.id", {
         id: "amLocationId",
         header: () => (
           <IconHeader
-            icon={
-              <ArrowBigUp className="stroke-3 size-6 fill-blue-700 text-blue-700" />
-            }
+            icon={<ArrowBigUp className="size-6 fill-blue-700 text-blue-700" />}
             label="Pick Up Point"
           />
         ),
@@ -199,17 +191,13 @@ export default function EnquiryTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: () => (
-          <ClockArrowUp className="stroke-3 size-6 text-blue-700" />
-        ),
+        header: () => <ClockArrowUp className="size-6 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
       }),
       columnHelper.accessor("pmIcon", {
         header: "",
-        cell: (info) => (
-          <TextInputCell {...info} textColour="text-orange-600" />
-        ),
+        cell: (info) => <TextInputCell {...info} className="text-orange-600" />,
         size: 40,
       }),
       columnHelper.accessor("pmLocation.id", {
@@ -217,7 +205,7 @@ export default function EnquiryTable({
         header: () => (
           <IconHeader
             icon={
-              <ArrowBigDown className="stroke-3 size-6 fill-orange-600 text-orange-600" />
+              <ArrowBigDown className="size-6 fill-orange-600 text-orange-600" />
             }
             label="Drop Off Point"
           />
@@ -232,9 +220,7 @@ export default function EnquiryTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: () => (
-          <ClockArrowDown className="stroke-3 size-6 text-orange-600" />
-        ),
+        header: () => <ClockArrowDown className="size-6 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
       }),
@@ -258,7 +244,7 @@ export default function EnquiryTable({
 
       columnHelper.display({
         id: "select",
-        header: () => <Trash2 className="stroke-3 size-6" />,
+        header: () => <Trash2 className="size-6" />,
         cell: RowSelectCell,
         size: 50,
       }),
