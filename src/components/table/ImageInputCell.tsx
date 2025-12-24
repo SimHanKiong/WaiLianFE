@@ -29,9 +29,17 @@ export default function FileInputCell<TData extends DataWithId>({
     formData.append("file", file);
 
     try {
-      const { key } = await uploadFile(formData);
+      const { key, signedUrl } = await uploadFile(formData);
       table.options.meta?.updateData(row.original.id, column.id, key);
       setValue(key);
+
+      const signedUrlColumnId = column.id.replace("Key", "SignedUrl");
+      table.options.meta?.updateData(
+        row.original.id,
+        signedUrlColumnId,
+        signedUrl
+      );
+
       toast({
         variant: "success",
         title: "Upload Successful",

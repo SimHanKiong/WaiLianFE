@@ -56,7 +56,6 @@ export const createSchool = async (schoolCreate: School): Promise<void> => {
   if (!response.ok) {
     throw new Error("Unable to create School");
   }
-  await response.json();
 };
 
 export const updateSchool = async (

@@ -42,9 +42,11 @@ export default function SchoolTable({ data }: SchoolTableProps) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("isFavourite", {
-        header: () => <MoveHorizontal className="size-8 text-yellow-500" />,
+        header: () => (
+          <MoveHorizontal className="stroke-3 size-6 text-yellow-500" />
+        ),
         cell: (info) => <CheckboxCell {...info} />,
-        size: 60,
+        size: 50,
       }),
       columnHelper.accessor("name", {
         header: "School Name",
@@ -52,17 +54,21 @@ export default function SchoolTable({ data }: SchoolTableProps) {
         size: 400,
       }),
       columnHelper.accessor("initial", {
-        header: () => <SchoolIcon className="size-8 text-amber-800" />,
+        header: () => <SchoolIcon className="stroke-3 size-6 text-amber-800" />,
         cell: (info) => <TextInputCell {...info} />,
         size: 80,
       }),
       columnHelper.accessor("arrivalTime", {
-        header: () => <ClockArrowUp className="size-8 text-blue-700" />,
+        header: () => (
+          <ClockArrowUp className="stroke-3 size-6 text-blue-700" />
+        ),
         cell: (info) => <TextInputCell {...info} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.accessor("departureTime", {
-        header: () => <ClockArrowDown className="size-8 text-orange-600" />,
+        header: () => (
+          <ClockArrowDown className="stroke-3 size-6 text-orange-600" />
+        ),
         cell: (info) => <TextInputCell {...info} />,
         size: 100,
       }),
@@ -99,9 +105,9 @@ export default function SchoolTable({ data }: SchoolTableProps) {
 
       columnHelper.display({
         id: "link",
-        header: "Copy Enquiries Link",
+        header: "Copy Link",
         cell: ({ row }) => <ClipboardCell content={getLink(row.original)} />,
-        size: 150,
+        size: 100,
       }),
       columnHelper.accessor("isFinalYear", {
         header: "Final Year",
@@ -110,9 +116,9 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       }),
       columnHelper.display({
         id: "select",
-        header: () => <Trash2 className="size-8" />,
+        header: () => <Trash2 className="stroke-3 size-6" />,
         cell: RowSelectCell,
-        size: 60,
+        size: 50,
       }),
     ],
     [columnHelper]

@@ -53,7 +53,7 @@ export default function StudentTable({
     return `${student.level} ${student.className}`;
   };
   const getContactUse = (student: Student) => {
-    return `${student.block} ${student.gender == Gender.MALE ? "🚹" : "🚺"} ${student.givenName}`;
+    return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}`;
   };
 
   const sortByColumns: SortingState = [{ id: "block", desc: false }];
@@ -85,23 +85,25 @@ export default function StudentTable({
   const columns = useMemo(
     () => [
       columnHelper.accessor("school.initial", {
-        header: () => <School className="size-8 text-amber-800" />,
+        header: () => <School className="stroke-3 size-6 text-amber-800" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 80,
+        size: 70,
       }),
       columnHelper.accessor("parent.email", {
         header: "Mail",
         cell: (info) => (
           <div className="flex justify-center">
             <a href={`mailto:${info.getValue()}`}>
-              <Mail className="size-8" />
+              <Mail className="stroke-3 size-6" />
             </a>
           </div>
         ),
         size: 60,
       }),
       columnHelper.accessor("parent.contact1No", {
-        header: () => <MessageSquareShare className="size-8 text-green-500" />,
+        header: () => (
+          <MessageSquareShare className="stroke-3 size-6 text-green-500" />
+        ),
         cell: (info) => (
           <div className="flex justify-center">
             <a
@@ -109,11 +111,11 @@ export default function StudentTable({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MessageCircleMore className="size-8 text-green-500" />
+              <MessageCircleMore className="size-6 stroke-1 text-green-500" />
             </a>
           </div>
         ),
-        size: 60,
+        size: 50,
       }),
       columnHelper.accessor("id", {
         header: "Edit",
@@ -123,16 +125,18 @@ export default function StudentTable({
               href={`/admin/student/edit/${info.getValue()}`}
               target="_self"
             >
-              <SquarePen className="size-8 text-rose-600" />
+              <SquarePen className="size-6 stroke-1 text-rose-600" />
             </Link>
           </div>
         ),
         size: 60,
       }),
       columnHelper.accessor("isFavourite", {
-        header: () => <MoveHorizontal className="size-8 text-yellow-500" />,
+        header: () => (
+          <MoveHorizontal className="stroke-3 size-6 text-yellow-500" />
+        ),
         cell: (info) => <CheckboxCell {...info} />,
-        size: 60,
+        size: 50,
       }),
       columnHelper.display({
         id: "#",
@@ -142,8 +146,8 @@ export default function StudentTable({
       }),
       columnHelper.accessor("block", {
         header: "Block",
-        cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 200,
+        cell: (info) => <TextInputCell {...info} />,
+        size: 170,
         sortingFn: blockSortFn,
       }),
       columnHelper.accessor("fullName", {
@@ -158,9 +162,11 @@ export default function StudentTable({
         size: 200,
       }),
       columnHelper.accessor("parent.fare", {
-        header: () => <CircleDollarSign className="size-8 text-amber-500" />,
+        header: () => (
+          <CircleDollarSign className="stroke-3 size-6 text-amber-500" />
+        ),
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 120,
+        size: 100,
       }),
       columnHelper.accessor("parent.underFas", {
         header: "FAS",
@@ -179,7 +185,9 @@ export default function StudentTable({
         id: "amLocationId",
         header: () => (
           <IconHeader
-            icon={<ArrowBigUp className="size-8 fill-blue-700 text-blue-700" />}
+            icon={
+              <ArrowBigUp className="stroke-3 size-6 fill-blue-700 text-blue-700" />
+            }
             label="Pick Up Point"
           />
         ),
@@ -193,9 +201,11 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("amLocation.time", {
-        header: () => <ClockArrowUp className="size-8 text-blue-700" />,
+        header: () => (
+          <ClockArrowUp className="stroke-3 size-6 text-blue-700" />
+        ),
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.accessor("pmIcon", {
         header: "",
@@ -209,7 +219,7 @@ export default function StudentTable({
         header: () => (
           <IconHeader
             icon={
-              <ArrowBigDown className="size-8 fill-orange-600 text-orange-600" />
+              <ArrowBigDown className="stroke-3 size-6 fill-orange-600 text-orange-600" />
             }
             label="Drop Off Point"
           />
@@ -224,15 +234,17 @@ export default function StudentTable({
         size: 400,
       }),
       columnHelper.accessor("pmLocation.time", {
-        header: () => <ClockArrowDown className="size-8 text-orange-600" />,
+        header: () => (
+          <ClockArrowDown className="stroke-3 size-6 text-orange-600" />
+        ),
         cell: (info) => <DisplayCell value={info.getValue()} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.display({
         id: "select",
-        header: () => <Trash2 className="size-8" />,
+        header: () => <Trash2 className="stroke-3 size-6" />,
         cell: RowSelectCell,
-        size: 60,
+        size: 50,
       }),
       columnHelper.display({
         id: "Contact Use",

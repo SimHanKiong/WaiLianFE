@@ -4,6 +4,7 @@ const navItems = [
   { href: "/admin/school", label: "Schools" },
   { href: "/admin/enquiry", label: "Enquiries" },
   { href: "/admin/student", label: "Students" },
+  { href: "/admin/bus", label: "Buses" },
 ];
 
 export default function AdminLayout({

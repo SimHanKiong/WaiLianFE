@@ -19,10 +19,10 @@ export default function ClipboardCell({ content }: ClipboardCellProps) {
   return (
     <div className="flex justify-center">
       {copied ? (
-        <CheckIcon className="size-8 text-green-500" />
+        <CheckIcon className="size-6 stroke-1 text-green-500" />
       ) : (
         <CopyIcon
-          className="size-8 cursor-pointer text-emerald-600"
+          className="size-6 cursor-pointer stroke-1 text-emerald-600"
           onClick={handleCopy}
         />
       )}

@@ -10,8 +10,10 @@ interface DisplayCellProps {
 
 export default function DisplayCell({ value, icon }: DisplayCellProps) {
   return (
-    <div className="flex w-full items-center gap-2 px-3 py-1 text-base md:text-sm">
-      {value && icon}
+    <div className="flex w-full items-center gap-1 px-3 py-1 text-base md:text-sm">
+      {value && icon && (
+        <span className="flex size-10 items-center justify-center">{icon}</span>
+      )}
       {value && typeof value === "string" && validator.isEmail(value) ? (
         <a href={`mailto:${value}`} className="text-blue-500 hover:underline">
           {value}
