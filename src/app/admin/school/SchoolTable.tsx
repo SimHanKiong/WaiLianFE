@@ -1,22 +1,6 @@
 "use client";
 
-import CheckboxCell from "@/components/table/CheckboxCell";
-import ClipboardCell from "@/components/table/CopyCell";
-import EditableTable from "@/components/table/EditableTable";
-import EmailInputCell from "@/components/table/EmailInputCell";
-import RowSelectCell from "@/components/table/RowSelectCell";
-import TextInputCell from "@/components/table/TextInputCell";
-import {
-  createSchool,
-  deleteSchools,
-  School,
-  updateSchool,
-} from "@/lib/services/school";
 import { createColumnHelper } from "@tanstack/react-table";
-import { v4 as uuidv4 } from "uuid";
-import { useMemo } from "react";
-import ImageInputCell from "@/components/table/ImageInputCell";
-import ImageDisplayCell from "@/components/table/ImageDisplayCell";
 import {
   ClockArrowDown,
   ClockArrowUp,
@@ -24,6 +8,24 @@ import {
   SchoolIcon,
   Trash2,
 } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+
+import { useMemo } from "react";
+
+import CheckboxCell from "@/components/table/CheckboxCell";
+import ClipboardCell from "@/components/table/CopyCell";
+import EditableTable from "@/components/table/EditableTable";
+import EmailInputCell from "@/components/table/EmailInputCell";
+import ImageDisplayCell from "@/components/table/ImageDisplayCell";
+import ImageInputCell from "@/components/table/ImageInputCell";
+import RowSelectCell from "@/components/table/RowSelectCell";
+import TextInputCell from "@/components/table/TextInputCell";
+import {
+  School,
+  createSchool,
+  deleteSchools,
+  updateSchool,
+} from "@/lib/services/school";
 
 interface SchoolTableProps {
   data: School[];

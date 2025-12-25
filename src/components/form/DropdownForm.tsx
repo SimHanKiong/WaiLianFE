@@ -1,13 +1,11 @@
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { useState } from "react";
 import { Control, FieldValues, Path } from "react-hook-form";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+
+import { cn } from "@/lib/utils";
+
 import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -16,9 +14,14 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface DropdownFormProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>;

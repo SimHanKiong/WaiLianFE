@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
+
+import { useState } from "react";
+
+import BaseCell from "./BaseCell";
 
 interface ClipboardCellProps {
   content: string;
@@ -17,7 +20,7 @@ export default function ClipboardCell({ content }: ClipboardCellProps) {
   };
 
   return (
-    <div className="flex justify-center">
+    <BaseCell align="center">
       {copied ? (
         <CheckIcon className="size-6 stroke-1 text-green-500" />
       ) : (
@@ -26,6 +29,6 @@ export default function ClipboardCell({ content }: ClipboardCellProps) {
           onClick={handleCopy}
         />
       )}
-    </div>
+    </BaseCell>
   );
 }

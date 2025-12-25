@@ -1,13 +1,15 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { createLocation } from "@/lib/services/location";
-import TextInputForm from "@/components/form/TextInputForm";
+
+import { useForm } from "react-hook-form";
+
 import RadioInputForm from "@/components/form/RadioInputForm";
+import TextInputForm from "@/components/form/TextInputForm";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { createLocation } from "@/lib/services/location";
 
 const addLocationSchema = z.object({
   address: z.string().trim().min(1, "Address is required"),

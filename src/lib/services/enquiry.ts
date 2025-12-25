@@ -1,9 +1,10 @@
 "use server";
 
+import { EnquiryFormData } from "@/app/enquiry/[id]/EnquiryForm";
+
+import { EnquiryStatusType } from "../constants";
 import { Location } from "./location";
 import { School } from "./school";
-import { EnquiryFormData } from "@/app/enquiry/[id]/EnquiryForm";
-import { EnquiryStatusType } from "../constants";
 
 export type Enquiry = {
   id: string;

@@ -1,4 +1,6 @@
 import { ReactNode } from "react";
+
+import { Button, ButtonProps } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Button, ButtonProps } from "./ui/button";
 
 type DialogWrapperProps = {
   openText: ReactNode;

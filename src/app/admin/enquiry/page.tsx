@@ -1,12 +1,14 @@
 import DialogWrapper from "@/components/DialogWrapper";
-import { readEnquiries } from "@/lib/services/enquiry";
-import EnquiryTable from "./EnquiryTable";
-import { readSchools } from "@/lib/services/school";
-import { readLocations } from "@/lib/services/location";
 import Header from "@/components/Header";
+import PageContainer from "@/components/PageContainer";
 import { EnquiryStatusOptions } from "@/lib/constants";
+import { readEnquiries } from "@/lib/services/enquiry";
+import { readLocations } from "@/lib/services/location";
+import { readSchools } from "@/lib/services/school";
+
 import AddLocationForm from "./AddLocationForm";
 import DeleteLocationForm from "./DeleteLocationForm";
+import EnquiryTable from "./EnquiryTable";
 
 export default async function Page() {
   const [enquiries, schools, amLocations, pmLocations] = await Promise.all([
@@ -31,18 +33,21 @@ export default async function Page() {
     label: pmLocation.address,
     object: pmLocation,
   }));
-  const enquiryStatus = EnquiryStatusOptions.map((status) => ({
-    value: status,
-    label: status,
-    object: false,
-  }));
+  const enquiryStatus = [
+    { value: "", label: "None", object: false },
+    ...EnquiryStatusOptions.map((status) => ({
+      value: status,
+      label: status,
+      object: false,
+    })),
+  ];
   const locations = [...amLocations, ...pmLocations].map((location) => ({
     value: location.id,
     label: location.address + " (" + location.type + ")",
   }));
 
   return (
-    <div className="container mx-auto max-w-full px-10 py-10">
+    <PageContainer>
       <Header title="Enquiries" />
       <div className="mb-4 flex flex-row justify-end gap-4 pb-2">
         <DialogWrapper
@@ -67,6 +72,6 @@ export default async function Page() {
         amLocations={amLocationOptions}
         pmLocations={pmLocationOptions}
       />
-    </div>
+    </PageContainer>
   );
 }

@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Input } from "../ui/input";
 import { CellContext } from "@tanstack/react-table";
-import { uploadFile } from "@/lib/services/file";
+
+import { useEffect, useRef, useState } from "react";
+
 import { toast } from "@/hooks/use-toast";
+import { uploadFile } from "@/lib/services/file";
+
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import BaseCell from "./BaseCell";
 import { DataWithId } from "./EditableTable";
 
 export default function FileInputCell<TData extends DataWithId>({
@@ -56,7 +60,7 @@ export default function FileInputCell<TData extends DataWithId>({
   };
 
   return (
-    <div className="ml-2 flex items-center gap-3">
+    <BaseCell padding="sm" className="gap-3">
       <Button
         type="button"
         variant={value ? "secondary" : "outline"}
@@ -76,6 +80,6 @@ export default function FileInputCell<TData extends DataWithId>({
         accept="image/*"
         onChange={handleFileChange}
       />
-    </div>
+    </BaseCell>
   );
 }

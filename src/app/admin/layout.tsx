@@ -24,7 +24,7 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-md flex items-center gap-1 font-bold text-gray-700 hover:text-gray-900"
+                className="text-md flex items-center gap-1 font-bold text-gray-700 hover:text-gray-900 pr-2"
               >
                 {item.label}
               </Link>

@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { CellContext } from "@tanstack/react-table";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,14 +14,20 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+
+import BaseCell from "./BaseCell";
 import { DataWithId } from "./EditableTable";
 
 interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
   options: { value: string; label: string; object?: unknown }[];
   objectColumnId?: string;
+  backgroundColour?: string;
 }
 
 export default function DropdownCell<TData extends DataWithId>({
@@ -32,6 +37,7 @@ export default function DropdownCell<TData extends DataWithId>({
   options,
   objectColumnId,
   table,
+  backgroundColour = "transparent",
 }: DropdownCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -42,16 +48,17 @@ export default function DropdownCell<TData extends DataWithId>({
   }, [initialValue]);
 
   const handleSelect = (currentValue: string) => {
-    setValue(currentValue);
+    const value = currentValue === "" ? null : currentValue;
+    setValue(value);
     setOpen(false);
 
-    table.options.meta?.updateData(row.original.id, column.id, currentValue);
+    table.options.meta?.updateData(row.original.id, column.id, value);
 
     if (!objectColumnId) {
       return;
     }
     for (const option of options) {
-      if (option.value !== currentValue) {
+      if (option.value !== value) {
         continue;
       }
 
@@ -65,7 +72,11 @@ export default function DropdownCell<TData extends DataWithId>({
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <BaseCell
+      padding="none"
+      align="center"
+      style={{ backgroundColor: backgroundColour }}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -77,7 +88,7 @@ export default function DropdownCell<TData extends DataWithId>({
             {value ? (
               options.find((option) => option.value === value)?.label
             ) : (
-              <span className="invisible"></span>
+              <span className="text-gray-400">None</span>
             )}
             <ChevronsUpDown className="opacity-50" />
           </Button>
@@ -108,6 +119,6 @@ export default function DropdownCell<TData extends DataWithId>({
           </Command>
         </PopoverContent>
       </Popover>
-    </div>
+    </BaseCell>
   );
 }

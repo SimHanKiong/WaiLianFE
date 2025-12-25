@@ -1,18 +1,20 @@
 "use client";
 
-import { Enquiry } from "@/lib/services/enquiry";
-import { z } from "zod";
-import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import TextInputForm from "@/components/form/TextInputForm";
-import RadioInputForm from "@/components/form/RadioInputForm";
-import NumberInputForm from "@/components/form/NumberInputForm";
+import { z } from "zod";
+
+import { useFieldArray, useForm } from "react-hook-form";
+
 import DateInputForm from "@/components/form/DateInputForm";
 import DisplayFieldForm from "@/components/form/DisplayFieldForm";
-import { createParent } from "@/lib/services/parent";
+import NumberInputForm from "@/components/form/NumberInputForm";
+import RadioInputForm from "@/components/form/RadioInputForm";
+import TextInputForm from "@/components/form/TextInputForm";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { Enquiry } from "@/lib/services/enquiry";
+import { createParent } from "@/lib/services/parent";
 
 const capitalise = (word: string) => {
   return word.charAt(0).toLocaleUpperCase() + word.slice(1).toLowerCase();

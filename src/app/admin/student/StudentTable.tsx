@@ -1,43 +1,51 @@
 "use client";
 
+import { Row, SortingState, createColumnHelper } from "@tanstack/react-table";
+import {
+  ArrowBigDown,
+  ArrowBigDownDash,
+  ArrowBigUp,
+  ArrowBigUpDash,
+  CircleDollarSign,
+  ClockArrowDown,
+  ClockArrowUp,
+  Mail,
+  MessageCircleMore,
+  MessageSquareShare,
+  MoveHorizontal,
+  School,
+  SquarePen,
+  Trash2,
+} from "lucide-react";
+
+import { useMemo } from "react";
+
+import Link from "next/link";
+
+import CheckboxCell from "@/components/table/CheckboxCell";
 import DisplayCell from "@/components/table/DisplayCell";
 import DropdownCell from "@/components/table/DropdownCell";
 import EditableTable from "@/components/table/EditableTable";
-import RowSelectCell from "@/components/table/RowSelectCell";
-import { Gender } from "@/lib/constants";
-import { deleteStudents, Student, updateStudent } from "@/lib/services/student";
-import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
-import {
-  School,
-  CircleDollarSign,
-  ClockArrowUp,
-  ClockArrowDown,
-  Mail,
-  MessageSquareShare,
-  MessageCircleMore,
-  ArrowBigUp,
-  ArrowBigDown,
-  SquarePen,
-  MoveHorizontal,
-  Trash2,
-} from "lucide-react";
-import { useMemo } from "react";
-import { Location } from "@/lib/services/location";
-import Link from "next/link";
-import CheckboxCell from "@/components/table/CheckboxCell";
-import TextInputCell from "@/components/table/TextInputCell";
 import IconHeader from "@/components/table/IconHeader";
+import RowSelectCell from "@/components/table/RowSelectCell";
+import TextInputCell from "@/components/table/TextInputCell";
+import { Gender } from "@/lib/constants";
+import { Bus } from "@/lib/services/bus";
+import { Location } from "@/lib/services/location";
+import { Student, deleteStudents, updateStudent } from "@/lib/services/student";
 
 interface StudentTableProps {
   data: Student[];
   amLocations: { value: string; label: string; object: Location }[];
   pmLocations: { value: string; label: string; object: Location }[];
+  buses: { value: string; label: string; object: Bus }[];
 }
 
 export default function StudentTable({
   data,
   amLocations,
   pmLocations,
+  buses,
 }: StudentTableProps) {
   const getRowColour = (row: Student): string => {
     return row.isFavourite ? "bg-yellow-100" : "";
@@ -139,6 +147,32 @@ export default function StudentTable({
         header: "S/No.",
         cell: ({ row }) => <DisplayCell value={row.index + 1} />,
         size: 60,
+      }),
+      columnHelper.accessor("amBus.id", {
+        id: "amBusId",
+        header: () => <ArrowBigUpDash className="size-6 text-blue-700" />,
+        cell: (info) => (
+          <DropdownCell
+            {...info}
+            options={buses}
+            objectColumnId="amBus"
+            backgroundColour={info.row.original.amBus?.colour}
+          />
+        ),
+        size: 120,
+      }),
+      columnHelper.accessor("pmBus.id", {
+        id: "pmBusId",
+        header: () => <ArrowBigDownDash className="size-6 text-orange-600" />,
+        cell: (info) => (
+          <DropdownCell
+            {...info}
+            options={buses}
+            objectColumnId="pmBus"
+            backgroundColour={info.row.original.pmBus?.colour}
+          />
+        ),
+        size: 120,
       }),
       columnHelper.accessor("block", {
         header: "Block",
@@ -244,7 +278,7 @@ export default function StudentTable({
         size: 250,
       }),
     ],
-    [columnHelper, amLocations, pmLocations]
+    [columnHelper, amLocations, pmLocations, buses]
   );
   return (
     <EditableTable<Student, any>

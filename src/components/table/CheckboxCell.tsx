@@ -1,12 +1,12 @@
 "use client";
 
 import { CellContext } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
+
 import { useEffect, useState } from "react";
 
-interface DataWithId {
-  id: string;
-}
+import { Checkbox } from "../ui/checkbox";
+import BaseCell from "./BaseCell";
+import { DataWithId } from "./EditableTable";
 
 export default function CheckboxCell<TData extends DataWithId>({
   getValue,
@@ -28,12 +28,12 @@ export default function CheckboxCell<TData extends DataWithId>({
   };
 
   return (
-    <div className="flex justify-center">
+    <BaseCell align="center">
       <Checkbox
         className="size-6 data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
         checked={value}
         onCheckedChange={handleCheckedChange}
       />
-    </div>
+    </BaseCell>
   );
 }

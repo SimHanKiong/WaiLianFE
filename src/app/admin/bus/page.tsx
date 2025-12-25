@@ -1,14 +1,16 @@
 import Header from "@/components/Header";
+import PageContainer from "@/components/PageContainer";
 import { readBuses } from "@/lib/services/bus";
+
 import BusTable from "./BusTable";
 
 export default async function Page() {
   const buses = await readBuses();
 
   return (
-    <div className="container mx-auto max-w-full px-10 py-10">
+    <PageContainer>
       <Header title="Buses" />
       <BusTable data={buses} />
-    </div>
+    </PageContainer>
   );
 }

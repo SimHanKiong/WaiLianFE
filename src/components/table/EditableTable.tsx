@@ -2,14 +2,19 @@
 
 import {
   ColumnDef,
+  RowData,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  RowData,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+
+import { useEffect, useState } from "react";
+
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import {
   Table,
   TableBody,
@@ -18,9 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -143,7 +145,7 @@ export default function EditableTable<TData extends DataWithId, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="border border-gray-400 px-0 py-2 text-sm text-gray-900"
+                      className="border border-gray-400 p-0 text-sm text-gray-900"
                       style={{ width: `${cell.column.getSize()}px` }}
                     >
                       {flexRender(

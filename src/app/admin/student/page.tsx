@@ -1,13 +1,17 @@
 import Header from "@/components/Header";
-import { readStudents } from "@/lib/services/student";
-import StudentTable from "./StudentTable";
+import PageContainer from "@/components/PageContainer";
+import { readBuses } from "@/lib/services/bus";
 import { readLocations } from "@/lib/services/location";
+import { readStudents } from "@/lib/services/student";
+
+import StudentTable from "./StudentTable";
 
 export default async function Page() {
-  const [students, amLocations, pmLocations] = await Promise.all([
+  const [students, amLocations, pmLocations, buses] = await Promise.all([
     readStudents(),
     readLocations("AM", "address"),
     readLocations("PM", "address"),
+    readBuses(),
   ]);
 
   const amLocationOptions = amLocations.map((amLocation) => ({
@@ -20,15 +24,21 @@ export default async function Page() {
     label: pmLocation.address,
     object: pmLocation,
   }));
+  const busOptions = buses.map((bus) => ({
+    value: bus.id,
+    label: bus.name,
+    object: bus,
+  }));
 
   return (
-    <div className="container mx-auto max-w-full px-10 py-10">
+    <PageContainer>
       <Header title="Students" />
       <StudentTable
         data={students}
         amLocations={amLocationOptions}
         pmLocations={pmLocationOptions}
+        buses={busOptions}
       />
-    </div>
+    </PageContainer>
   );
 }

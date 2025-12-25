@@ -1,4 +1,5 @@
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Control, FieldValues, Path } from "react-hook-form";
+
 import {
   FormControl,
   FormField,
@@ -6,8 +7,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Control, FieldValues, Path } from "react-hook-form";
 import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 type RadioOption<T> = { value: T; label: string };
 

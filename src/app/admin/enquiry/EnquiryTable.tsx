@@ -1,19 +1,6 @@
 "use client";
 
-import EditableTable from "@/components/table/EditableTable";
-import { createColumnHelper, Row, SortingState } from "@tanstack/react-table";
-import DropdownCell from "@/components/table/DropdownCell";
-import NumberInputCell from "@/components/table/NumberInputCell";
-import RowSelectCell from "@/components/table/RowSelectCell";
-import TextInputCell from "@/components/table/TextInputCell";
-import {
-  Enquiry,
-  updateEnquiry,
-  deleteEnquiries,
-} from "@/lib/services/enquiry";
-import DisplayCell from "@/components/table/DisplayCell";
-import { useMemo } from "react";
-import CheckboxCell from "@/components/table/CheckboxCell";
+import { Row, SortingState, createColumnHelper } from "@tanstack/react-table";
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -24,9 +11,24 @@ import {
   SchoolIcon,
   Trash2,
 } from "lucide-react";
-import { School } from "@/lib/services/school";
-import { Location } from "@/lib/services/location";
+
+import { useMemo } from "react";
+
+import CheckboxCell from "@/components/table/CheckboxCell";
+import DisplayCell from "@/components/table/DisplayCell";
+import DropdownCell from "@/components/table/DropdownCell";
+import EditableTable from "@/components/table/EditableTable";
 import IconHeader from "@/components/table/IconHeader";
+import NumberInputCell from "@/components/table/NumberInputCell";
+import RowSelectCell from "@/components/table/RowSelectCell";
+import TextInputCell from "@/components/table/TextInputCell";
+import {
+  Enquiry,
+  deleteEnquiries,
+  updateEnquiry,
+} from "@/lib/services/enquiry";
+import { Location } from "@/lib/services/location";
+import { School } from "@/lib/services/school";
 
 interface EnquiryTableProps {
   data: Enquiry[];
@@ -159,7 +161,7 @@ export default function EnquiryTable({
       }),
       columnHelper.accessor("block", {
         header: "Block*",
-        cell: (info) => <TextInputCell {...info} />,
+        cell: (info) => <TextInputCell {...info} className="font-bold" />,
         size: 170,
         enableGlobalFilter: true,
       }),

@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
 import { CellContext } from "@tanstack/react-table";
 import validator from "validator";
+
+import { useEffect, useState } from "react";
+
 import { useToast } from "@/hooks/use-toast";
+
+import { Input } from "../ui/input";
+import BaseCell from "./BaseCell";
 import { DataWithId } from "./EditableTable";
 
 export default function EmailInputCell<TData extends DataWithId>({
@@ -36,12 +40,14 @@ export default function EmailInputCell<TData extends DataWithId>({
   };
 
   return (
-    <Input
-      className="border-0 shadow-none focus-visible:ring-0"
-      value={value ?? ""}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={handleBlur}
-      type="email"
-    />
+    <BaseCell padding="none">
+      <Input
+        className="w-full border-0 shadow-none focus-visible:ring-0"
+        value={value ?? ""}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={handleBlur}
+        type="email"
+      />
+    </BaseCell>
   );
 }
