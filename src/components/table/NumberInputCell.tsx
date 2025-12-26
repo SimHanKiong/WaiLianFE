@@ -13,7 +13,7 @@ export default function NumberInputCell<TData extends DataWithId>({
   row,
   column,
   table,
-}: CellContext<TData, number>) {
+}: CellContext<TData, number | null>) {
   const initialValue = getValue();
   const [value, setValue] = useState(String(initialValue));
 

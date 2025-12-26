@@ -1,6 +1,6 @@
 "use server";
 
-import { RegistrationFormData } from "@/app/registration/[id]/RegistrationForm";
+import { RegistrationFormData } from "@/app/registration/RegistrationForm";
 
 export type Parent = {
   id: string;

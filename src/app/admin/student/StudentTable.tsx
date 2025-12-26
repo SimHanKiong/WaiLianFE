@@ -21,6 +21,7 @@ import {
 import { useMemo } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import CheckboxCell from "@/components/table/CheckboxCell";
 import DisplayCell from "@/components/table/DisplayCell";
@@ -31,7 +32,7 @@ import RowSelectCell from "@/components/table/RowSelectCell";
 import TextInputCell from "@/components/table/TextInputCell";
 import { Gender } from "@/lib/constants";
 import { Bus } from "@/lib/services/bus";
-import { Location } from "@/lib/services/location";
+import { Location, updateLocation } from "@/lib/services/location";
 import { Student, deleteStudents, updateStudent } from "@/lib/services/student";
 
 interface StudentTableProps {
@@ -47,6 +48,8 @@ export default function StudentTable({
   pmLocations,
   buses,
 }: StudentTableProps) {
+  const router = useRouter();
+
   const getRowColour = (row: Student): string => {
     return row.isFavourite ? "bg-yellow-100" : "";
   };
@@ -62,6 +65,14 @@ export default function StudentTable({
   };
   const getContactUse = (student: Student) => {
     return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}`;
+  };
+
+  const updateLocationAction = async (
+    id: string,
+    dataUpdate: Record<string, unknown>
+  ) => {
+    await updateLocation(id, dataUpdate);
+    router.refresh();
   };
 
   const sortByColumns: SortingState = [{ id: "block", desc: false }];
@@ -148,28 +159,37 @@ export default function StudentTable({
         cell: ({ row }) => <DisplayCell value={row.index + 1} />,
         size: 60,
       }),
-      columnHelper.accessor("amBus.id", {
-        id: "amBusId",
+      columnHelper.accessor("amLocation.bus.id", {
         header: () => <ArrowBigUpDash className="size-6 text-blue-700" />,
         cell: (info) => (
           <DropdownCell
             {...info}
             options={buses}
-            objectColumnId="amBus"
-            backgroundColour={info.row.original.amBus?.colour}
+            objectColumnId="amLocation.bus"
+            backgroundColour={info.row.original.amLocation?.bus?.colour}
+            serverUpdate={{
+              id: info.row.original.amLocation?.id ?? "",
+              field: "busId",
+              action: updateLocationAction,
+            }}
           />
         ),
         size: 120,
       }),
-      columnHelper.accessor("pmBus.id", {
-        id: "pmBusId",
+      columnHelper.accessor("pmLocation.bus.id", {
+        id: "pmLocationBusId",
         header: () => <ArrowBigDownDash className="size-6 text-orange-600" />,
         cell: (info) => (
           <DropdownCell
             {...info}
             options={buses}
-            objectColumnId="pmBus"
-            backgroundColour={info.row.original.pmBus?.colour}
+            objectColumnId="pmLocation.bus"
+            backgroundColour={info.row.original.pmLocation?.bus?.colour}
+            serverUpdate={{
+              id: info.row.original.pmLocation?.id ?? "",
+              field: "busId",
+              action: updateLocationAction,
+            }}
           />
         ),
         size: 120,

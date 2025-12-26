@@ -28,6 +28,16 @@ declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData = RowData> {
     updateData: (rowId: string, columnId: string, value: unknown) => void;
+    updateNestedData: (
+      columnId: string,
+      matchId: string,
+      newObject: unknown,
+      value: unknown,
+      serverAction?: (
+        id: string,
+        dataUpdate: Record<string, unknown>
+      ) => Promise<void>
+    ) => void;
   }
 }
 
@@ -93,6 +103,29 @@ export default function EditableTable<TData extends DataWithId, TValue>({
         );
         if (updateServer) {
           updateCellAction(rowId, { [columnId]: value } as Partial<TData>);
+        }
+      },
+      updateNestedData: (
+        columnId: string,
+        matchId: string,
+        newObject: unknown,
+        value: unknown,
+        serverAction?: (
+          id: string,
+          dataUpdate: Record<string, unknown>
+        ) => Promise<void>
+      ) => {
+        setTableData((prev) =>
+          prev.map((row) => {
+            const obj = (row as any)[columnId];
+            if (!obj || obj.id !== matchId) {
+              return row;
+            }
+            return { ...row, [columnId]: newObject };
+          })
+        );
+        if (serverAction) {
+          serverAction(matchId, value as Record<string, unknown>);
         }
       },
     },

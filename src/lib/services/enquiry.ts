@@ -1,6 +1,6 @@
 "use server";
 
-import { EnquiryFormData } from "@/app/enquiry/[id]/EnquiryForm";
+import { EnquiryFormData } from "@/app/enquiry/EnquiryForm";
 
 import { EnquiryStatusType } from "../constants";
 import { Location } from "./location";

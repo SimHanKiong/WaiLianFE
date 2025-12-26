@@ -1,7 +1,6 @@
 "use server";
 
 import { GenderType, TransportRequirementType } from "../constants";
-import { Bus } from "./bus";
 import { Location } from "./location";
 import { Parent } from "./parent";
 import { School } from "./school";
@@ -31,10 +30,6 @@ export type Student = {
   pmLocation: Location | null;
   parentId: string;
   parent: Parent;
-  amBusId: string | null;
-  amBus: Bus | null;
-  pmBusId: string | null;
-  pmBus: Bus | null;
 };
 
 export const readStudents = async (): Promise<Student[]> => {
@@ -55,7 +50,6 @@ export const updateStudent = async (
   id: string,
   studentUpdate: Partial<Student>
 ): Promise<void> => {
-  console.log(studentUpdate);
   const response = await fetch(`${process.env.API_URL}/student/${id}`, {
     method: "PATCH",
     headers: {

@@ -2,13 +2,15 @@
 
 import { revalidateTag } from "next/cache";
 
+import { Bus } from "./bus";
+
 export type Location = {
   id: string;
   address: string;
   time: string;
   type: "AM" | "PM";
-  timeReached: string | null;
-  position: number | null;
+  busId: string | null;
+  bus: Bus | null;
 };
 
 export const readLocations = async (
@@ -55,6 +57,23 @@ export const createLocation = async (locationCreate: Partial<Location>) => {
   }
 
   revalidateTag("location");
+};
+
+export const updateLocation = async (
+  id: string,
+  locationUpdate: Partial<Location>
+): Promise<void> => {
+  const response = await fetch(`${process.env.API_URL}/location/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(locationUpdate),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update Location");
+  }
 };
 
 export const deleteLocation = async (id: string): Promise<void> => {

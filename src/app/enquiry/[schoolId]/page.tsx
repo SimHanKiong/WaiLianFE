@@ -2,10 +2,14 @@ import Header from "@/components/Header";
 import PageContainer from "@/components/PageContainer";
 import { readSchool } from "@/lib/services/school";
 
-import EnquiryForm from "./EnquiryForm";
+import EnquiryForm from "../EnquiryForm";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const school = await readSchool(params.id);
+export default async function Page({
+  params,
+}: {
+  params: { schoolId: string };
+}) {
+  const school = await readSchool(params.schoolId);
 
   return (
     <PageContainer>

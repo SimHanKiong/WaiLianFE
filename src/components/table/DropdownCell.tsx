@@ -28,6 +28,11 @@ interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
   options: { value: string; label: string; object?: unknown }[];
   objectColumnId?: string;
   backgroundColour?: string;
+  serverUpdate?: {
+    id: string;
+    field: string;
+    action: (id: string, dataUpdate: Record<string, unknown>) => Promise<void>;
+  };
 }
 
 export default function DropdownCell<TData extends DataWithId>({
@@ -38,6 +43,7 @@ export default function DropdownCell<TData extends DataWithId>({
   objectColumnId,
   table,
   backgroundColour = "transparent",
+  serverUpdate,
 }: DropdownCellProps<TData>) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -52,22 +58,20 @@ export default function DropdownCell<TData extends DataWithId>({
     setValue(value);
     setOpen(false);
 
-    table.options.meta?.updateData(row.original.id, column.id, value);
+    const selectedOption = options.find((opt) => opt.value === value);
 
-    if (!objectColumnId) {
-      return;
+    if (serverUpdate && serverUpdate.id) {
+      const { id, field, action } = serverUpdate;
+      action(id, { [field]: value });
     }
-    for (const option of options) {
-      if (option.value !== value) {
-        continue;
-      }
 
+    table.options.meta?.updateData(row.original.id, column.id, value);
+    if (objectColumnId && selectedOption) {
       table.options.meta?.updateData(
         row.original.id,
         objectColumnId,
-        option.object
+        selectedOption.object
       );
-      return;
     }
   };
 
