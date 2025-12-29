@@ -9,11 +9,18 @@ import BaseCell from "./BaseCell";
 interface DisplayCellProps {
   value: string | number | null | undefined;
   icon?: ReactNode;
+  className?: string;
+  textColour?: string;
 }
 
-export default function DisplayCell({ value, icon }: DisplayCellProps) {
+export default function DisplayCell({
+  value,
+  icon,
+  className,
+  textColour,
+}: DisplayCellProps) {
   return (
-    <BaseCell align="left">
+    <BaseCell align="left" className={className} style={{ color: textColour }}>
       {value && icon && (
         <span className="flex w-10 items-center justify-center">{icon}</span>
       )}

@@ -28,6 +28,9 @@ interface DropdownCellProps<TData> extends CellContext<TData, string | null> {
   options: { value: string; label: string; object?: unknown }[];
   objectColumnId?: string;
   backgroundColour?: string;
+  textColour?: string;
+  className?: string;
+  buttonClassName?: string;
   serverUpdate?: {
     id: string;
     field: string;
@@ -43,6 +46,8 @@ export default function DropdownCell<TData extends DataWithId>({
   objectColumnId,
   table,
   backgroundColour = "transparent",
+  textColour,
+  buttonClassName,
   serverUpdate,
 }: DropdownCellProps<TData>) {
   const initialValue = getValue();
@@ -87,19 +92,23 @@ export default function DropdownCell<TData extends DataWithId>({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between border-0 bg-transparent px-3 shadow-none hover:bg-transparent focus-visible:ring-0"
+            style={{ color: textColour }}
+            className={cn(
+              "w-full justify-between border-0 bg-transparent px-3 shadow-none hover:bg-transparent focus-visible:ring-0",
+              buttonClassName
+            )}
           >
             {value ? (
               options.find((option) => option.value === value)?.label
             ) : (
-              <span className="text-gray-400">None</span>
+              <span></span>
             )}
-            <ChevronsUpDown className="opacity-50" />
+            <ChevronsUpDown className="opacity-50 text-black" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
           <Command>
-            <CommandInput placeholder="Search..." />
+            <CommandInput />
             <CommandList>
               <CommandEmpty>No options found.</CommandEmpty>
               <CommandGroup>

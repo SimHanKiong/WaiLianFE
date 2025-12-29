@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   RowData,
   SortingState,
   flexRender,
@@ -11,7 +12,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -39,6 +40,11 @@ declare module "@tanstack/react-table" {
       ) => Promise<void>
     ) => void;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData = RowData, TValue = unknown> {
+    cellStyle?: CSSProperties;
+  }
 }
 
 export interface DataWithId {
@@ -55,6 +61,7 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   getRowColour?: (row: TData) => string;
   enableSearching?: boolean;
   sortByColumns?: SortingState;
+  initialColumnFilters?: ColumnFiltersState;
 }
 
 export default function EditableTable<TData extends DataWithId, TValue>({
@@ -67,10 +74,14 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   getRowColour,
   enableSearching = false,
   sortByColumns,
+  initialColumnFilters,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>(sortByColumns ?? []);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    initialColumnFilters ?? []
+  );
 
   useEffect(() => {
     setTableData(data);
@@ -83,9 +94,10 @@ export default function EditableTable<TData extends DataWithId, TValue>({
     enableRowSelection: true,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    state: { globalFilter, sorting },
+    state: { globalFilter, sorting, columnFilters },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     defaultColumn: {
       enableGlobalFilter: false,
     },
@@ -179,7 +191,10 @@ export default function EditableTable<TData extends DataWithId, TValue>({
                     <TableCell
                       key={cell.id}
                       className="border border-gray-400 p-0 text-sm text-gray-900"
-                      style={{ width: `${cell.column.getSize()}px` }}
+                      style={{
+                        width: `${cell.column.getSize()}px`,
+                        ...cell.column.columnDef.meta?.cellStyle,
+                      }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

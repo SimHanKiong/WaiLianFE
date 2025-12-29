@@ -7,9 +7,11 @@ import EnquiryForm from "../EnquiryForm";
 export default async function Page({
   params,
 }: {
-  params: { schoolId: string };
+  params: Promise<{ schoolId: string }>;
 }) {
-  const school = await readSchool(params.schoolId);
+  const { schoolId } = await params;
+
+  const school = await readSchool(schoolId);
 
   return (
     <PageContainer>

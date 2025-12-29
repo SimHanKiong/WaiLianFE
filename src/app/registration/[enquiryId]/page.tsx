@@ -7,9 +7,11 @@ import RegistrationForm from "../RegistrationForm";
 export default async function Page({
   params,
 }: {
-  params: { enquiryId: string };
+  params: Promise<{ enquiryId: string }>;
 }) {
-  const enquiry = await readEnquiry(params.enquiryId);
+  const { enquiryId } = await params;
+
+  const enquiry = await readEnquiry(enquiryId);
 
   return (
     <PageContainer>

@@ -1,84 +1,236 @@
-// "use client";
+"use client";
 
-// import { createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 
-// import { useMemo } from "react";
+import { useMemo } from "react";
 
-// import DisplayCell from "@/components/table/DisplayCell";
-// import DropdownCell from "@/components/table/DropdownCell";
-// import EditableTable from "@/components/table/EditableTable";
-// import NumberInputCell from "@/components/table/NumberInputCell";
-// import TextInputCell from "@/components/table/TextInputCell";
-// import { Bus } from "@/lib/services/bus";
-// import { Location } from "@/lib/services/location";
+import CheckboxLinkCell from "@/components/table/CheckboxLinkCell";
+import DisplayCell from "@/components/table/DisplayCell";
+import DropdownCell from "@/components/table/DropdownCell";
+import EditableTable from "@/components/table/EditableTable";
+import RowSelectCell from "@/components/table/RowSelectCell";
+import TextInputCell from "@/components/table/TextInputCell";
+import { Gender, LocationType, LocationTypeType } from "@/lib/constants";
+import { Bus } from "@/lib/services/bus";
+import {
+  Location,
+  deleteLocations,
+  updateLocation,
+} from "@/lib/services/location";
+import { Student } from "@/lib/services/student";
 
-// interface LocationTableProps {
-//   data: Location[];
-//   buses: { value: string; label: string; object: Bus }[];
-// }
+interface LocationTableProps {
+  data: Location[];
+  busId: string;
+  type: LocationTypeType;
+  buses: { value: string; label: string; object: Bus | null }[];
+}
 
-// export default function LocationTable({ data, buses }: LocationTableProps) {
-//   const columnHelper = createColumnHelper<Location>();
+export default function LocationTable({
+  data,
+  busId,
+  buses,
+  type,
+}: LocationTableProps) {
+  const getStudentNameAndClass = (student: Student) => {
+    return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}(${student.level} ${student.className})`;
+  };
+  const getWhatsappLink = (phoneNumber: string) => {
+    return `https://wa.me/65${phoneNumber}`;
+  };
 
-//   const columns = useMemo(
-//     () => [
-//       columnHelper.accessor("busId", {
-//         header: "Bus",
-//         cell: (info) => (
-//           <DropdownCell {...info} options={buses} objectColumnId="bus" />
-//         ),
-//         size: 80,
-//       }),
-//       columnHelper.accessor("students", {
-//         header: "Block",
-//         cell: (info) => (
-//           <div className="p-2 space-y-1">
-//             {info.getValue().map((student) => (
-//               <div key={student.id} className="text-sm">
-//                 <span className="font-medium">{student.block}</span>
-//               </div>
-//             ))}
-//           </div>
-//         ),
-//         size: 100,
-//       }),
-//       columnHelper.accessor("address", {
-//         header: "Address",
-//         cell: (info) => <TextInputCell {...info} />,
-//         size: 300,
-//       }),
-//       columnHelper.accessor("time", {
-//         header: "Time",
-//         cell: (info) => <TextInputCell {...info} />,
-//         size: 100,
-//       }),
-//       columnHelper.accessor("position", {
-//         header: "Position",
-//         cell: (info) => <NumberInputCell {...info} />,
-//         size: 50,
-//       }),
-//       columnHelper.accessor("students", {
-//         header: "Students",
-//         cell: (info) => (
-//           <div className="p-2 space-y-1">
-//             {info.getValue().map((student) => (
-//               <div key={student.id} className="text-sm">
-//                 <DisplayCell value={student.fullName} />
-//               </div>
-//             ))}
-//           </div>
-//         ),
-//         size: 200,
-//       }),
-//     ],
-//     []
-//   );
-//   return (
-//     <EditableTable<Location, any>
-//       columns={columns}
-//       data={data}
-//       updateCellAction={async (id, dataUpdate) => {}}
-//       deleteRowsAction={async (ids) => {}}
-//     />
-//   );
-// }
+  const columnHelper = createColumnHelper<Location>();
+
+  const columns = useMemo(() => {
+    const amColumns = [
+      columnHelper.accessor("busId", {
+        header: "AM",
+        cell: (info) => (
+          <DropdownCell
+            {...info}
+            options={buses}
+            objectColumnId="bus"
+            buttonClassName="font-bold"
+            textColour={info.row.original.bus?.colour}
+          />
+        ),
+        size: 60,
+        meta: { cellStyle: { verticalAlign: "top" } },
+        filterFn: (row, columnId, filterValue) => {
+          return row.getValue(columnId) === filterValue;
+        },
+      }),
+      columnHelper.display({
+        id: "PM",
+        header: "PM",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <DisplayCell
+                key={student.id}
+                value={student.pmLocation?.bus?.name}
+                className="font-bold"
+                textColour={student.pmLocation?.bus?.colour}
+              />
+            ))}
+          </div>
+        ),
+        size: 60,
+      }),
+    ];
+    const pmColumns = [
+      columnHelper.display({
+        id: "AM",
+        header: "AM",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <DisplayCell
+                key={student.id}
+                value={student.amLocation?.bus?.name}
+                className="font-bold"
+                textColour={student.amLocation?.bus?.colour}
+              />
+            ))}
+          </div>
+        ),
+        size: 60,
+      }),
+      columnHelper.accessor("busId", {
+        header: "PM",
+        cell: (info) => (
+          <DropdownCell
+            {...info}
+            options={buses}
+            objectColumnId="bus"
+            buttonClassName="font-bold"
+            textColour={info.row.original.bus?.colour}
+          />
+        ),
+        size: 60,
+        meta: { cellStyle: { verticalAlign: "top" } },
+        filterFn: (row, columnId, filterValue) => {
+          return row.getValue(columnId) === filterValue;
+        },
+      }),
+    ];
+
+    return [
+      ...(type === LocationType.AM ? amColumns : pmColumns),
+      columnHelper.display({
+        id: "Block",
+        header: "Block",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <DisplayCell
+                key={student.id}
+                value={student.block}
+                className="font-bold"
+              />
+            ))}
+          </div>
+        ),
+        size: 170,
+      }),
+      columnHelper.display({
+        id: "#",
+        header: "No.",
+        cell: ({ row }) => (
+          <DisplayCell value={row.index + 1} className="mt-2" />
+        ),
+        size: 60,
+        meta: { cellStyle: { verticalAlign: "top" } },
+      }),
+      columnHelper.accessor("address", {
+        header: "Pick Up Point",
+        cell: (info) => <TextInputCell {...info} />,
+        size: 400,
+        meta: { cellStyle: { verticalAlign: "top" } },
+      }),
+      columnHelper.accessor("time", {
+        header: "Time",
+        cell: (info) => <TextInputCell {...info} />,
+        size: 80,
+        meta: { cellStyle: { verticalAlign: "top" } },
+      }),
+      columnHelper.display({
+        id: "Select",
+        header: "+ / -",
+        cell: (info) => <RowSelectCell {...info} className="mt-1.5" />,
+        size: 50,
+        meta: { cellStyle: { verticalAlign: "top" } },
+      }),
+      columnHelper.accessor("students", {
+        header: ({ table }) => {
+          const filteredRows = table.getFilteredRowModel().rows;
+          const total = filteredRows.reduce(
+            (sum, row) => sum + (row.original.students?.length || 0),
+            0
+          );
+          return total;
+        },
+        cell: (info) => (
+          <DisplayCell
+            value={String(info.getValue().length)}
+            className="mt-2"
+          />
+        ),
+        size: 40,
+        meta: { cellStyle: { verticalAlign: "top" } },
+      }),
+      columnHelper.display({
+        header: "Student Name & Class",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <div key={student.id} className="text-sm">
+                <DisplayCell value={getStudentNameAndClass(student)} />
+              </div>
+            ))}
+          </div>
+        ),
+        size: 400,
+      }),
+      columnHelper.display({
+        id: "Contact 1",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <div key={student.id} className="text-sm">
+                <CheckboxLinkCell
+                  link={getWhatsappLink(student.parent.contact1No)}
+                />
+              </div>
+            ))}
+          </div>
+        ),
+        size: 50,
+      }),
+      columnHelper.display({
+        id: "Contact 2",
+        cell: ({ row }) => (
+          <div className="p-2 space-y-1">
+            {row.original.students.map((student) => (
+              <div key={student.id} className="text-sm">
+                <CheckboxLinkCell
+                  link={getWhatsappLink(student.parent.contact2No)}
+                />
+              </div>
+            ))}
+          </div>
+        ),
+        size: 50,
+      }),
+    ];
+  }, [columnHelper, buses, type]);
+  return (
+    <EditableTable<Location, any>
+      columns={columns}
+      data={data}
+      updateCellAction={updateLocation}
+      deleteRowsAction={deleteLocations}
+      initialColumnFilters={[{ id: "busId", value: busId }]}
+    />
+  );
+}

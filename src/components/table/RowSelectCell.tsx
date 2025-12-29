@@ -2,17 +2,26 @@
 
 import { CellContext } from "@tanstack/react-table";
 
+import { cn } from "@/lib/utils";
+
 import { Checkbox } from "../ui/checkbox";
 import BaseCell from "./BaseCell";
-import { DataWithId } from "./EditableTable";
 
-export default function RowSelectCell<TData extends DataWithId>({
+interface RowSelectCellProps<TData> extends CellContext<TData, unknown> {
+  className?: string;
+}
+
+export default function RowSelectCell<TData>({
   row,
-}: CellContext<TData, unknown>) {
+  className,
+}: RowSelectCellProps<TData>) {
   return (
     <BaseCell align="center">
       <Checkbox
-        className="h-6 w-6 items-center data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
+        className={cn(
+          className,
+          "h-6 w-6 items-center data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
+        )}
         checked={row.getIsSelected()}
         onCheckedChange={row.getToggleSelectedHandler()}
       />

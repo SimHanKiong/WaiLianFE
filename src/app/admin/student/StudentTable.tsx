@@ -39,7 +39,7 @@ interface StudentTableProps {
   data: Student[];
   amLocations: { value: string; label: string; object: Location }[];
   pmLocations: { value: string; label: string; object: Location }[];
-  buses: { value: string; label: string; object: Bus }[];
+  buses: { value: string; label: string; object: Bus | null }[];
 }
 
 export default function StudentTable({
@@ -149,7 +149,9 @@ export default function StudentTable({
         size: 60,
       }),
       columnHelper.accessor("isFavourite", {
-        header: () => <MoveHorizontal className="size-6 text-yellow-500" />,
+        header: () => (
+          <MoveHorizontal className="size-6 text-yellow-500 stroke-3" />
+        ),
         cell: (info) => <CheckboxCell {...info} />,
         size: 50,
       }),
@@ -167,6 +169,7 @@ export default function StudentTable({
             options={buses}
             objectColumnId="amLocation.bus"
             backgroundColour={info.row.original.amLocation?.bus?.colour}
+            buttonClassName="font-bold"
             serverUpdate={{
               id: info.row.original.amLocation?.id ?? "",
               field: "busId",
@@ -174,7 +177,7 @@ export default function StudentTable({
             }}
           />
         ),
-        size: 120,
+        size: 60,
       }),
       columnHelper.accessor("pmLocation.bus.id", {
         id: "pmLocationBusId",
@@ -185,6 +188,7 @@ export default function StudentTable({
             options={buses}
             objectColumnId="pmLocation.bus"
             backgroundColour={info.row.original.pmLocation?.bus?.colour}
+            buttonClassName="font-bold"
             serverUpdate={{
               id: info.row.original.pmLocation?.id ?? "",
               field: "busId",
@@ -192,7 +196,7 @@ export default function StudentTable({
             }}
           />
         ),
-        size: 120,
+        size: 60,
       }),
       columnHelper.accessor("block", {
         header: "Block",
@@ -281,7 +285,7 @@ export default function StudentTable({
         size: 80,
       }),
       columnHelper.display({
-        id: "select",
+        id: "Select",
         header: () => <Trash2 className="size-6" />,
         cell: RowSelectCell,
         size: 50,
@@ -298,7 +302,7 @@ export default function StudentTable({
         size: 250,
       }),
     ],
-    [columnHelper, amLocations, pmLocations, buses]
+    [columnHelper, amLocations, pmLocations, buses, updateLocationAction]
   );
   return (
     <EditableTable<Student, any>

@@ -44,7 +44,9 @@ export default function SchoolTable({ data }: SchoolTableProps) {
   const columns = useMemo(
     () => [
       columnHelper.accessor("isFavourite", {
-        header: () => <MoveHorizontal className="size-6 text-yellow-500" />,
+        header: () => (
+          <MoveHorizontal className="size-6 text-yellow-500 stroke-3" />
+        ),
         cell: (info) => <CheckboxCell {...info} />,
         size: 50,
       }),
@@ -66,7 +68,7 @@ export default function SchoolTable({ data }: SchoolTableProps) {
       columnHelper.accessor("departureTime", {
         header: () => <ClockArrowDown className="size-6 text-orange-600" />,
         cell: (info) => <TextInputCell {...info} />,
-        size: 100,
+        size: 80,
       }),
       columnHelper.accessor("priceListKey", {
         header: "Price List Upload",

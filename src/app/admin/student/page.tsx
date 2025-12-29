@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import PageContainer from "@/components/PageContainer";
+import { LocationType } from "@/lib/constants";
 import { readBuses } from "@/lib/services/bus";
 import { readLocations } from "@/lib/services/location";
 import { readStudents } from "@/lib/services/student";
@@ -9,8 +10,8 @@ import StudentTable from "./StudentTable";
 export default async function Page() {
   const [students, amLocations, pmLocations, buses] = await Promise.all([
     readStudents(),
-    readLocations("AM", "address"),
-    readLocations("PM", "address"),
+    readLocations({ type: LocationType.AM, sortBy: "address" }),
+    readLocations({ type: LocationType.PM, sortBy: "address" }),
     readBuses(),
   ]);
 
@@ -24,11 +25,14 @@ export default async function Page() {
     label: pmLocation.address,
     object: pmLocation,
   }));
-  const busOptions = buses.map((bus) => ({
-    value: bus.id,
-    label: bus.name,
-    object: bus,
-  }));
+  const busOptions = [
+    { value: "", label: "", object: null },
+    ...buses.map((bus) => ({
+      value: bus.id,
+      label: bus.name,
+      object: bus,
+    })),
+  ];
 
   return (
     <PageContainer>

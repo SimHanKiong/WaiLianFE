@@ -5,6 +5,7 @@ const navItems = [
   { href: "/admin/enquiry", label: "Enquiries" },
   { href: "/admin/student", label: "Students" },
   { href: "/admin/bus", label: "Buses" },
+  { href: "/admin/location", label: "Routes" },
 ];
 
 export default function AdminLayout({
@@ -16,7 +17,7 @@ export default function AdminLayout({
     <div className="min-h-screen">
       <nav className="border-b border-gray-200 bg-white">
         <div className="flex items-center justify-between px-6 py-4">
-          <div className="text-lg font-bold text-gray-900">
+          <div className="text-xl font-bold text-gray-900">
             WAI LIAN TRADING AND TRANSPORTATION
           </div>
           <div className="flex items-center gap-10">
@@ -24,7 +25,7 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-md flex items-center gap-1 font-bold text-gray-700 hover:text-gray-900 pr-2"
+                className="text-lg flex items-center gap-1 font-bold text-gray-700 hover:text-gray-900 pr-2"
               >
                 {item.label}
               </Link>

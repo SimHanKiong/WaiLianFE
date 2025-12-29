@@ -1,7 +1,7 @@
 import DialogWrapper from "@/components/DialogWrapper";
 import Header from "@/components/Header";
 import PageContainer from "@/components/PageContainer";
-import { EnquiryStatusOptions } from "@/lib/constants";
+import { EnquiryStatusOptions, LocationType } from "@/lib/constants";
 import { readEnquiries } from "@/lib/services/enquiry";
 import { readLocations } from "@/lib/services/location";
 import { readSchools } from "@/lib/services/school";
@@ -14,8 +14,8 @@ export default async function Page() {
   const [enquiries, schools, amLocations, pmLocations] = await Promise.all([
     readEnquiries(),
     readSchools(),
-    readLocations("AM", "address"),
-    readLocations("PM", "address"),
+    readLocations({ type: LocationType.AM, sortBy: "address" }),
+    readLocations({ type: LocationType.PM, sortBy: "address" }),
   ]);
 
   const schoolOptions = schools.map((school) => ({
@@ -34,7 +34,7 @@ export default async function Page() {
     object: pmLocation,
   }));
   const enquiryStatus = [
-    { value: "", label: "None", object: false },
+    { value: "", label: "", object: false },
     ...EnquiryStatusOptions.map((status) => ({
       value: status,
       label: status,

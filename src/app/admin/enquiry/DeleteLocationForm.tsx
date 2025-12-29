@@ -5,6 +5,8 @@ import { z } from "zod";
 
 import { useForm } from "react-hook-form";
 
+import { useRouter } from "next/navigation";
+
 import DropdownForm from "@/components/form/DropdownForm";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -23,6 +25,8 @@ type DeleteLocationFormData = z.infer<typeof deleteLocationSchema>;
 export default function DeleteLocationForm({
   locations,
 }: DeleteLocationFormProps) {
+  const router = useRouter();
+
   const form = useForm<DeleteLocationFormData>({
     resolver: zodResolver(deleteLocationSchema),
     defaultValues: { locationId: undefined },
@@ -31,6 +35,7 @@ export default function DeleteLocationForm({
   const onSubmit = async (data: DeleteLocationFormData) => {
     await deleteLocation(data.locationId);
     form.reset();
+    router.refresh();
   };
 
   return (

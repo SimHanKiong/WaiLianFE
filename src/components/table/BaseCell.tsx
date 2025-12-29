@@ -9,7 +9,7 @@ interface BaseCellProps {
   className?: string;
   align?: "left" | "center" | "right";
   padding?: "none" | "sm" | "md";
-  verticalPadding?: "none" | "sm" | "md"; // none = py-0, sm = py-1, md = py-2
+  verticalPadding?: "none" | "sm" | "md";
   style?: CSSProperties;
 }
 

@@ -102,12 +102,14 @@ export default function EnquiryTable({
         size: 75,
       }),
       columnHelper.accessor("isFavourite", {
-        header: () => <MoveHorizontal className="size-6 text-yellow-500" />,
+        header: () => (
+          <MoveHorizontal className="size-6 text-yellow-500 stroke-3" />
+        ),
         cell: (info) => <CheckboxCell {...info} />,
         size: 50,
       }),
       columnHelper.accessor("email", {
-        header: "Email*",
+        header: "Email *",
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 200,
         enableGlobalFilter: true,
@@ -154,13 +156,13 @@ export default function EnquiryTable({
         size: 300,
       }),
       columnHelper.accessor("remark", {
-        header: "Remark*",
+        header: "Remark *",
         cell: (info) => <TextInputCell {...info} className="text-red-600" />,
         size: 250,
         enableGlobalFilter: true,
       }),
       columnHelper.accessor("block", {
-        header: "Block*",
+        header: "Block *",
         cell: (info) => <TextInputCell {...info} className="font-bold" />,
         size: 170,
         enableGlobalFilter: true,

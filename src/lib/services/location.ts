@@ -1,28 +1,33 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-
+import { LocationTypeType } from "../constants";
 import { Bus } from "./bus";
+import { Student } from "./student";
 
 export type Location = {
   id: string;
   address: string;
   time: string;
-  type: "AM" | "PM";
+  type: LocationTypeType;
   busId: string | null;
   bus: Bus | null;
+  students: Student[];
 };
 
-export const readLocations = async (
-  type?: "AM" | "PM",
-  sortBy?: string
-): Promise<Location[]> => {
+export const readLocations = async (options?: {
+  type?: LocationTypeType;
+  busId?: string;
+  sortBy?: string;
+}): Promise<Location[]> => {
   const params = new URLSearchParams();
-  if (type) {
-    params.append("type", type);
+  if (options?.type) {
+    params.append("type", options.type);
   }
-  if (sortBy) {
-    params.append("sort_by", sortBy);
+  if (options?.busId) {
+    params.append("bus_id", options.busId);
+  }
+  if (options?.sortBy) {
+    params.append("sort_by", options.sortBy);
   }
   const queryString = params.toString() ? `?${params.toString()}` : "";
 
@@ -30,9 +35,7 @@ export const readLocations = async (
     `${process.env.API_URL}/location/${queryString}`,
     {
       method: "GET",
-      next: {
-        tags: ["location", type].filter(Boolean) as string[],
-      },
+      cache: "no-store",
     }
   );
   if (!response.ok) {
@@ -55,8 +58,6 @@ export const createLocation = async (locationCreate: Partial<Location>) => {
   if (!response.ok) {
     throw new Error("Unable to create Location");
   }
-
-  revalidateTag("location");
 };
 
 export const updateLocation = async (
@@ -84,6 +85,18 @@ export const deleteLocation = async (id: string): Promise<void> => {
   if (!response.ok) {
     throw new Error("Unable to delete Location");
   }
+};
 
-  revalidateTag("location");
+export const deleteLocations = async (ids: string[]): Promise<void> => {
+  const response = await fetch(`${process.env.API_URL}/location/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to delete Locations");
+  }
 };

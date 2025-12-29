@@ -5,6 +5,8 @@ import { z } from "zod";
 
 import { useForm } from "react-hook-form";
 
+import { useRouter } from "next/navigation";
+
 import RadioInputForm from "@/components/form/RadioInputForm";
 import TextInputForm from "@/components/form/TextInputForm";
 import { Button } from "@/components/ui/button";
@@ -20,6 +22,8 @@ const addLocationSchema = z.object({
 type AddLocationFormData = z.infer<typeof addLocationSchema>;
 
 export default function AddLocationForm() {
+  const router = useRouter();
+
   const form = useForm<AddLocationFormData>({
     resolver: zodResolver(addLocationSchema),
     defaultValues: { address: "", time: "", type: undefined },
@@ -28,6 +32,7 @@ export default function AddLocationForm() {
   const onSubmit = async (data: AddLocationFormData) => {
     await createLocation(data);
     form.reset();
+    router.refresh();
   };
 
   return (
