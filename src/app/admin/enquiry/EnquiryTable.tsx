@@ -194,7 +194,7 @@ export default function EnquiryTable({
         ),
         size: 400,
       }),
-      columnHelper.accessor("amLocation.time", {
+      columnHelper.accessor("amLocation.timeReach", {
         header: () => <ClockArrowUp className="size-6 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
@@ -223,7 +223,7 @@ export default function EnquiryTable({
         ),
         size: 400,
       }),
-      columnHelper.accessor("pmLocation.time", {
+      columnHelper.accessor("pmLocation.timeReach", {
         header: () => <ClockArrowDown className="size-6 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,

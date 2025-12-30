@@ -6,8 +6,8 @@ import { readEnquiries } from "@/lib/services/enquiry";
 import { readLocations } from "@/lib/services/location";
 import { readSchools } from "@/lib/services/school";
 
-import AddLocationForm from "./AddLocationForm";
-import DeleteLocationForm from "./DeleteLocationForm";
+import AddLocationForm from "../AddLocationForm";
+import DeleteLocationForm from "../DeleteLocationForm";
 import EnquiryTable from "./EnquiryTable";
 
 export default async function Page() {

@@ -18,7 +18,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -67,13 +67,13 @@ export default function StudentTable({
     return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}`;
   };
 
-  const updateLocationAction = async (
-    id: string,
-    dataUpdate: Record<string, unknown>
-  ) => {
-    await updateLocation(id, dataUpdate);
-    router.refresh();
-  };
+  const updateLocationAction = useCallback(
+    async (id: string, dataUpdate: Record<string, unknown>) => {
+      await updateLocation(id, dataUpdate);
+      router.refresh();
+    },
+    [router]
+  );
 
   const sortByColumns: SortingState = [{ id: "block", desc: false }];
 
@@ -250,7 +250,7 @@ export default function StudentTable({
         ),
         size: 400,
       }),
-      columnHelper.accessor("amLocation.time", {
+      columnHelper.accessor("amLocation.timeReach", {
         header: () => <ClockArrowUp className="size-6 text-blue-700" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,
@@ -279,7 +279,7 @@ export default function StudentTable({
         ),
         size: 400,
       }),
-      columnHelper.accessor("pmLocation.time", {
+      columnHelper.accessor("pmLocation.timeReach", {
         header: () => <ClockArrowDown className="size-6 text-orange-600" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
         size: 80,

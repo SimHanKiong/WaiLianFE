@@ -51,6 +51,13 @@ export interface DataWithId {
   id: string;
 }
 
+const adjustTimeField = (time: string, minutes: number) => {
+  const [h, m, s] = time.split(":").map(Number);
+  const date = new Date();
+  date.setHours(h, m + minutes, s);
+  return date.toTimeString().slice(0, 8);
+};
+
 interface EditableTableProps<TData extends DataWithId, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -62,6 +69,7 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   enableSearching?: boolean;
   sortByColumns?: SortingState;
   initialColumnFilters?: ColumnFiltersState;
+  timeField?: keyof TData;
 }
 
 export default function EditableTable<TData extends DataWithId, TValue>({
@@ -75,6 +83,7 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   enableSearching = false,
   sortByColumns,
   initialColumnFilters,
+  timeField,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -144,6 +153,25 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   });
 
   const selectedRows = table.getSelectedRowModel().rows;
+
+  const handleTimeFieldChange = (minutes: number) => {
+    if (!timeField) return;
+    selectedRows.forEach((row) => {
+      const currentTime = row.original[timeField] as string;
+      if (currentTime) {
+        const newTime = adjustTimeField(currentTime, minutes);
+        setTableData((prev) =>
+          prev.map((r) =>
+            r.id === row.original.id ? { ...r, [timeField]: newTime } : r
+          )
+        );
+        updateCellAction(row.original.id, {
+          [timeField]: newTime,
+        } as Partial<TData>);
+      }
+    });
+    table.resetRowSelection();
+  };
 
   return (
     <div className="rounded-lg border">
@@ -231,6 +259,24 @@ export default function EditableTable<TData extends DataWithId, TValue>({
             Add Row
           </Button>
         ) : null}
+        {timeField && (
+          <>
+            <Button
+              variant="outline"
+              className="mr-2"
+              onClick={() => handleTimeFieldChange(-1)}
+            >
+              -1
+            </Button>
+            <Button
+              variant="outline"
+              className="mr-2"
+              onClick={() => handleTimeFieldChange(1)}
+            >
+              +1
+            </Button>
+          </>
+        )}
         <Button
           variant="delete"
           onClick={() => {

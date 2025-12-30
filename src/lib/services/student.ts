@@ -11,6 +11,7 @@ export type Student = {
   givenName: string;
   gender: GenderType;
   level: number;
+  order: number;
   className: string;
   dateOfBirth: string;
   nric: string;

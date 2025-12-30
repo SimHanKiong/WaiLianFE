@@ -15,7 +15,7 @@ import { createLocation } from "@/lib/services/location";
 
 const addLocationSchema = z.object({
   address: z.string().trim().min(1, "Address is required"),
-  time: z.string().trim().min(1, "Time is required"),
+  timeReach: z.string().trim().min(1, "Time is required"),
   type: z.enum(["AM", "PM"], { required_error: "Type is required" }),
 });
 
@@ -26,7 +26,7 @@ export default function AddLocationForm() {
 
   const form = useForm<AddLocationFormData>({
     resolver: zodResolver(addLocationSchema),
-    defaultValues: { address: "", time: "", type: undefined },
+    defaultValues: { address: "", timeReach: "", type: undefined },
   });
 
   const onSubmit = async (data: AddLocationFormData) => {
@@ -48,11 +48,11 @@ export default function AddLocationForm() {
           placeholder="Enter address"
         />
         <TextInputForm
+          type="time"
           control={form.control}
-          name="time"
+          name="timeReach"
           label="Time"
           placeholder="Enter time"
-          type="text"
         />
         <RadioInputForm
           control={form.control}

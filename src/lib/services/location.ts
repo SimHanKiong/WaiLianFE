@@ -7,7 +7,7 @@ import { Student } from "./student";
 export type Location = {
   id: string;
   address: string;
-  time: string;
+  timeReach: string;
   type: LocationTypeType;
   busId: string | null;
   bus: Bus | null;
@@ -24,10 +24,10 @@ export const readLocations = async (options?: {
     params.append("type", options.type);
   }
   if (options?.busId) {
-    params.append("bus_id", options.busId);
+    params.append("busId", options.busId);
   }
   if (options?.sortBy) {
-    params.append("sort_by", options.sortBy);
+    params.append("sortBy", options.sortBy);
   }
   const queryString = params.toString() ? `?${params.toString()}` : "";
 

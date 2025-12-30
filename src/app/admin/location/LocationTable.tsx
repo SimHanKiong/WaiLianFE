@@ -1,6 +1,6 @@
 "use client";
 
-import { createColumnHelper } from "@tanstack/react-table";
+import { SortingState, createColumnHelper } from "@tanstack/react-table";
 
 import { useMemo } from "react";
 
@@ -33,11 +33,14 @@ export default function LocationTable({
   type,
 }: LocationTableProps) {
   const getStudentNameAndClass = (student: Student) => {
-    return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}(${student.level} ${student.className})`;
+    const siblingSuffix = student.order == 0 ? "" : `-${student.order}`;
+    return `${student.block}${student.gender == Gender.MALE ? "🚹" : "🚺"}${student.givenName}(${student.level} ${student.className}) ${siblingSuffix}`;
   };
   const getWhatsappLink = (phoneNumber: string) => {
     return `https://wa.me/65${phoneNumber}`;
   };
+
+  const sortByColumns: SortingState = [{ id: "timeReach", desc: false }];
 
   const columnHelper = createColumnHelper<Location>();
 
@@ -54,7 +57,7 @@ export default function LocationTable({
             textColour={info.row.original.bus?.colour}
           />
         ),
-        size: 60,
+        size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
         filterFn: (row, columnId, filterValue) => {
           return row.getValue(columnId) === filterValue;
@@ -75,7 +78,7 @@ export default function LocationTable({
             ))}
           </div>
         ),
-        size: 60,
+        size: 50,
       }),
     ];
     const pmColumns = [
@@ -94,7 +97,7 @@ export default function LocationTable({
             ))}
           </div>
         ),
-        size: 60,
+        size: 50,
       }),
       columnHelper.accessor("busId", {
         header: "PM",
@@ -107,7 +110,7 @@ export default function LocationTable({
             textColour={info.row.original.bus?.colour}
           />
         ),
-        size: 60,
+        size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
         filterFn: (row, columnId, filterValue) => {
           return row.getValue(columnId) === filterValue;
@@ -136,10 +139,12 @@ export default function LocationTable({
       columnHelper.display({
         id: "#",
         header: "No.",
-        cell: ({ row }) => (
-          <DisplayCell value={row.index + 1} className="mt-2" />
-        ),
-        size: 60,
+        cell: ({ row, table }) => {
+          const sortedRows = table.getRowModel().rows;
+          const sortedIndex = sortedRows.findIndex((r) => r.id === row.id);
+          return <DisplayCell value={sortedIndex + 1} className="mt-2" />;
+        },
+        size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.accessor("address", {
@@ -148,10 +153,10 @@ export default function LocationTable({
         size: 400,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
-      columnHelper.accessor("time", {
+      columnHelper.accessor("timeReach", {
         header: "Time",
-        cell: (info) => <TextInputCell {...info} />,
-        size: 80,
+        cell: (info) => <TextInputCell {...info} type="time" />,
+        size: 120,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.display({
@@ -190,7 +195,7 @@ export default function LocationTable({
             ))}
           </div>
         ),
-        size: 400,
+        size: 250,
       }),
       columnHelper.display({
         id: "Contact 1",
@@ -231,6 +236,8 @@ export default function LocationTable({
       updateCellAction={updateLocation}
       deleteRowsAction={deleteLocations}
       initialColumnFilters={[{ id: "busId", value: busId }]}
+      sortByColumns={sortByColumns}
+      timeField="timeReach"
     />
   );
 }

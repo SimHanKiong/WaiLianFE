@@ -16,7 +16,7 @@ export default async function Page({
 
   const [buses, locations] = await Promise.all([
     readBuses(),
-    readLocations({ busId: busId, type: locationType }),
+    readLocations({ busId: busId, type: locationType, sortBy: "time_reach" }),
   ]);
   const busOptions = [
     { value: "", label: "", object: null },

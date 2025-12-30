@@ -11,6 +11,7 @@ import BaseCell from "./BaseCell";
 import { DataWithId } from "./EditableTable";
 
 interface TextInputCellProps<TData> extends CellContext<TData, string> {
+  type?: "text" | "time";
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export default function TextInputCell<TData extends DataWithId>({
   row,
   column,
   table,
+  type = "text",
   className = "",
 }: TextInputCellProps<TData>) {
   const initialValue = getValue();
@@ -42,7 +44,8 @@ export default function TextInputCell<TData extends DataWithId>({
         onBlur={() => {
           table.options.meta?.updateData(row.original.id, column.id, value);
         }}
-        type="text"
+        type={type}
+        step={type === "time" ? "1" : undefined}
       />
     </BaseCell>
   );
