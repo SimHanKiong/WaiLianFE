@@ -5,6 +5,7 @@ import {
   ColumnFiltersState,
   RowData,
   SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,6 +14,8 @@ import {
 } from "@tanstack/react-table";
 
 import { CSSProperties, useEffect, useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -70,6 +73,8 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   sortByColumns?: SortingState;
   initialColumnFilters?: ColumnFiltersState;
   timeField?: keyof TData;
+  invisibleColumns?: string[];
+  getMergeRowsColumnId?: (row: TData) => string | null;
 }
 
 export default function EditableTable<TData extends DataWithId, TValue>({
@@ -84,12 +89,17 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   sortByColumns,
   initialColumnFilters,
   timeField,
+  invisibleColumns = [],
+  getMergeRowsColumnId,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>(sortByColumns ?? []);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialColumnFilters ?? []
+  );
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    invisibleColumns.reduce((acc, column) => ({ ...acc, [column]: false }), {})
   );
 
   useEffect(() => {
@@ -103,10 +113,11 @@ export default function EditableTable<TData extends DataWithId, TValue>({
     enableRowSelection: true,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    state: { globalFilter, sorting, columnFilters },
+    state: { globalFilter, sorting, columnFilters, columnVisibility },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     defaultColumn: {
       enableGlobalFilter: false,
     },
@@ -209,29 +220,65 @@ export default function EditableTable<TData extends DataWithId, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  className={getRowColour?.(row.original)}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="border border-gray-400 p-0 text-sm text-gray-900"
-                      style={{
-                        width: `${cell.column.getSize()}px`,
-                        ...cell.column.columnDef.meta?.cellStyle,
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row, index) => {
+                const rows = table.getRowModel().rows;
+
+                let isPrevSibling = false;
+                let isNextSibling = false;
+
+                if (getMergeRowsColumnId) {
+                  const currentId = getMergeRowsColumnId(row.original);
+                  const prevId =
+                    index > 0
+                      ? getMergeRowsColumnId(rows[index - 1].original)
+                      : null;
+                  const nextId =
+                    index < rows.length - 1
+                      ? getMergeRowsColumnId(rows[index + 1].original)
+                      : null;
+                  isPrevSibling =
+                    currentId !== null &&
+                    currentId !== undefined &&
+                    currentId === prevId;
+                  isNextSibling =
+                    currentId !== null &&
+                    currentId !== undefined &&
+                    currentId === nextId;
+                }
+
+                return (
+                  <TableRow
+                    key={row.id}
+                    className={cn(
+                      getRowColour?.(row.original),
+                      isNextSibling && "border-b-0"
+                    )}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          "p-0 text-sm text-gray-900",
+                          isPrevSibling
+                            ? "border-l border-r border-b border-gray-400"
+                            : "border border-gray-400",
+                          isNextSibling && "border-b-0"
+                        )}
+                        style={{
+                          width: `${cell.column.getSize()}px`,
+                          ...cell.column.columnDef.meta?.cellStyle,
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell

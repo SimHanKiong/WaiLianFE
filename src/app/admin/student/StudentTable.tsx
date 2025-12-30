@@ -75,7 +75,11 @@ export default function StudentTable({
     [router]
   );
 
-  const sortByColumns: SortingState = [{ id: "block", desc: false }];
+  const sortByColumns: SortingState = [
+    { id: "block", desc: false },
+    { id: "parentId", desc: false },
+    { id: "level", desc: true },
+  ];
 
   const blockSortFn = (rowA: Row<Student>, rowB: Row<Student>) => {
     const blockA = rowA.original.block;
@@ -134,7 +138,8 @@ export default function StudentTable({
         ),
         size: 50,
       }),
-      columnHelper.accessor("id", {
+      columnHelper.accessor("parent.id", {
+        id: "parentId",
         header: "Edit",
         cell: (info) => (
           <div className="flex justify-center">
@@ -158,7 +163,11 @@ export default function StudentTable({
       columnHelper.display({
         id: "#",
         header: "S/No.",
-        cell: ({ row }) => <DisplayCell value={row.index + 1} />,
+        cell: ({ row, table }) => {
+          const sortedRows = table.getRowModel().rows;
+          const sortedIndex = sortedRows.findIndex((r) => r.id === row.id);
+          return <DisplayCell value={sortedIndex + 1} />;
+        },
         size: 60,
       }),
       columnHelper.accessor("amLocation.bus.id", {
@@ -215,6 +224,7 @@ export default function StudentTable({
         cell: ({ row }) => <DisplayCell value={getClass(row.original)} />,
         size: 120,
       }),
+      columnHelper.accessor("level", {}),
       columnHelper.accessor("parent.fare", {
         header: () => <CircleDollarSign className="size-6 text-amber-500" />,
         cell: (info) => <DisplayCell value={info.getValue()} />,
@@ -312,6 +322,8 @@ export default function StudentTable({
       deleteRowsAction={deleteStudents}
       sortByColumns={sortByColumns}
       getRowColour={getRowColour}
+      invisibleColumns={["level"]}
+      getMergeRowsColumnId={(row) => row.parentId}
     />
   );
 }
