@@ -22,10 +22,10 @@ export default function ClipboardCell({ content }: ClipboardCellProps) {
   return (
     <BaseCell align="center">
       {copied ? (
-        <CheckIcon className="size-6 stroke-1 text-green-500" />
+        <CheckIcon className="size-5 stroke-1 text-green-500" />
       ) : (
         <CopyIcon
-          className="size-6 cursor-pointer stroke-1 text-emerald-600"
+          className="size-5 cursor-pointer stroke-1 text-emerald-600"
           onClick={handleCopy}
         />
       )}

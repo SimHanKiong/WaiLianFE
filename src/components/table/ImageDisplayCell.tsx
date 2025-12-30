@@ -11,14 +11,14 @@ export default function ImageDisplayCell<TData>({
 
   if (!url) {
     return (
-      <BaseCell>
+      <BaseCell className="h-20">
         <span className="text-gray-400">No Image</span>
       </BaseCell>
     );
   }
 
   return (
-    <BaseCell>
+    <BaseCell className="h-20">
       <a href={url}>
         <img
           src={url}

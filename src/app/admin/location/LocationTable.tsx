@@ -49,13 +49,15 @@ export default function LocationTable({
       columnHelper.accessor("busId", {
         header: "AM",
         cell: (info) => (
-          <DropdownCell
-            {...info}
-            options={buses}
-            objectColumnId="bus"
-            buttonClassName="font-bold"
-            textColour={info.row.original.bus?.colour}
-          />
+          <div className="py-1">
+            <DropdownCell
+              {...info}
+              options={buses}
+              objectColumnId="bus"
+              buttonClassName="font-bold"
+              textColour={info.row.original.bus?.colour}
+            />
+          </div>
         ),
         size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
@@ -67,7 +69,7 @@ export default function LocationTable({
         id: "PM",
         header: "PM",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <DisplayCell
                 key={student.id}
@@ -86,7 +88,7 @@ export default function LocationTable({
         id: "AM",
         header: "AM",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <DisplayCell
                 key={student.id}
@@ -102,13 +104,15 @@ export default function LocationTable({
       columnHelper.accessor("busId", {
         header: "PM",
         cell: (info) => (
-          <DropdownCell
-            {...info}
-            options={buses}
-            objectColumnId="bus"
-            buttonClassName="font-bold"
-            textColour={info.row.original.bus?.colour}
-          />
+          <div className="py-1">
+            <DropdownCell
+              {...info}
+              options={buses}
+              objectColumnId="bus"
+              buttonClassName="font-bold"
+              textColour={info.row.original.bus?.colour}
+            />
+          </div>
         ),
         size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
@@ -124,7 +128,7 @@ export default function LocationTable({
         id: "Block",
         header: "Block",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <DisplayCell
                 key={student.id}
@@ -142,27 +146,39 @@ export default function LocationTable({
         cell: ({ row, table }) => {
           const sortedRows = table.getRowModel().rows;
           const sortedIndex = sortedRows.findIndex((r) => r.id === row.id);
-          return <DisplayCell value={sortedIndex + 1} className="mt-2" />;
+          return <DisplayCell value={sortedIndex + 1} className="my-1" />;
         },
         size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.accessor("address", {
-        header: "Pick Up Point",
-        cell: (info) => <TextInputCell {...info} />,
+        header: "Location",
+        cell: (info) => (
+          <div className="py-1">
+            <TextInputCell {...info} />
+          </div>
+        ),
         size: 400,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.accessor("timeReach", {
         header: "Time",
-        cell: (info) => <TextInputCell {...info} type="time" />,
+        cell: (info) => (
+          <div className="py-1">
+            <TextInputCell {...info} type="time" />
+          </div>
+        ),
         size: 120,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.display({
         id: "Select",
         header: "+ / -",
-        cell: (info) => <RowSelectCell {...info} className="mt-1.5" />,
+        cell: (info) => (
+          <div className="py-1">
+            <RowSelectCell {...info} />
+          </div>
+        ),
         size: 50,
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
@@ -178,7 +194,7 @@ export default function LocationTable({
         cell: (info) => (
           <DisplayCell
             value={String(info.getValue().length)}
-            className="mt-2"
+            className="my-1"
           />
         ),
         size: 40,
@@ -187,7 +203,7 @@ export default function LocationTable({
       columnHelper.display({
         header: "Student Name & Class",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <div key={student.id} className="text-sm">
                 <DisplayCell value={getStudentNameAndClass(student)} />
@@ -200,7 +216,7 @@ export default function LocationTable({
       columnHelper.display({
         id: "Contact 1",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <div key={student.id} className="text-sm">
                 <CheckboxLinkCell
@@ -215,7 +231,7 @@ export default function LocationTable({
       columnHelper.display({
         id: "Contact 2",
         cell: ({ row }) => (
-          <div className="p-2 space-y-1">
+          <div className="py-1 px-2 space-y-1">
             {row.original.students.map((student) => (
               <div key={student.id} className="text-sm">
                 <CheckboxLinkCell

@@ -60,7 +60,7 @@ export default function FileInputCell<TData extends DataWithId>({
   };
 
   return (
-    <BaseCell padding="sm" className="gap-3">
+    <BaseCell padding="sm" className="gap-3 h-20">
       <Button
         type="button"
         variant={value ? "secondary" : "outline"}

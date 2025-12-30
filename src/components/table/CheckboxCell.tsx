@@ -30,7 +30,7 @@ export default function CheckboxCell<TData extends DataWithId>({
   return (
     <BaseCell align="center">
       <Checkbox
-        className="size-6 data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
+        className="size-5 data-[state=checked]:bg-transparent data-[state=checked]:text-primary"
         checked={value}
         onCheckedChange={handleCheckedChange}
       />

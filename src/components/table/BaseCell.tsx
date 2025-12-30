@@ -29,8 +29,8 @@ export default function BaseCell({
 
   const verticalPaddingClasses = {
     none: "py-0",
-    sm: "py-1",
-    md: "py-2",
+    sm: "py-0.5",
+    md: "py-1",
   };
 
   const alignClasses = {
@@ -42,7 +42,7 @@ export default function BaseCell({
   return (
     <div
       className={cn(
-        "flex w-full items-center",
+        "flex w-full h-9 items-center",
         paddingClasses[padding],
         verticalPaddingClasses[verticalPadding],
         alignClasses[align],

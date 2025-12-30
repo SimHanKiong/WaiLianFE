@@ -130,7 +130,7 @@ export default function EnquiryTable({
           <DisplayCell
             value={info.getValue()}
             icon={
-              <ArrowBigUp className="size-6 fill-blue-700 stroke-1 text-blue-700" />
+              <ArrowBigUp className="size-5 fill-blue-700 stroke-1 text-blue-700" />
             }
           />
         ),
@@ -149,7 +149,7 @@ export default function EnquiryTable({
           <DisplayCell
             value={info.getValue()}
             icon={
-              <ArrowBigDown className="size-6 fill-orange-600 stroke-1 text-orange-600" />
+              <ArrowBigDown className="size-5 fill-orange-600 stroke-1 text-orange-600" />
             }
           />
         ),

@@ -113,7 +113,7 @@ export default function StudentTable({
         cell: (info) => (
           <div className="flex justify-center">
             <a href={`mailto:${info.getValue()}`}>
-              <Mail className="size-6 stroke-1" />
+              <Mail className="size-5 stroke-1" />
             </a>
           </div>
         ),
@@ -128,7 +128,7 @@ export default function StudentTable({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MessageCircleMore className="size-6 stroke-1 text-green-500" />
+              <MessageCircleMore className="size-5 stroke-1 text-green-500" />
             </a>
           </div>
         ),
@@ -142,7 +142,7 @@ export default function StudentTable({
               href={`/admin/student/edit/${info.getValue()}`}
               target="_self"
             >
-              <SquarePen className="size-6 stroke-1 text-rose-600" />
+              <SquarePen className="size-5 stroke-1 text-rose-600" />
             </Link>
           </div>
         ),
