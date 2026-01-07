@@ -40,6 +40,15 @@ export default function LocationTable({
     return `https://wa.me/65${phoneNumber}`;
   };
 
+  const toggleColumns = [
+    "Block",
+    "Student",
+    "Contact 1",
+    "Contact 2",
+    "AM",
+    "PM",
+  ];
+
   const sortByColumns: SortingState = [{ id: "timeReach", desc: false }];
 
   const columnHelper = createColumnHelper<Location>();
@@ -201,6 +210,7 @@ export default function LocationTable({
         meta: { cellStyle: { verticalAlign: "top" } },
       }),
       columnHelper.display({
+        id: "Student",
         header: "Student Name & Class",
         cell: ({ row }) => (
           <div className="py-1 px-2 space-y-1">
@@ -246,14 +256,18 @@ export default function LocationTable({
     ];
   }, [columnHelper, buses, type]);
   return (
-    <EditableTable<Location, any>
-      columns={columns}
-      data={data}
-      updateCellAction={updateLocation}
-      deleteRowsAction={deleteLocations}
-      initialColumnFilters={[{ id: "busId", value: busId }]}
-      sortByColumns={sortByColumns}
-      timeField="timeReach"
-    />
+    <>
+      {" "}
+      <EditableTable<Location, any>
+        columns={columns}
+        data={data}
+        updateCellAction={updateLocation}
+        deleteRowsAction={deleteLocations}
+        initialColumnFilters={[{ id: "busId", value: busId }]}
+        sortByColumns={sortByColumns}
+        timeField="timeReach"
+        toggleColumns={toggleColumns}
+      />
+    </>
   );
 }

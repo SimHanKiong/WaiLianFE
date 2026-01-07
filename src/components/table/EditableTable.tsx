@@ -74,6 +74,7 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   initialColumnFilters?: ColumnFiltersState;
   timeField?: keyof TData;
   invisibleColumns?: string[];
+  toggleColumns?: string[];
   getMergeRowsColumnId?: (row: TData) => string | null;
 }
 
@@ -90,6 +91,7 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   initialColumnFilters,
   timeField,
   invisibleColumns = [],
+  toggleColumns,
   getMergeRowsColumnId,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
@@ -98,13 +100,29 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     initialColumnFilters ?? []
   );
+  const [showDetails, setShowDetails] = useState(true);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    invisibleColumns.reduce((acc, column) => ({ ...acc, [column]: false }), {})
+    () => {
+      const hidden = [...invisibleColumns, ...(toggleColumns ?? [])];
+      return hidden.reduce((acc, column) => ({ ...acc, [column]: false }), {});
+    }
   );
 
   useEffect(() => {
     setTableData(data);
   }, [data]);
+
+  useEffect(() => {
+    if (toggleColumns) {
+      setColumnVisibility((prev) => {
+        const updated = { ...prev };
+        toggleColumns.forEach((col) => {
+          updated[col] = showDetails;
+        });
+        return updated;
+      });
+    }
+  }, [showDetails, toggleColumns]);
 
   const table = useReactTable({
     data: tableData,
@@ -181,7 +199,6 @@ export default function EditableTable<TData extends DataWithId, TValue>({
         } as Partial<TData>);
       }
     });
-    table.resetRowSelection();
   };
 
   return (
@@ -306,6 +323,15 @@ export default function EditableTable<TData extends DataWithId, TValue>({
             Add Row
           </Button>
         ) : null}
+        {toggleColumns && toggleColumns.length > 0 && (
+          <Button
+            variant="default"
+            className="mr-2"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            {showDetails ? "Hide Details" : "Show Details"}
+          </Button>
+        )}
         {timeField && (
           <>
             <Button
@@ -339,7 +365,7 @@ export default function EditableTable<TData extends DataWithId, TValue>({
         </Button>
       </div>
 
-      <pre>{JSON.stringify(tableData, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(tableData, null, 2)}</pre> */}
     </div>
   );
 }
