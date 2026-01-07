@@ -1,6 +1,10 @@
 "use server";
 
-import { GenderType, TransportRequirementType } from "../constants";
+import {
+  GenderType,
+  StudentStatusType,
+  TransportRequirementType,
+} from "../constants";
 import { Location } from "./location";
 import { Parent } from "./parent";
 import { School } from "./school";
@@ -18,11 +22,12 @@ export type Student = {
   transportStartDate: string;
   transportRequirement: TransportRequirementType;
   block: string;
-  status: string;
+  status: StudentStatusType | null;
   amIcon: string;
   pmIcon: string;
   isFavourite: boolean;
   remark: string;
+  icon: string;
   schoolId: string;
   school: School;
   amLocationId: string | null;

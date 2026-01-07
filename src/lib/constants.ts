@@ -31,3 +31,11 @@ export const LocationType = {
 } as const;
 export type LocationTypeType = (typeof LocationType)[keyof typeof LocationType];
 export const LocationTypeOptions = Object.values(LocationType);
+
+export const StudentStatus = {
+  PENDING: "Pending",
+  NEW: "New",
+} as const;
+export type StudentStatusType =
+  (typeof StudentStatus)[keyof typeof StudentStatus];
+export const StudentStatusOptions = Object.values(StudentStatus);

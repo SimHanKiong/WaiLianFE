@@ -306,6 +306,11 @@ export default function StudentTable({
         cell: ({ row }) => <DisplayCell value={getContactUse(row.original)} />,
         size: 200,
       }),
+      columnHelper.accessor("icon", {
+        header: "",
+        cell: (info) => <TextInputCell {...info} />,
+        size: 40,
+      }),
       columnHelper.accessor("remark", {
         header: "Remark",
         cell: (info) => <TextInputCell {...info} className="text-red-600" />,
@@ -324,6 +329,10 @@ export default function StudentTable({
       getRowColour={getRowColour}
       invisibleColumns={["level"]}
       getMergeRowsColumnId={(row) => row.parentId}
+      linkButton={{
+        label: "Add Student",
+        href: `/admin/student/add`,
+      }}
     />
   );
 }

@@ -15,6 +15,8 @@ import {
 
 import { CSSProperties, useEffect, useState } from "react";
 
+import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
@@ -76,6 +78,10 @@ interface EditableTableProps<TData extends DataWithId, TValue> {
   invisibleColumns?: string[];
   toggleColumns?: string[];
   getMergeRowsColumnId?: (row: TData) => string | null;
+  linkButton?: {
+    label: string;
+    href: string;
+  };
 }
 
 export default function EditableTable<TData extends DataWithId, TValue>({
@@ -93,6 +99,7 @@ export default function EditableTable<TData extends DataWithId, TValue>({
   invisibleColumns = [],
   toggleColumns,
   getMergeRowsColumnId,
+  linkButton,
 }: EditableTableProps<TData, TValue>) {
   const [tableData, setTableData] = useState(data);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -323,6 +330,11 @@ export default function EditableTable<TData extends DataWithId, TValue>({
             Add Row
           </Button>
         ) : null}
+        {linkButton && (
+          <Button variant="link" className="mr-2">
+            <Link href={linkButton.href}>{linkButton.label}</Link>
+          </Button>
+        )}
         {toggleColumns && toggleColumns.length > 0 && (
           <Button
             variant="default"

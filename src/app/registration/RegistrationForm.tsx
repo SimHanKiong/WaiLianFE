@@ -13,25 +13,16 @@ import TextInputForm from "@/components/form/TextInputForm";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { Gender, GenderType, TransportRequirement } from "@/lib/constants";
 import { Enquiry } from "@/lib/services/enquiry";
-import { createParent } from "@/lib/services/parent";
-
-const capitalise = (word: string) => {
-  return word.charAt(0).toLocaleUpperCase() + word.slice(1).toLowerCase();
-};
+import { createParentFromEnquiry } from "@/lib/services/parent";
+import { capitalise, startOfToday, startOfTomorrow } from "@/lib/utils";
 
 const getYear = () => {
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
   return month >= 11 ? year + 1 : year;
 };
-
-const startOfToday = new Date();
-startOfToday.setHours(0, 0, 0, 0);
-
-const startOfTomorrow = new Date();
-startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
-startOfTomorrow.setHours(0, 0, 0, 0);
 
 const studentSchema = z
   .object({
@@ -45,7 +36,9 @@ const studentSchema = z
       .trim()
       .min(1, "Given Name is required")
       .transform((name) => name.split(" ").map(capitalise).join(" ")),
-    gender: z.enum(["M", "F"], { required_error: "Gender is required" }),
+    gender: z.enum([Gender.MALE, Gender.FEMALE], {
+      required_error: "Gender is required",
+    }),
     level: z
       .number({ required_error: "Level is required" })
       .int()
@@ -70,9 +63,16 @@ const studentSchema = z
         const middle = ic.slice(1, ic.length - 1);
         return firstLetter + middle + lastLetter;
       }),
-    transportRequirement: z.enum(["AM", "PM", "Both"], {
-      required_error: "Transport Requirement is required",
-    }),
+    transportRequirement: z.enum(
+      [
+        TransportRequirement.AM,
+        TransportRequirement.PM,
+        TransportRequirement.BOTH,
+      ],
+      {
+        required_error: "Transport Requirement is required",
+      }
+    ),
     transportStartDate: z.coerce
       .date({ required_error: "Transport Start Date is required" })
       .min(startOfTomorrow, {
@@ -101,15 +101,13 @@ const registrationSchema = z.object({
   contact2Name: z
     .string()
     .trim()
-    .min(1, "Full Name of Contact 2 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
-  contact2No: z
-    .string()
-    .regex(/^\d{8}$/, "Contact Number 2 must be exactly 8 digits"),
+  contact2No: z.string().refine((val) => !val || /^\d{8}$/.test(val), {
+    message: "Contact Number 2 must be exactly 8 digits if provided",
+  }),
   contact2Relationship: z
     .string()
     .trim()
-    .min(1, "Relationship of Contact 2 is required")
     .transform((name) => name.split(" ").map(capitalise).join(" ")),
   underFas: z.preprocess(
     (val) => (val === undefined ? undefined : val === "true"),
@@ -129,10 +127,10 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
 
   const enquiryTransportRequirement =
     enquiry.amPostalCode && enquiry.pmPostalCode
-      ? "Both"
+      ? TransportRequirement.BOTH
       : enquiry.amPostalCode
-        ? "AM"
-        : "PM";
+        ? TransportRequirement.AM
+        : TransportRequirement.PM;
 
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
@@ -167,7 +165,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
 
   const onSubmit = async (data: RegistrationFormData) => {
     try {
-      await createParent(enquiry.id, data);
+      await createParentFromEnquiry(enquiry.id, data);
       toast({
         variant: "success",
         title: "Submission Successful",
@@ -281,8 +279,8 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               label="Gender"
               control={form.control}
               options={[
-                { value: "M", label: "M" },
-                { value: "F", label: "F" },
+                { value: Gender.MALE, label: "M" },
+                { value: Gender.FEMALE, label: "F" },
               ]}
             />
             <NumberInputForm
@@ -313,9 +311,9 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               label="Transport Requirement"
               control={form.control}
               options={[
-                { value: "Both", label: "2-way" },
-                { value: "AM", label: "1-way to school" },
-                { value: "PM", label: "1-way back home" },
+                { value: TransportRequirement.BOTH, label: "2-way" },
+                { value: TransportRequirement.AM, label: "1-way to school" },
+                { value: TransportRequirement.PM, label: "1-way back home" },
               ]}
             />
             <DateInputForm
@@ -334,7 +332,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
             append({
               fullName: "",
               givenName: "",
-              gender: undefined as unknown as "M" | "F",
+              gender: undefined as unknown as GenderType,
               level: 0,
               className: "",
               dateOfBirth: startOfTomorrow,

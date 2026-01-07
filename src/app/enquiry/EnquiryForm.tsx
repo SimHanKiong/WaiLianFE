@@ -12,6 +12,7 @@ import TextInputForm from "@/components/form/TextInputForm";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { TransportRequirement } from "@/lib/constants";
 import { createEnquiry } from "@/lib/services/enquiry";
 import { getAddress } from "@/lib/services/external";
 import { School } from "@/lib/services/school";
@@ -30,17 +31,24 @@ const enquirySchema = z
       .trim()
       .regex(/^\d{6}$/, "Home Postal Code must be exactly 6 digits"),
     homeUnitNo: z.string().trim(),
-    transportRequirement: z.enum(["Both", "AM", "PM"], {
-      required_error: "Transport Requirement is required",
-    }),
+    transportRequirement: z.enum(
+      [
+        TransportRequirement.BOTH,
+        TransportRequirement.AM,
+        TransportRequirement.PM,
+      ],
+      {
+        required_error: "Transport Requirement is required",
+      }
+    ),
     amPostalCode: z.string().trim(),
     pmPostalCode: z.string().trim(),
   })
   .refine(
     (data) => {
       if (
-        data.transportRequirement === "Both" ||
-        data.transportRequirement === "AM"
+        data.transportRequirement === TransportRequirement.BOTH ||
+        data.transportRequirement === TransportRequirement.AM
       ) {
         return /^\d{6}$/.test(data.amPostalCode);
       }
@@ -54,8 +62,8 @@ const enquirySchema = z
   .refine(
     (data) => {
       if (
-        data.transportRequirement === "Both" ||
-        data.transportRequirement === "PM"
+        data.transportRequirement === TransportRequirement.BOTH ||
+        data.transportRequirement === TransportRequirement.PM
       ) {
         return /^\d{6}$/.test(data.pmPostalCode);
       }
@@ -67,10 +75,10 @@ const enquirySchema = z
     }
   )
   .transform((data) => {
-    if (data.transportRequirement === "AM") {
+    if (data.transportRequirement === TransportRequirement.AM) {
       return { ...data, pmPostalCode: "" };
     }
-    if (data.transportRequirement === "PM") {
+    if (data.transportRequirement === TransportRequirement.PM) {
       return { ...data, amPostalCode: "" };
     }
     return data;
@@ -225,12 +233,13 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
           label="Transport Requirement"
           control={form.control}
           options={[
-            { value: "Both", label: "2-way" },
-            { value: "AM", label: "1-way to school" },
-            { value: "PM", label: "1-way back home" },
+            { value: TransportRequirement.BOTH, label: "2-way" },
+            { value: TransportRequirement.AM, label: "1-way to school" },
+            { value: TransportRequirement.PM, label: "1-way back home" },
           ]}
         />
-        {(transportRequirement === "Both" || transportRequirement === "AM") && (
+        {(transportRequirement === TransportRequirement.BOTH ||
+          transportRequirement === TransportRequirement.AM) && (
           <>
             <TextInputForm
               name="amPostalCode"
@@ -246,7 +255,8 @@ export default function EnquiryForm({ school }: EnquiryFormProps) {
             />
           </>
         )}
-        {(transportRequirement === "Both" || transportRequirement == "PM") && (
+        {(transportRequirement === TransportRequirement.BOTH ||
+          transportRequirement === TransportRequirement.PM) && (
           <>
             <TextInputForm
               name="pmPostalCode"

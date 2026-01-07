@@ -70,13 +70,8 @@ export const createEnquiry = async (
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: formData.email,
-      homePostalCode: formData.homePostalCode,
-      homeUnitNo: formData.homeUnitNo,
-      amPostalCode: formData.amPostalCode,
-      pmPostalCode: formData.pmPostalCode,
+      ...formData,
       schoolId: schoolId,
-      year: formData.year,
     }),
   });
 

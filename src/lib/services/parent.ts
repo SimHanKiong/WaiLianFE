@@ -1,5 +1,6 @@
 "use server";
 
+import { ParentFormData } from "@/app/admin/student/StudentForm";
 import { RegistrationFormData } from "@/app/registration/RegistrationForm";
 
 export type Parent = {
@@ -23,12 +24,33 @@ export type Parent = {
   enquiryId: string | null;
 };
 
-export const createParent = async (
+export const createParent = async (formData: ParentFormData): Promise<void> => {
+  const response = await fetch(`${process.env.API_URL}/parent/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...formData,
+      children: formData.children.map((child) => ({
+        ...child,
+        dateOfBirth: child.dateOfBirth.toISOString().split("T")[0],
+        transportStartDate: child.transportStartDate
+          .toISOString()
+          .split("T")[0],
+      })),
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error("Unable to create Parent: " + text);
+  }
+};
+
+export const createParentFromEnquiry = async (
   enquiryId: string,
   formData: RegistrationFormData
 ): Promise<void> => {
-  console.log(enquiryId);
-  const response = await fetch(`${process.env.API_URL}/parent/`, {
+  const response = await fetch(`${process.env.API_URL}/parent/enquiry`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -57,7 +79,6 @@ export const createParent = async (
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text);
+    throw new Error("Unable to create Parent");
   }
 };
