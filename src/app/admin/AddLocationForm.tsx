@@ -26,7 +26,7 @@ export default function AddLocationForm() {
 
   const form = useForm<AddLocationFormData>({
     resolver: zodResolver(addLocationSchema),
-    defaultValues: { address: "", timeReach: "", type: undefined },
+    defaultValues: { address: "", timeReach: "12:00", type: undefined },
   });
 
   const onSubmit = async (data: AddLocationFormData) => {
