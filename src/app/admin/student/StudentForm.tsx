@@ -77,14 +77,10 @@ const studentSchema = z
         required_error: "Transport Requirement is required",
       }
     ),
-    transportStartDate: z.coerce
-      .date({ required_error: "Transport Start Date is required" })
-      .min(startOfTomorrow, {
-        message: "Transport Start Date should be after today",
-      }),
+    transportStartDate: z.coerce.date({
+      required_error: "Transport Start Date is required",
+    }),
     block: z.string().trim().min(1, "Block is required"),
-    amLocationId: z.string().min(1, "Pick Up Location is required"),
-    pmLocationId: z.string().min(1, "Drop Off Location is required"),
     schoolId: z.string().min(1, "School is required"),
     status: z
       .enum([StudentStatus.PENDING, StudentStatus.NEW, ""])
@@ -140,15 +136,11 @@ export type ParentFormData = z.infer<typeof parentSchema>;
 
 interface StudentFormProps {
   schools: { value: string; label: string }[];
-  amLocations: { value: string; label: string }[];
-  pmLocations: { value: string; label: string }[];
   studentStatus: { value: string; label: string }[];
 }
 
 export default function StudentForm({
   schools,
-  amLocations,
-  pmLocations,
   studentStatus,
 }: StudentFormProps) {
   const router = useRouter();
@@ -185,8 +177,6 @@ export default function StudentForm({
           transportRequirement: undefined,
           transportStartDate: startOfToday,
           block: "",
-          amLocationId: "",
-          pmLocationId: "",
           schoolId: "",
           status: "" as unknown as StudentStatusType,
         },
@@ -340,25 +330,12 @@ export default function StudentForm({
               name={`children.${index}.transportStartDate`}
               label="Transport Start Date"
               control={form.control}
-              minDate={startOfTomorrow}
             />
             <TextInputForm
               name={`children.${index}.block`}
               label="Block"
               control={form.control}
               placeholder="Enter block"
-            />
-            <DropdownForm
-              name={`children.${index}.amLocationId`}
-              label="Pick Up Location"
-              control={form.control}
-              options={amLocations}
-            />
-            <DropdownForm
-              name={`children.${index}.pmLocationId`}
-              label="Drop Off Location"
-              control={form.control}
-              options={pmLocations}
             />
             <DropdownForm
               name={`children.${index}.schoolId`}
@@ -391,8 +368,6 @@ export default function StudentForm({
                 undefined as unknown as TransportRequirementType,
               transportStartDate: startOfToday,
               block: "",
-              amLocationId: "",
-              pmLocationId: "",
               schoolId: "",
               status: "" as unknown as StudentStatusType,
             })

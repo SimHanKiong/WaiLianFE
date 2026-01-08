@@ -54,26 +54,14 @@ export const createParentFromEnquiry = async (
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      contact1Name: formData.contact1Name,
-      contact1No: formData.contact1No,
-      contact1Relationship: formData.contact1Relationship,
-      contact2Name: formData.contact2Name,
-      contact2No: formData.contact2No,
-      contact2Relationship: formData.contact2Relationship,
-      underFas: formData.underFas,
+      ...formData,
       enquiryId: enquiryId,
       children: formData.children.map((child) => ({
-        fullName: child.fullName,
-        givenName: child.givenName,
-        gender: child.gender,
-        level: child.level,
-        className: child.className,
+        ...child,
         dateOfBirth: child.dateOfBirth.toISOString().split("T")[0],
-        nric: child.nric,
         transportStartDate: child.transportStartDate
           .toISOString()
           .split("T")[0],
-        transportRequirement: child.transportRequirement,
       })),
     }),
   });

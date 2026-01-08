@@ -1,26 +1,13 @@
 import Header from "@/components/Header";
 import PageContainer from "@/components/PageContainer";
-import { LocationType, StudentStatusOptions } from "@/lib/constants";
-import { readLocations } from "@/lib/services/location";
+import { StudentStatusOptions } from "@/lib/constants";
 import { readSchools } from "@/lib/services/school";
 
 import StudentForm from "../StudentForm";
 
 export default async function Page() {
-  const [schools, amLocations, pmLocations] = await Promise.all([
-    readSchools(),
-    readLocations({ type: LocationType.AM, sortBy: "address" }),
-    readLocations({ type: LocationType.PM, sortBy: "address" }),
-  ]);
+  const schools = await readSchools();
 
-  const amLocationOptions = amLocations.map((amLocation) => ({
-    value: amLocation.id,
-    label: amLocation.address,
-  }));
-  const pmLocationOptions = pmLocations.map((pmLocation) => ({
-    value: pmLocation.id,
-    label: pmLocation.address,
-  }));
   const schoolOptions = schools.map((school) => ({
     value: school.id,
     label: school.initial,
@@ -35,12 +22,7 @@ export default async function Page() {
   return (
     <PageContainer>
       <Header title="Add Student" />
-      <StudentForm
-        schools={schoolOptions}
-        amLocations={amLocationOptions}
-        pmLocations={pmLocationOptions}
-        studentStatus={studentStatus}
-      />
+      <StudentForm schools={schoolOptions} studentStatus={studentStatus} />
     </PageContainer>
   );
 }
