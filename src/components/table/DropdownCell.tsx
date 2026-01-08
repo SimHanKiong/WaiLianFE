@@ -103,7 +103,7 @@ export default function DropdownCell<TData extends DataWithId>({
             ) : (
               <span></span>
             )}
-            <ChevronsUpDown className="opacity-50 text-black" />
+            <ChevronsUpDown className="opacity-50 text-gray-700" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
