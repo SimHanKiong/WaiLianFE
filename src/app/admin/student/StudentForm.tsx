@@ -48,10 +48,7 @@ const studentSchema = z
       .int()
       .min(1, "Level should be between 1 and 6")
       .max(6, "Level should be between 1 and 6"),
-    className: z
-      .string()
-      .trim()
-      .transform((str) => capitalise(str)),
+    className: z.string().trim().toUpperCase(),
     dateOfBirth: z.coerce
       .date({ required_error: "Date of Birth is required" })
       .max(startOfToday, { message: "Date of Birth should be before today" }),

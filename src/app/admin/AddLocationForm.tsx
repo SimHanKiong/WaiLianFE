@@ -11,6 +11,7 @@ import RadioInputForm from "@/components/form/RadioInputForm";
 import TextInputForm from "@/components/form/TextInputForm";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 import { createLocation } from "@/lib/services/location";
 
 const addLocationSchema = z.object({
@@ -23,6 +24,7 @@ type AddLocationFormData = z.infer<typeof addLocationSchema>;
 
 export default function AddLocationForm() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<AddLocationFormData>({
     resolver: zodResolver(addLocationSchema),
@@ -30,9 +32,27 @@ export default function AddLocationForm() {
   });
 
   const onSubmit = async (data: AddLocationFormData) => {
-    await createLocation(data);
-    form.reset();
-    router.refresh();
+    try {
+      await createLocation(data);
+      form.reset({
+        address: data.address,
+        timeReach: "12:00",
+        type: undefined,
+      });
+      toast({
+        title: "Success",
+        description: "Location added successfully",
+        variant: "success",
+      });
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: "Failed to add location",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
