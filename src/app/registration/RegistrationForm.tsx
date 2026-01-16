@@ -302,6 +302,7 @@ export default function RegistrationForm({ enquiry }: RegistrationFormProps) {
               label="Birth Certificate or FIN Number"
               control={form.control}
               placeholder="Enter birth certificate or FIN number"
+              maxLength={9}
             />
             <RadioInputForm
               name={`children.${index}.transportRequirement`}

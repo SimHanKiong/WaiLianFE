@@ -25,11 +25,12 @@ import {
   TransportRequirementType,
 } from "@/lib/constants";
 import { getAddress } from "@/lib/services/external";
-import { createParent } from "@/lib/services/parent";
+import { Parent, createParent, updateParent } from "@/lib/services/parent";
 import { capitalise, startOfToday, startOfTomorrow } from "@/lib/utils";
 
 const studentSchema = z
   .object({
+    id: z.string().optional(),
     fullName: z
       .string()
       .trim()
@@ -77,11 +78,13 @@ const studentSchema = z
     transportStartDate: z.coerce.date({
       required_error: "Transport Start Date is required",
     }),
+    amLocationId: z.string().transform((val) => val || null),
+    pmLocationId: z.string().transform((val) => val || null),
     block: z.string().trim().min(1, "Block is required"),
     schoolId: z.string().min(1, "School is required"),
     status: z
       .enum([StudentStatus.PENDING, StudentStatus.NEW, ""])
-      .transform((val) => (val === "" ? null : val)),
+      .transform((val) => val || null),
   })
   .refine((data) => data.fullName.includes(data.givenName), {
     message: "Given Name must be part of Full Name",
@@ -134,51 +137,93 @@ export type ParentFormData = z.infer<typeof parentSchema>;
 interface StudentFormProps {
   schools: { value: string; label: string }[];
   studentStatus: { value: string; label: string }[];
+  amLocations: { value: string; label: string }[];
+  pmLocations: { value: string; label: string }[];
+  parent?: Parent;
 }
 
 export default function StudentForm({
   schools,
   studentStatus,
+  amLocations,
+  pmLocations,
+  parent,
 }: StudentFormProps) {
   const router = useRouter();
 
-  const [homeAddress, setHomeAddress] = useState("");
-  const [amAddress, setAmAddress] = useState("");
-  const [pmAddress, setPmAddress] = useState("");
+  const [homeAddress, setHomeAddress] = useState(parent?.homeAddress || "");
+  const [amAddress, setAmAddress] = useState(parent?.amAddress || "");
+  const [pmAddress, setPmAddress] = useState(parent?.pmAddress || "");
 
   const form = useForm<ParentFormData>({
     resolver: zodResolver(parentSchema),
-    defaultValues: {
-      email: "",
-      contact1Name: "",
-      contact1No: "",
-      contact1Relationship: "",
-      contact2Name: "",
-      contact2No: "",
-      contact2Relationship: "",
-      homePostalCode: "",
-      homeUnitNo: "",
-      amPostalCode: "",
-      pmPostalCode: "",
-      underFas: undefined,
-      fare: 0,
-      children: [
-        {
-          fullName: "",
-          givenName: "",
-          gender: undefined,
-          level: 0,
-          className: "",
-          dateOfBirth: startOfTomorrow,
-          nric: "",
-          transportRequirement: undefined,
-          transportStartDate: startOfToday,
-          block: "",
-          schoolId: "",
-          status: "" as unknown as StudentStatusType,
+    defaultValues: parent
+      ? {
+          email: parent.email,
+          contact1Name: parent.contact1Name,
+          contact1No: parent.contact1No,
+          contact1Relationship: parent.contact1Relationship,
+          contact2Name: parent.contact2Name,
+          contact2No: parent.contact2No,
+          contact2Relationship: parent.contact2Relationship,
+          homePostalCode: parent.homePostalCode,
+          homeUnitNo: parent.homeUnitNo,
+          amPostalCode: parent.amPostalCode,
+          pmPostalCode: parent.pmPostalCode,
+          underFas: parent.underFas,
+          fare: parent.fare,
+          children: parent.children.map((child) => ({
+            id: child.id,
+            fullName: child.fullName,
+            givenName: child.givenName,
+            gender: child.gender,
+            level: child.level,
+            className: child.className,
+            dateOfBirth: new Date(child.dateOfBirth),
+            nric: child.nric,
+            transportRequirement: child.transportRequirement,
+            transportStartDate: new Date(child.transportStartDate),
+            amLocationId: child.amLocationId ?? "",
+            pmLocationId: child.pmLocationId ?? "",
+            block: child.block,
+            schoolId: child.schoolId,
+            status: child.status ?? ("" as StudentStatusType),
+          })),
+        }
+      : {
+          email: "",
+          contact1Name: "",
+          contact1No: "",
+          contact1Relationship: "",
+          contact2Name: "",
+          contact2No: "",
+          contact2Relationship: "",
+          homePostalCode: "",
+          homeUnitNo: "",
+          amPostalCode: "",
+          pmPostalCode: "",
+          underFas: undefined,
+          fare: 0,
+          children: [
+            {
+              id: undefined,
+              fullName: "",
+              givenName: "",
+              gender: undefined,
+              level: 0,
+              className: "",
+              dateOfBirth: startOfTomorrow,
+              nric: "",
+              transportRequirement: undefined,
+              transportStartDate: startOfToday,
+              amLocationId: "",
+              pmLocationId: "",
+              block: "",
+              schoolId: "",
+              status: "" as unknown as StudentStatusType,
+            },
+          ],
         },
-      ],
-    },
   });
 
   const homePostalCode = useWatch({
@@ -239,7 +284,11 @@ export default function StudentForm({
 
   const onSubmit = async (data: ParentFormData) => {
     try {
-      await createParent(data);
+      if (parent) {
+        await updateParent(parent.id, data);
+      } else {
+        await createParent(data);
+      }
       router.push("/admin/student");
     } catch (error) {
       console.log(error);
@@ -312,6 +361,7 @@ export default function StudentForm({
               label="Birth Certificate or FIN Number"
               control={form.control}
               placeholder="Enter birth certificate or FIN number"
+              maxLength={9}
             />
             <RadioInputForm
               name={`children.${index}.transportRequirement`}
@@ -335,6 +385,18 @@ export default function StudentForm({
               placeholder="Enter block"
             />
             <DropdownForm
+              name={`children.${index}.amLocationId`}
+              label="Pick Up Location"
+              control={form.control}
+              options={amLocations}
+            />
+            <DropdownForm
+              name={`children.${index}.pmLocationId`}
+              label="Drop Off Location"
+              control={form.control}
+              options={pmLocations}
+            />
+            <DropdownForm
               name={`children.${index}.schoolId`}
               label="School"
               control={form.control}
@@ -354,6 +416,7 @@ export default function StudentForm({
           variant="add"
           onClick={() =>
             append({
+              id: undefined,
               fullName: "",
               givenName: "",
               gender: undefined as unknown as GenderType,
@@ -364,6 +427,8 @@ export default function StudentForm({
               transportRequirement:
                 undefined as unknown as TransportRequirementType,
               transportStartDate: startOfToday,
+              amLocationId: "",
+              pmLocationId: "",
               block: "",
               schoolId: "",
               status: "" as unknown as StudentStatusType,
